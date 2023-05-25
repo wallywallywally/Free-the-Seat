@@ -1,0 +1,19 @@
+.test {
+    background-color: red;
+}
+
+/* reserve.js */
+/* timetable */
+.tt p {
+    width: 2.7rem;
+    height: 5.4rem;
+    border: 1px solid rgba(0,0,0,0.25);
+}
+
+.tt-emp {
+    background-color: #d9d9d9;
+}
+
+.tt-occ {
+    background-color: #fb7979;
+}
