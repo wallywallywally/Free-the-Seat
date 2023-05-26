@@ -25,10 +25,7 @@ const User = sequelize.define('users', {
         type: DataTypes.STRING,
         unique: true
     },
-    username: {
-        type: DataTypes.TEXT
-    },
-    password_has: {
+    password_hash: {
         type: DataTypes.TEXT
     }
 }, {
@@ -96,9 +93,9 @@ Seat.Reservation = Seat.hasMany(Reservation, {
 });
 
 (async () => {
-/*
-    User.create({ email: 'pete6@gmail.com', username: 'petegrif6', password_hash: 'itshashed' },
-        { fields: ['email', 'username', 'password_hash'] })
+    /*
+    User.create({ email: 'pete@gmail.com',  password_hash: 'itshashed' },
+        { fields: ['email', 'password_hash'] })
         .then(newUser => {
             // Do something with the new user
             console.log(newUser.toJSON());
@@ -113,8 +110,46 @@ Seat.Reservation = Seat.hasMany(Reservation, {
             }
         });
         */
-    const users = await User.findAll({
-        attributes: ["id","email", "username"]
+    /*
+    User.destroy({
+        where: {},
     })
-    console.log(users[1].dataValues)
+        .then(deletedRowsCount => {
+            console.log(`Deleted ${deletedRowsCount} rows.`);
+        })
+        .catch(error => {
+            console.log('Error:', error.message);
+        });
+    */
+    /*
+    const users = await User.findAll({
+        attributes: ["id","email", "password_hash"]
+    })
+    console.log(users.map(user => user.dataValues))
+    */
 })()
+
+const checkCredentials = (email, password) => {
+    (async () => {
+        const result = await sequelize.query(
+            'SELECT * FROM users WHERE email = :email AND password_hash = :password',
+            {
+                replacements: {
+                    email: email,
+                    password: password
+                },
+                type: sequelize.QueryTypes.SELECT
+            })
+        console.log(result)
+        if (result.length === 0) {
+            console.log('no email and password combination detected')
+            return false
+        }
+        else {
+            console.log('log in successful')
+            return true 
+        }
+    })()
+}
+
+checkCredentials ('pete@gmail.com', 'itshashed2')

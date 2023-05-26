@@ -8,7 +8,7 @@ const connection = mysql.createConnection({
     password: process.env.PASSWORD,
   database: 'free-the-seat',
   ssl: { rejectUnauthorized: true },
-  multipleStatements: true,
+  // multipleStatements: true,
 });
 
 // Connecting to the database
@@ -22,31 +22,8 @@ connection.connect((err) => {
 
   // Perform database operations
   const createTablesQuery = `
-    -- Create User table
-    CREATE TABLE IF NOT EXISTS users (
-      id INT AUTO_INCREMENT PRIMARY KEY,
-      email VARCHAR(255) UNIQUE,
-      username TEXT,
-      password_hash TEXT
-    );
-
-    -- Create Seat table
-    CREATE TABLE IF NOT EXISTS seats (
-      id INT AUTO_INCREMENT PRIMARY KEY,
-      occupancy ENUM ('Free', 'Occupied') NOT NULL
-    );
-    
-    -- Create Reservation table 
-    CREATE TABLE IF NOT EXISTS reservations (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        start_time INT,
-        end_time INT,
-        date_created DATE,
-        user_id INT, 
-        KEY users_id_idx (user_id),
-        seat_id INT,
-        KEY seats_id_idx(seat_id)
-    );
+    ALTER TABLE users
+    DROP COLUMN username
   `;
 
   connection.query(createTablesQuery, (err, results) => {
