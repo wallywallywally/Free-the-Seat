@@ -100,8 +100,8 @@ export default function Main() {
             <Container
             sx={{marginTop: '30px'}}
             >
-                {/* <Lvl1 /> */}
-                <Reserve />
+                <Lvl1 />
+                    {/* <Reserve /> */}
             </Container>
         </ThemeProvider>
 

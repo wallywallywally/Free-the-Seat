@@ -10,21 +10,21 @@ import Main from './components/main.js'
 import { CssBaseline, Container } from '@mui/material'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 
-// font - Inter
-import '@fontsource/inter/300.css';
-import '@fontsource/inter/400.css';
-import '@fontsource/inter/500.css';
-import '@fontsource/inter/700.css';
+// font - Inter/
+// import '@fontsource/inter/300.css';
+// import '@fontsource/inter/400.css';
+// import '@fontsource/inter/500.css';
+// import '@fontsource/inter/700.css';
 
 
 // main theme
 const main = createTheme({
-  typography: {
-    fontFamily: [
-      'Inter',
-      'sans-serif'
-    ].join(',')
-  },
+  // typography: {
+  //  fontFamily: [
+  //    'Inter',
+  //    'sans-serif'
+  //  ].join(',')
+  // },
 
 
 })
@@ -32,7 +32,7 @@ const main = createTheme({
 // app
 function App() {
     // log in state
-    const [log, setLog] = useState(true)
+    const [log, setLog] = useState(false)
     const logInToggle = (event) => {
         setLog(!log)
     }
