@@ -12,10 +12,10 @@ import Typography from '@mui/material/Typography';
 
 export default function SignIn({handleSIU, handleLogIn}) {
     // sign in/up toggle
-    const SIUtoggle = () => () => {handleSIU()}
+    const SIUtoggle = () => () => handleSIU()
 
     // log in state
-    const logInToggle = () => () => {handleLogIn()}
+    const logInToggle = () => () => handleLogIn()
 
     // ! integrate with sam
     const handleSubmit = (event) => {
@@ -86,7 +86,7 @@ export default function SignIn({handleSIU, handleLogIn}) {
                 </Button>
 
                 <Grid container>
-                    <Grid item xs>
+                    <Grid item>
                         <Link href="#" variant="body2">
                             Forgot password?
                         </Link>

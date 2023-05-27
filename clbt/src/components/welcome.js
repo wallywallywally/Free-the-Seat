@@ -16,7 +16,7 @@ export default function Welcome({handleLogIn}) {
     }
 
     // log in toggle
-    const logInToggle = () => () => {handleLogIn()}
+    const logInToggle = () => () => handleLogIn()
 
     return (
         <Grid container component="main" sx={{ height: '100vh' }}>

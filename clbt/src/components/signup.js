@@ -17,7 +17,7 @@ import Select from '@mui/material/Select'
 
 export default function SignIn({handleSIU}) {
     // sign in/up toggle
-    const SIUtoggle = () => () => {handleSIU()}
+    const SIUtoggle = () => () => handleSIU()
 
     // ! integrate with sam
     const handleSubmit = (event) => {

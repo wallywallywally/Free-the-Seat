@@ -40,7 +40,7 @@ function ReserveModal(props) {
 
     // this is what is displayed in the modal
     return (
-        <Dialog fullWidth='true' maxWidth='lg' onClose={handleClose} open={open}>
+        <Dialog fullWidth={true} maxWidth='lg' onClose={handleClose} open={open}>
             <DialogTitle>You are now reserving:</DialogTitle>
 
             <div
@@ -192,32 +192,16 @@ ReserveModal.propTypes = {
 }
 
 // main
-export default function Reserve() {
-  const [open, setOpen] = useState(false);
-  const [selectedValue, setSelectedValue] = useState(5);
+export default function Reserve({open, onClose, selectedValue}) {
+    const handleClose = () => () => onClose()
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = (value) => {
-    setOpen(false);
-    setSelectedValue(value);
-  };
-
-  return (
-    <div>
-        {/* button press triggers simple dialog */}
-        <Button variant="outlined" onClick={handleClickOpen}>
-            Open simple dialog
-        </Button>
-
-        {/* only need one, as modal window interrupts everything */}
+    return (
+        <>
         <ReserveModal
-            selectedValue={selectedValue}
+            selectedValue={selectedValue}   // exported value from modal
             open={open}
-            onClose={handleClose}
+            onClose={handleClose()}
         />
-    </div>
+        </>
   );
 }

@@ -19,12 +19,12 @@ import '@fontsource/inter/700.css';
 
 // main theme
 const main = createTheme({
-  typography: {
-    fontFamily: [
-      'Inter',
-      'sans-serif'
-    ].join(',')
-  },
+    typography: {
+        fontFamily: [
+            'Inter',
+            'sans-serif'
+        ].join(',')
+    },
 
 
 })
@@ -36,6 +36,11 @@ function App() {
     const logInToggle = (event) => {
         setLog(!log)
     }
+
+    // !! to implement database stuff
+    // user id state
+    const [userid, setUserid] = useState(597)
+    
     
     return (
         <>
@@ -44,7 +49,7 @@ function App() {
 
         {log === false ?
             <Welcome handleLogIn={logInToggle} />
-            : <Main />
+            : <Main userid={userid} />
         }
 
         </ThemeProvider>
