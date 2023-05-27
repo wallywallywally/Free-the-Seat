@@ -3,8 +3,8 @@ require('dotenv').config();
 const { Sequelize, DataTypes } = require('sequelize');
 const sequelize = new Sequelize(
     'free-the-seat',
-    process.env.USER_ID,
-    process.env.PASSWORD,
+    process.env.REACT_APP_DB_USER,
+    process.env.REACT_APP_DB_PW,
     {
         host: 'aws.connect.psdb.cloud',
         dialect: 'mysql',
