@@ -4,11 +4,9 @@ import {useState} from "react"
 import Lvl1 from './lvl1.js'
 import Reserve from './reserve.js'
 
-import Button from '@mui/material/Button'
-
 // mui
 import { Box, Container, Typography } from '@mui/material'
-import {createTheme, styled} from '@mui/material/styles'
+import {createTheme} from '@mui/material/styles'
 import { ThemeProvider } from '@emotion/react'
 import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
@@ -16,19 +14,19 @@ import FormControl from '@mui/material/FormControl'
 import Select from '@mui/material/Select'
 
 // database integration
-// i'll make a mock db - mySQL exported to JSON, so an array of objects
+// mimics Reservation table
 // a database filtered by level is passed into each Lvl
 const database = [
-    {id: 1, userid: 236, seat: 101, start: "14:00", end: "15:00"},
-    {id: 2, userid: 123, seat: 101, start: "15:30", end: "16:00"},
-    {id: 3, userid: 553, seat: 112, start: "09:00", end: "10:00"},
-    {id: 4, userid: 598, seat: 112, start: "13:30", end: "14:30"},
-    {id: 5, userid: 111, seat: 102, start: "14:00", end: "14:30"},
-    {id: 6, userid: 111, seat: 102, start: "14:30", end: "15:30"},
+    {id: 2, user_id: 123, seat_id: 101, start_time: "15:30", end_time: "16:00"},
+    {id: 1, user_id: 236, seat_id: 101, start_time: "14:00", end_time: "15:00"},
+    {id: 3, user_id: 553, seat_id: 112, start_time: "09:00", end_time: "10:00"},
+    {id: 4, user_id: 598, seat_id: 112, start_time: "13:30", end_time: "14:30"},
+    {id: 5, user_id: 111, seat_id: 102, start_time: "14:00", end_time: "14:30"},
+    {id: 6, user_id: 111, seat_id: 102, start_time: "14:30", end_time: "15:30"},
 ]
 
 // 1 JSON array - 2 main functions
-// 1. display
+// 1. display (DONE)
 // query by floor
 // each dict: read seat + read occupancy at that time (current time falls between start and end)
 // update display
@@ -52,8 +50,8 @@ export default function Main({userid}) {
     let resDet = []
     let reserved = false
     for (var element of database) {
-        if (element.userid === userid) {
-            resDet = [element.seat, element.start, element.end]
+        if (element.user_id === userid) {
+            resDet = [element.seat_id, element.start_time, element.end_time]
             reserved = true
             break
         } else {

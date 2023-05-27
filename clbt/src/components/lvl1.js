@@ -3,9 +3,7 @@ import Seat from './seat.js'
 
 // mui
 import {createTheme, styled} from '@mui/material/styles'
-import Button from '@mui/material/Button'
 import Grid from '@mui/material/Grid'
-import { Typography } from '@mui/material'
 import Paper from '@mui/material/Paper'
 import { ThemeProvider } from '@emotion/react'
 
@@ -44,13 +42,12 @@ const table = createTheme({
 const level = '1'
 const numSeats = 80
 // initilaise seatInfo database - {101: 'emp',...}
+// mimics Seat table
 let seatInfo = {}
 for (let i = 1; i <= numSeats; i++) {
     const seatNum = Number(level + (i <= 9 ? '0' + String(i) : String(i)))
     seatInfo[seatNum] = 'emp'
 }
-const seatNums = Object.keys(seatInfo)
-
 
 // get current time
 let hour = String(new Date().getHours())
@@ -61,6 +58,7 @@ currentTime = 1329
 // main
 export default function Lvl1({reserve, database, reservation}) {
     // process reservation, if any
+    // ! ourres ?
     if (reservation !== 'emp') {        
         seatInfo[reservation[0]] = 'ourres'
     }
@@ -68,21 +66,15 @@ export default function Lvl1({reserve, database, reservation}) {
     // process database
     for (var element of database) {
         // alr occ/ourres- skip other entries
-        let currentStatus = seatInfo[element.seat]
+        let currentStatus = seatInfo[element.seat_id]
         if (currentStatus === 'occ') {
             continue
         }
 
-        // ourres
-        // check userid
-        if (currentStatus === 'ourres') {
-            
-        }
-
         // get start and end times
         let [start, end, start15b] = [0,0,0]
-        start = Number(element.start.split(':').join(''))
-        end = Number(element.end.split(':').join(''))
+        start = Number(element.start_time.split(':').join(''))
+        end = Number(element.end_time.split(':').join(''))
         start15b = String(start).substring(2) === '00' ? start - 100 + 45 : start - 15
 
         // check if current time is between start and end times and get status
@@ -101,7 +93,7 @@ export default function Lvl1({reserve, database, reservation}) {
         }
 
         // update seat status
-        seatInfo[element.seat] = status
+        seatInfo[element.seat_id] = status
     }
 
     // ! we need to update dict every min
