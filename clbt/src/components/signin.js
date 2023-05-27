@@ -18,6 +18,7 @@ const sequelize = new Sequelize(
     {
         host: 'aws.connect.psdb.cloud',
         dialect: 'mysql',
+        dialectModule: require('mysql2'),
         dialectOptions: {
             ssl: {
                 rejectUnauthorized: true,
@@ -117,6 +118,24 @@ export default function SignIn({handleSIU, handleLogIn}) {
             email: data.get('email'),
             password: data.get('password'),
         });
+        (async () => {
+            const userLogin = await sequelize.query(
+                'SELECT * FROM users WHERE email = :email AND password_hash = :password',
+                {
+                    replacements: {
+                        email: data.get('email'),
+                        password: data.get('password')
+                    },
+                    type: sequelize.QueryTypes.SELECT
+                })[0].id
+            if (userLogin.length !== 0) {
+                alert("log in successful")
+                //do something
+            }
+            else {
+                alert("wrong credentials")
+            }
+        })()
     }
 
     return (
@@ -136,7 +155,7 @@ export default function SignIn({handleSIU, handleLogIn}) {
                     Sign in
                 </Typography>
                 
-                <Box component="form" onSubmit={alert(process.env.REACT_APP_DB_USER)} sx={{ mt: 1 }}>
+                <Box component="form" onSubmit={logInToggle()} sx={{ mt: 1 }}>
                 <TextField
                     margin="normal"
                     required
