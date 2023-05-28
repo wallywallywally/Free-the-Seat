@@ -110,6 +110,7 @@ Seat.Reservation = Seat.hasMany(Reservation, {
             }
         });
         */
+
     /*
     User.destroy({
         where: {},
@@ -121,6 +122,7 @@ Seat.Reservation = Seat.hasMany(Reservation, {
             console.log('Error:', error.message);
         });
     */
+
     /*
     const users = await User.findAll({
         attributes: ["id","email", "password_hash"]
@@ -144,12 +146,20 @@ const checkCredentials = (email, password) => {
         if (result.length === 0) {
             console.log('no email and password combination detected')
             return false
+            // nothing
         }
         else {
             console.log('log in successful')
-            return true 
+            return true
+            // move to next page
         }
     })()
 }
 
-//checkCredentials ('pete@gmail.com', 'itshashed2')
+checkCredentials ('pete@gmail.com', 'itshashed2')
+
+// this works
+const a = "export fnc wrks"
+export const test = () => {
+    console.log(1, a)
+}

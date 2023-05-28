@@ -7,7 +7,7 @@ import Welcome from "./components/welcome.js"
 import Main from './components/main.js'
 
 // mui
-import { CssBaseline, Container } from '@mui/material'
+import { CssBaseline } from '@mui/material'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 
 // font - Inter/
@@ -19,14 +19,12 @@ import { createTheme, ThemeProvider } from '@mui/material/styles'
 
 // main theme
 const main = createTheme({
-  // typography: {
-  //  fontFamily: [
-  //    'Inter',
-  //    'sans-serif'
-  //  ].join(',')
-  // },
-
-
+    typography: {
+        fontFamily: [
+            'Inter',
+            'sans-serif'
+        ].join(',')
+    }
 })
 
 // app
@@ -36,6 +34,11 @@ function App() {
     const logInToggle = (event) => {
         setLog(!log)
     }
+
+    // !! to implement database stuff
+    // user id state
+    const [userid, setUserid] = useState(598)
+    
     
     return (
         <>
@@ -44,7 +47,7 @@ function App() {
 
         {log === false ?
             <Welcome handleLogIn={logInToggle} />
-            : <Main />
+            : <Main userid={userid} />
         }
 
         </ThemeProvider>

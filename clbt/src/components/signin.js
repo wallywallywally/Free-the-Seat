@@ -1,3 +1,6 @@
+// db stuff
+// import {test} from './db.js'
+
 // mui
 import Avatar from '@mui/material/Avatar'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
@@ -9,134 +12,134 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 
-//require('dotenv').config();
-const { Sequelize, DataTypes } = require('sequelize');
-const sequelize = new Sequelize(
-    'free-the-seat',
-    process.env.REACT_APP_DB_USER,
-    process.env.REACT_APP_DB_PW,
-    {
-        host: 'aws.connect.psdb.cloud',
-        dialect: 'mysql',
-        dialectModule: require('mysql2'),
-        dialectOptions: {
-            ssl: {
-                rejectUnauthorized: true,
-            }
-        }
-    });
+// require('dotenv').config();
+// const { Sequelize, DataTypes } = require('sequelize');
+// const sequelize = new Sequelize(
+//     'free-the-seat',
+//     process.env.REACT_APP_DB_USER,
+//     process.env.REACT_APP_DB_PW,
+//     {
+//         host: 'aws.connect.psdb.cloud',
+//         dialect: 'mysql',
+//         dialectModule: require('mysql2'),
+//         dialectOptions: {
+//             ssl: {
+//                 rejectUnauthorized: true,
+//             }
+//         }
+//     });
 
-const User = sequelize.define('users', {
-    id: {
-        type: DataTypes.INTEGER,
-        autoIncrement: true,
-        primaryKey: true
-    },
-    email: {
-        type: DataTypes.STRING,
-        unique: true
-    },
-    password_hash: {
-        type: DataTypes.TEXT
-    }
-}, {
-    timestamps: false
-})
+// const User = sequelize.define('users', {
+//     id: {
+//         type: DataTypes.INTEGER,
+//         autoIncrement: true,
+//         primaryKey: true
+//     },
+//     email: {
+//         type: DataTypes.STRING,
+//         unique: true
+//     },
+//     password_hash: {
+//         type: DataTypes.TEXT
+//     }
+// }, {
+//     timestamps: false
+// })
 
-const Seat = sequelize.define('seats', {
-    id: {
-        type: DataTypes.INTEGER,
-        autoIncrement: true,
-        primaryKey: true
-    },
-    occupancy: {
-        type: DataTypes.ENUM('Free', 'Occupied')
-    }
-}, {
-    timestamps: false
-})
+// const Seat = sequelize.define('seats', {
+//     id: {
+//         type: DataTypes.INTEGER,
+//         autoIncrement: true,
+//         primaryKey: true
+//     },
+//     occupancy: {
+//         type: DataTypes.ENUM('Free', 'Occupied')
+//     }
+// }, {
+//     timestamps: false
+// })
 
-const Reservation = sequelize.define('reservations', {
-    id: {
-        type: DataTypes.INTEGER,
-        autoIncrement: true,
-        primaryKey: true
-    },
-    start_time: {
-        type: DataTypes.INTEGER
-    },
-    end_time: {
-        type: DataTypes.INTEGER
-    },
-    date_created: {
-        type: DataTypes.DATE
-    },
-    user_id: {
-        type: DataTypes.INTEGER,
-        references: {
-            model: User,
-            key: 'id'
-        }
-    },
-    seat_id: {
-        type: DataTypes.INTEGER,
-        references: {
-            model: Seat,
-            key: 'id'
-        }
-    }
-},
-    {
-        timestamps: false
-    })
-Reservation.User = Reservation.belongsTo(User, {
-    foreignKey: "user_id"
-})
-User.Reservation = User.hasMany(Reservation, {
-    foreignkey: "user_id"
-});
+// const Reservation = sequelize.define('reservations', {
+//     id: {
+//         type: DataTypes.INTEGER,
+//         autoIncrement: true,
+//         primaryKey: true
+//     },
+//     start_time: {
+//         type: DataTypes.INTEGER
+//     },
+//     end_time: {
+//         type: DataTypes.INTEGER
+//     },
+//     date_created: {
+//         type: DataTypes.DATE
+//     },
+//     user_id: {
+//         type: DataTypes.INTEGER,
+//         references: {
+//             model: User,
+//             key: 'id'
+//         }
+//     },
+//     seat_id: {
+//         type: DataTypes.INTEGER,
+//         references: {
+//             model: Seat,
+//             key: 'id'
+//         }
+//     }
+// },
+//     {
+//         timestamps: false
+//     })
+// Reservation.User = Reservation.belongsTo(User, {
+//     foreignKey: "user_id"
+// })
+// User.Reservation = User.hasMany(Reservation, {
+//     foreignkey: "user_id"
+// });
 
-Reservation.Seat = Reservation.belongsTo(Seat, {
-    foreignKey: "seat_id"
-})
-Seat.Reservation = Seat.hasMany(Reservation, {
-    foreignKey: "seat_id"
-});
+// Reservation.Seat = Reservation.belongsTo(Seat, {
+//     foreignKey: "seat_id"
+// })
+// Seat.Reservation = Seat.hasMany(Reservation, {
+//     foreignKey: "seat_id"
+// });
+
 export default function SignIn({handleSIU, handleLogIn}) {
     // sign in/up toggle
-    const SIUtoggle = () => () => {handleSIU()}
+    const SIUtoggle = () => () => handleSIU()
 
     // log in state
-    const logInToggle = () => () => { handleLogIn() }
-
+    const logInToggle = () => () => handleLogIn()
 
     // ! integrate with sam
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        const data = new FormData(event.currentTarget);
-        console.log({
-            email: data.get('email'),
-            password: data.get('password'),
-        });
-        (async () => {
-            const userLogin = await sequelize.query(
-                'SELECT * FROM users WHERE email = :email AND password_hash = :password',
-                {
-                    replacements: {
-                        email: data.get('email'),
-                        password: data.get('password')
-                    },
-                    type: sequelize.QueryTypes.SELECT
-                })
-            if (userLogin[0].id.length !== 0) {
-                alert("log in successful")
-                //do something
-            }
-            else {
-                alert("wrong credentials")
-            }
-        })()
-    }
+    // const handleSubmit = (event) => {
+    //     event.preventDefault();
+    //     const data = new FormData(event.currentTarget);
+    //     console.log({
+    //         email: data.get('email'),
+    //         password: data.get('password'),
+    //     });
+    //     (async () => {
+    //         const userLogin = await sequelize.query(
+    //             'SELECT * FROM users WHERE email = :email AND password_hash = :password',
+    //             {
+    //                 replacements: {
+    //                     email: data.get('email'),
+    //                     password: data.get('password')
+    //                 },
+    //                 type: sequelize.QueryTypes.SELECT
+    //             })[0].id
+    //         if (userLogin.length !== 0) {
+    //             alert("log in successful")
+    //             //do something
+    //         }
+    //         else {
+    //             alert("wrong credentials")
+    //         }
+    //     })()
+    // }
 
     return (
         <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
@@ -197,11 +200,11 @@ export default function SignIn({handleSIU, handleLogIn}) {
                 </Button>
 
                 <Grid container>
-                    <Grid item xs>
+                    {/* <Grid item>
                         <Link href="#" variant="body2">
                             Forgot password?
                         </Link>
-                    </Grid>
+                    </Grid> */}
                     <Grid item>
                         <Link href="#" variant="body2" onClick={SIUtoggle()}>
                             Don't have an account? Sign Up
