@@ -140,7 +140,7 @@ const checkCredentials = (email, password) => {
                 },
                 type: sequelize.QueryTypes.SELECT
             })
-        console.log(result)
+        //console.log(result)
         if (result.length === 0) {
             console.log('no email and password combination detected')
             return false
@@ -152,4 +152,4 @@ const checkCredentials = (email, password) => {
     })()
 }
 
-checkCredentials ('pete@gmail.com', 'itshashed2')
+//checkCredentials ('pete@gmail.com', 'itshashed2')
