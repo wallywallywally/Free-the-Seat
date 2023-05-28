@@ -4,8 +4,8 @@ require('dotenv').config();
 // Creating a connection
 const connection = mysql.createConnection({
     host: 'aws.connect.psdb.cloud',
-    user: process.env.USER_ID,
-    password: process.env.PASSWORD,
+    user: process.env.REACT_APP_DB_USER,
+    password: process.env.REACT_APP_DB_PW,
   database: 'free-the-seat',
   ssl: { rejectUnauthorized: true },
   // multipleStatements: true,
@@ -14,7 +14,7 @@ const connection = mysql.createConnection({
 // Connecting to the database
 connection.connect((err) => {
   if (err) {
-    console.error('Error connecting to the database:', err);
+    console.error('Error connecting to the database:', err);    
     return;
   }
 
