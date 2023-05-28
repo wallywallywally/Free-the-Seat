@@ -9,7 +9,9 @@ const db = mysql.createConnection({
     password: "pscale_pw_rhJQ2ytLEmQP6Xeq7moZzpETJGEFWDlib0HBXgSVswq",
     database: "free-the-seat"
 })
+
 app.use(express.json())
+
 // tables:
 // users, seats, reservations
 
@@ -34,7 +36,13 @@ app.post("/tablename", (req, res) => {
 
 //login (tentative)
 app.get("/login", (req, res) => {
-
+    const email = req.body.email
+    const password = req.body.password
+    const query = "SELECT * FROM users WHERE email = '${email}' AND password_hash = '${password}'"
+    db.query(query, email, password, (err, data) => {
+        if (err) return res.json(err)
+        return res.json(data)
+    })
 })
 
 
