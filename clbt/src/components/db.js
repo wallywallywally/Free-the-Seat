@@ -157,9 +157,3 @@ const checkCredentials = (email, password) => {
 }
 
 checkCredentials ('pete@gmail.com', 'itshashed2')
-
-// this works
-const a = "export fnc wrks"
-export const test = () => {
-    console.log(1, a)
-}

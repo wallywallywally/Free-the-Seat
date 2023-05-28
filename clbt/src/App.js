@@ -11,10 +11,10 @@ import { CssBaseline } from '@mui/material'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 
 // font - Inter/
-// import '@fontsource/inter/300.css';
-// import '@fontsource/inter/400.css';
-// import '@fontsource/inter/500.css';
-// import '@fontsource/inter/700.css';
+import '@fontsource/inter/300.css';
+import '@fontsource/inter/400.css';
+import '@fontsource/inter/500.css';
+import '@fontsource/inter/700.css';
 
 
 // main theme
