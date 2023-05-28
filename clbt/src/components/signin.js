@@ -127,8 +127,8 @@ export default function SignIn({handleSIU, handleLogIn}) {
                         password: data.get('password')
                     },
                     type: sequelize.QueryTypes.SELECT
-                })[0].id
-            if (userLogin.length !== 0) {
+                })
+            if (userLogin[0].id.length !== 0) {
                 alert("log in successful")
                 //do something
             }
