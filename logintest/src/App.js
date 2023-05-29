@@ -9,14 +9,13 @@ import { Context } from "./context/Context";
 function App() {
     const { user } = useContext(Context);
   return (
-    <Router>
-
+    <BrowserRouter>
     <Routes>
-      <Route path="/register">{user ? <Home /> : <Register />}</Route>
-      <Route path="/login">{user ? <Home /> : <Login />}</Route>
-      <Route path="/home">{user ? <Home /> : <Register />}</Route>
+      <Route path="/register" element = {user ? <Home /> : <Register />}/>
+      <Route path="/login" element = {user ? <Home /> : <Login />}/>
+      <Route path="/home" element = {user ? <Home /> : <Register />}/>
     </Routes>
-  </Router>
+  </BrowserRouter>
   );
 }
 

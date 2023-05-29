@@ -26,8 +26,6 @@ db.connect((error) => {
     }
     console.log('Connection established sucessfully');
    });
-  db.end((error) => {
- });
 
 
 
@@ -36,17 +34,21 @@ db.connect((error) => {
 
 // Read
 app.get("/getuser", (req, res) => {
-    const query = "SELECT * FROM User"
+    console.log("test")
+    const query = "SELECT * FROM users"
     db.query(query, (err, data) => {
-        if (err) return res.json(err)
-        return res.json(data)
-    })
+        if (err) {console.log("uhoh")
+        return res.json(err)
+    }
+        return res.json(data[0])
+    }) 
 })
 
 //register
 app.post("/register", async (req, res) => {
-    
-    const query = "INSERT INTO users ('email', 'password') VALUES (?)";
+    console.log("received register")
+    console.log(req.body)
+    const query = "INSERT INTO users (email, password_hash) VALUES (?)";
     const salt = await bcrypt.genSalt(10);
     const hashedPass = await bcrypt.hash(req.body.password, salt)
     const newUser = [
@@ -54,11 +56,12 @@ app.post("/register", async (req, res) => {
         hashedPass
         ];
         db.query(query, [newUser], (err, data) => {
-            if (err) res.status(500).json(err)
+            if (err) res.status(500)
              res.status(200).json(data);
         })
 //login (tentative)
-app.post("/login", (req, res) => {
+app.get("/login", (req, res) => {
+    //console.log(req.body.email)
     const email = req.body.email
     const password = req.body.password
     const query = "SELECT * FROM users WHERE email = '${email}' AND password_hash = '${password}'"

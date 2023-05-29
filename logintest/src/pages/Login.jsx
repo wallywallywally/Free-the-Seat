@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useContext, useRef } from "react";
 import { Link } from "react-router-dom";
-
+import { Context } from "../context/Context";
 
 export default function Login() {
   const emailRef = useRef();
@@ -12,12 +12,13 @@ export default function Login() {
     e.preventDefault();
     dispatch({ type: "LOGIN_START" });
     try {
-      const res = await axios.post("/auth/login", {
-        username: emailRef.current.value,
-        password: passwordRef.current.value,
-      });
+      const res = await axios.get("http://localhost:8800/login", {params: {
+        email: emailRef.current.value,
+        password: passwordRef.current.value
+      }});
       dispatch({ type: "LOGIN_SUCCESS", payload: res.data });
     } catch (err) {
+      alert(err)
       dispatch({ type: "LOGIN_FAILURE" });
     }
   };
