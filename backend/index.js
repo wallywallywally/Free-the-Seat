@@ -1,4 +1,5 @@
 import express from 'express'
+import mysql from 'mysql2'
 
 const app = express()
 
@@ -7,7 +8,8 @@ const db = mysql.createConnection({
     host: "aws.connect.psdb.cloud",
     user: "ar16f2d710lc0r3s881z",
     password: "pscale_pw_rhJQ2ytLEmQP6Xeq7moZzpETJGEFWDlib0HBXgSVswq",
-    database: "free-the-seat"
+    database: "free-the-seat",
+    ssl: { rejectUnauthorized: true },
 })
 
 app.use(express.json())
