@@ -28,7 +28,7 @@ export default function Welcome({handleLogIn}) {
             sm={4}
             md={7}
             sx={{
-                backgroundImage: 'url(./components/img/clb2.png)',    // ! to fix: LINK TO ACTUAL IMAGE
+                // backgroundImage: 'url(./components/img/clb2.png)',    // ! to fix: LINK TO ACTUAL IMAGE
                 backgroundRepeat: 'no-repeat',
                 backgroundColor: '#c59e88',
                 backgroundSize: 'cover',

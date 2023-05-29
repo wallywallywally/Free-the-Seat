@@ -4,11 +4,11 @@ require('dotenv').config();
 // Creating a connection
 const connection = mysql.createConnection({
     host: 'aws.connect.psdb.cloud',
-    user: process.env.REACT_APP_DB_USER,
-    password: process.env.REACT_APP_DB_PW,
-  database: 'free-the-seat',
-  ssl: { rejectUnauthorized: true },
-  // multipleStatements: true,
+    user: 'ar16f2d710lc0r3s881z',
+    password: 'pscale_pw_rhJQ2ytLEmQP6Xeq7moZzpETJGEFWDlib0HBXgSVswq',
+    database: 'free-the-seat',
+    ssl: { rejectUnauthorized: true },
+    // multipleStatements: true,
 });
 
 // Connecting to the database

@@ -1,5 +1,8 @@
+import { useState, useEffect } from 'react';
+
 // db stuff
 // import {test} from './db.js'
+import axios from 'axios'
 
 // mui
 import Avatar from '@mui/material/Avatar'
@@ -11,6 +14,7 @@ import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
+
 
 // require('dotenv').config();
 // const { Sequelize, DataTypes } = require('sequelize');
@@ -140,6 +144,19 @@ export default function SignIn({handleSIU, handleLogIn}) {
     //         }
     //     })()
     // }
+
+    // const [creds, setCreds] = useState([])
+    // useEffect(() => {
+    //     const fetch = async () => {
+    //         try {
+    //             const res = await axios.get('/getuser')
+    //             console.log(res)
+    //         } catch(err) {
+    //             console.log(err)
+    //         }
+    //     }
+    //     fetch()
+    // }, [])
 
     return (
         <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
