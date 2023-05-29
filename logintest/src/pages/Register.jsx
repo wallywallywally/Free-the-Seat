@@ -12,12 +12,14 @@ export default function Register() {
     const handleSubmit = async(e) => {
         e.preventDefault();
         setError(false);
-        try { const res = await axios.post("/register", {
+        try { 
+          const res = await axios.post("http://localhost:8800/register", {
             email,
             password,
         });
-        res.data && window.history.location.replace("/login");
+        res.data && window.location.replace("/login");
     } catch (err) {
+      alert(err)
         setError(true);
     }
 };
