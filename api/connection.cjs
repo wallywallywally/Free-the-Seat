@@ -19,11 +19,9 @@ connection.connect((err) => {
   }
 
   console.log('Connected to the database!');
-
+  const email = "tes2t"
   // Perform database operations
-  const createTablesQuery = `
-    SELECT * FROM users
-  `;
+  const createTablesQuery = `SELECT * FROM users`;
 
   connection.query(createTablesQuery, (err, results) => {
     if (err) {

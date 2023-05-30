@@ -5,3 +5,6 @@
 Team:
 Willson Han Zhekai
 Ong Yi Kai Samuel
+
+backend is backend
+frontend is logintest
