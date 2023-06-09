@@ -30,14 +30,14 @@ const main = createTheme({
 // app
 function App() {
     // log in state
-    const [log, setLog] = useState(false)
+    const [log, setLog] = useState(true)
     const logInToggle = (event) => {
         setLog(!log)
     }
 
     // !! to implement database stuff
     // user id state
-    const [userid, setUserid] = useState(598)
+    const [userid, setUserid] = useState(597)
     
     
     return (

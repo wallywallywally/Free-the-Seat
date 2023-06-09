@@ -35,12 +35,12 @@ const SeatBtn = styled(Button)(({status}) => ({
     }
 }))
 
-export default function Seat({status, reserve}) {
-    const handleReserve = () => () => reserve()
+export default function Seat({status, reserve, id}) {
+    const handleReserve = () => (event) => reserve(event)
 
     return (
         <>
-        <SeatBtn variant='contained' status={status} disableElevation onClick={handleReserve()} />
+        <SeatBtn id={id} variant='contained' status={status} disableElevation onClick={handleReserve()} />
         </>
     );
 }

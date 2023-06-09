@@ -6,6 +6,7 @@ import {createTheme, styled} from '@mui/material/styles'
 import Grid from '@mui/material/Grid'
 import Paper from '@mui/material/Paper'
 import { ThemeProvider } from '@emotion/react'
+import { useEffect } from 'react'
 
 
 // table
@@ -38,100 +39,55 @@ const table = createTheme({
     }
 })
 
-// level details
-const level = '1'
-const numSeats = 80
-// initilaise seatInfo database - {101: 'emp',...}
-// mimics Seat table
-let seatInfo = {}
-for (let i = 1; i <= numSeats; i++) {
-    const seatNum = Number(level + (i <= 9 ? '0' + String(i) : String(i)))
-    seatInfo[seatNum] = 'emp'
-}
-
-// get current time
-let hour = String(new Date().getHours())
-let min = String(new Date().getMinutes())
-let currentTime = Number(hour + (min.length === 1 ? '0' + min : min))
-currentTime = 1329
 
 // main
-export default function Lvl1({reserve, database, reservation}) {
-    // process reservation, if any
-    // ! ourres ?
-    if (reservation !== 'emp') {        
+export default function Lvl1({reserveModal, reservation, prevSeat, dbSeats}) {
+    const seatInfo = dbSeats
+    
+    // process reservation
+    // first time
+    if (reservation !== 'emp') {
         seatInfo[reservation[0]] = 'ourres'
     }
-
-    // process database
-    for (var element of database) {
-        // alr occ/ourres- skip other entries
-        let currentStatus = seatInfo[element.seat_id]
-        if (currentStatus === 'occ') {
-            continue
-        }
-
-        // get start and end times
-        let [start, end, start15b] = [0,0,0]
-        start = Number(element.start_time.split(':').join(''))
-        end = Number(element.end_time.split(':').join(''))
-        start15b = String(start).substring(2) === '00' ? start - 100 + 45 : start - 15
-
-        // check if current time is between start and end times and get status
-        let status
-        if ((currentTime >= start) && (currentTime <= end)) {
-            status = 'occ'
-        } else if ((currentTime <= start) && (currentTime >= start15b)) {
-            status = 'res'
+    // when reservation changes
+    useEffect(() => {
+        if (reservation !== 'emp') {
+            seatInfo[reservation[0]] = 'ourres'
+            if (reservation[0] !== prevSeat[0]) {
+                // reservation changed to diff seat - prevSeat cleared + new prevSeat
+                seatInfo[prevSeat[0]] = 'emp'
+                prevSeat[1](reservation[0])
+            }
         } else {
-            status = 'emp'
+            // previous reserved seat cleared
+            seatInfo[prevSeat[0]] = 'emp'
         }
-
-        // alr res - skip emp entries
-        if ((currentStatus === 'res') && (status === 'emp')) {
-            continue
-        }
-
-        // update seat status
-        seatInfo[element.seat_id] = status
-    }
-
-    // ! we need to update dict every min
-    const updateSeatInfo = () => {
-
-    }
-
-    // test for time reload
-    const handleTime = () => {
-        console.log(currentTime)
-    }
+    }, [reservation])
 
     // reserve modal
-    const handleReserve = () => () => reserve()
+    const handleReserve = () => (event) => reserveModal(event)
 
 
     // main
     return (
         <>
-        {/* <Button onClick={handleReserve()}>test</Button> */}
         <ThemeProvider theme={table}>
         <Grid container id='main' justifyContent={'space-around'}>
-            {/* <Button onClick={handleTime()}>test</Button> */}
 
-            <Grid container id='left-side' xs={4}>
+            <Grid item id='left-side' xs={4}>
 
                 <Grid container id='left-top'>
 
                     <Grid item xs={6}>
                     <TableFull container>
                         <Grid item>
-                            <Seat status={seatInfo[101]} reserve={handleReserve()}/>
+                            <Seat id='101' status={seatInfo[101]} reserve={handleReserve()}/>
                         </Grid>
                         <Grid item>
-                            <Seat status={seatInfo[102]} reserve={handleReserve()}/>
+                            <Seat id='102' status={seatInfo[102]} reserve={handleReserve()}/>
                         </Grid>
                         <Grid item>
-                            <Seat status={seatInfo[103]} reserve={handleReserve()}/>
+                            <Seat id= '103' status={seatInfo[103]} reserve={handleReserve()}/>
                         </Grid>
                         <Grid item>
                             <Seat status={seatInfo[104]} reserve={handleReserve()}/>
@@ -291,7 +247,7 @@ export default function Lvl1({reserve, database, reservation}) {
 
             </Grid>
 
-            <Grid container id='right-side' xs={4}>
+            <Grid item id='right-side' xs={4}>
 
                 <Grid container id='right-top'>
 
