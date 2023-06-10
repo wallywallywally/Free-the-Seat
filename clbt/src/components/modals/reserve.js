@@ -137,17 +137,10 @@ function ReserveModal(props) {
         // this entry is pushed to DB
         handleClose()
     }
-
     // [DB int] DELETE reservation
     const handleSubmitDelete = () => {
-        const test = [103, '0900', '1000']
         setResDet([])
-        console.log('deleted, ', test)
         // this entry is removed from DB
-        
-        // clear ourres
-        // ttCol[] = 'tt-res'
-
         handleClose()
     }
 

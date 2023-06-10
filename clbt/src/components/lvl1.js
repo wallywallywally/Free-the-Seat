@@ -62,6 +62,7 @@ export default function Lvl1({reserveModal, resDet, prevSeat, dbSeats}) {
         } else {
             // previous reserved seat cleared
             seatInfo[prevSeat[0]] = 'emp'
+            prevSeat[1](prevSeat)
         }
     }, [resDet, seatInfo, prevSeat])
 
