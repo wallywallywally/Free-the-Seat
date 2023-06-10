@@ -41,28 +41,29 @@ const table = createTheme({
 
 
 // main
-export default function Lvl1({reserveModal, reservation, prevSeat, dbSeats}) {
+export default function Lvl1({reserveModal, resDet, prevSeat, dbSeats}) {
     const seatInfo = dbSeats
     
-    // process reservation
+    // process reservation to update "seats" locally
     // first time
-    if (reservation !== 'emp') {
-        seatInfo[reservation[0]] = 'ourres'
+    if (resDet !== 'emp') {
+        seatInfo[resDet[0]] = 'ourres'
     }
     // when reservation changes
+    // ! [DB int] cleared - set to previous state
     useEffect(() => {
-        if (reservation !== 'emp') {
-            seatInfo[reservation[0]] = 'ourres'
-            if (reservation[0] !== prevSeat[0]) {
+        if (resDet !== 'emp') {
+            seatInfo[resDet[0]] = 'ourres'
+            if (resDet[0] !== prevSeat[0]) {
                 // reservation changed to diff seat - prevSeat cleared + new prevSeat
                 seatInfo[prevSeat[0]] = 'emp'
-                prevSeat[1](reservation[0])
+                prevSeat[1](resDet[0])
             }
         } else {
             // previous reserved seat cleared
             seatInfo[prevSeat[0]] = 'emp'
         }
-    }, [reservation])
+    }, [resDet, seatInfo, prevSeat])
 
     // reserve modal
     const handleReserve = () => (event) => reserveModal(event)
@@ -124,7 +125,7 @@ export default function Lvl1({reserveModal, reservation, prevSeat, dbSeats}) {
                             <Seat status={seatInfo[111]} reserve={handleReserve()}/>
                         </Grid>
                         <Grid item>
-                            <Seat status={seatInfo[112]} reserve={handleReserve()}/>
+                            <Seat id='112' status={seatInfo[112]} reserve={handleReserve()}/>
                         </Grid>
                         <Grid item>
                             <Seat status={seatInfo[113]} reserve={handleReserve()}/>

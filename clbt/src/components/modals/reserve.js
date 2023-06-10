@@ -1,5 +1,5 @@
-import { useState } from 'react'
 import '../styles.css'
+import { useState } from 'react'
 
 // mui
 import PropTypes from 'prop-types'
@@ -59,7 +59,7 @@ const timeslots60 = {
 // ! to fix
 // timetable + timings don't line up - add another and hide visibility or smth
 function ReserveModal(props) {
-    const { onClose, open, seatInfo, ttCol, ttColpre, setResDet, res } = props;
+    const { onClose, open, seatDet, ttCol, ttColpre, setResDet, resDet } = props;
 
     // on close
     const handleClose = () => {
@@ -67,6 +67,7 @@ function ReserveModal(props) {
         setDur('')
         setSlot('')
         setSlotDis(true)
+        setSubmitDis(true)
         setAvaslots([])
         onClose()
     }
@@ -75,13 +76,13 @@ function ReserveModal(props) {
     // 1. duration
     const [dur, setDur] = useState('')
     const [avaslots, setAvaslots] = useState([])
-    const [slotDis, setSlotDis] = useState(true)
     const handleChangeDur = (event) => {
         setDur(event.target.value)
-
+        
         // reset
         setSlot('')
         setSlotDis(false)
+        setSubmitDis(true)
         Object.assign(ttCol, ttColpre)
 
         // get available time slots
@@ -100,11 +101,13 @@ function ReserveModal(props) {
         // 30 min
         for (var element30 of avaslots) avaslotsfin.push(timeslots30[element30])
     }
-
+    
     // 2. time slot
     const [slot, setSlot] = useState('')
+    const [slotDis, setSlotDis] = useState(true)
     const handleChangeSlot = (event) => {
         setSlot(event.target.value)
+        setSubmitDis(false)
 
         // update timetable based on selected timeslot
         // reset
@@ -126,25 +129,43 @@ function ReserveModal(props) {
     }
 
     // buttons
+    const [submitDis, setSubmitDis] = useState(true)
     // [DB int] CREATE reservation
-    const handleSubmitCreate = (event) => {
-        const resDet = [Number(seatInfo[2]), slot.slice(0, 4), slot.slice(7, 12)]
+    const handleSubmitCreate = () => {
+        const resDet = [Number(seatDet[2]), slot.slice(0, 4), slot.slice(7, 12)]
         setResDet(resDet)
-        
+        // this entry is pushed to DB
         handleClose()
     }
 
     // [DB int] DELETE reservation
-    // for delete modal window
-    // setResDet([])
+    const handleSubmitDelete = () => {
+        const test = [103, '0900', '1000']
+        setResDet([])
+        console.log('deleted, ', test)
+        // this entry is removed from DB
+        
+        // clear ourres
+        // ttCol[] = 'tt-res'
 
-    // ! for delete and seat info we conditionally render
+        handleClose()
+    }
+
+    // expressions for reserved
+    const res = resDet.length !== 0
+    const resISseat = resDet[0] === Number(seatDet[2])
 
 
     // what's displayed
     return (
         <Dialog fullWidth={true} maxWidth='lg' onClose={handleClose} open={open} keepMounted>
-            <DialogTitle>You are now reserving:</DialogTitle>
+            <DialogTitle>
+            <span
+            style={{visibility: res && !resISseat ? 'collapse' : 'revert'}}
+            >
+                {res === false ? 'You are now reserving:' : 'You have reserved:'}
+            </span>
+            </DialogTitle>
 
             <div
             id='seat-num'
@@ -154,8 +175,8 @@ function ReserveModal(props) {
                 textAlign: 'center',
                 margin: '0 auto'
             }}>
-                <Typography variant='h5'>Level {seatInfo[0]}</Typography>
-                <Typography variant='h4'>{seatInfo[1]}</Typography>
+                <Typography variant='h5'>Level {seatDet[0]}</Typography>
+                <Typography variant='h4'>{seatDet[1]}</Typography>
             </div>
 
             {/* timetable */}
@@ -208,7 +229,12 @@ function ReserveModal(props) {
                 <p>1800</p>
             </Box>
 
-            {/* time slot select */}
+            {/* selects */}
+            {/* if reservation exists, this is pointless */}
+            {res  ? 
+            <></> 
+            : 
+            <>
             <Typography variant='h6' sx={{textAlign:'center'}}>Time slot:</Typography>
             <Box
             sx={{
@@ -219,6 +245,7 @@ function ReserveModal(props) {
                 marginTop: 2,
             }}
             >
+                {/* 1. duration */}
                 <FormControl sx={{width: 170}} required>
                     <InputLabel id="time-dur-label">Duration</InputLabel>
                     <Select
@@ -231,8 +258,8 @@ function ReserveModal(props) {
                         <MenuItem value={30}>30 min</MenuItem>
                         <MenuItem value={60}>1 hour</MenuItem>
                     </Select>
-                </FormControl>           
-
+                </FormControl>      
+                {/* 2. time slot */}
                 <FormControl sx={{width: 170}} disabled={slotDis}>
                     <InputLabel id="time-slot-label">Time</InputLabel>
                     <Select
@@ -249,25 +276,30 @@ function ReserveModal(props) {
                     </Select>
                 </FormControl>
             </Box>
+            </>
+            }
 
-            {/* reserve button */}
-            <Button 
-            onClick={handleSubmitCreate}
+            {/* button */}
+            {/* no reservation - CREATE / yes reservation + correct seat - DELETE */}
+            <Button
+            disabled={!res ? submitDis : false}
+            onClick={res ? handleSubmitDelete : handleSubmitCreate}
             variant='contained'
             disableElevation
             sx={{
+                visibility: !res || resISseat ? 'revert' : 'hidden',
                 marginTop: 5,
                 borderRadius: 0,
-                backgroundColor: '#e7be95',
+                backgroundColor: res ? '#fb7979' : 'rgba(189, 0 ,255, 0.6)',
                 color: '#000',
                 '&:hover': {
-                    backgroundColor: 'rgba(231, 190, 149, 0.75)'
+                    backgroundColor: res ? 'rgba(251, 121, 121, 0.75)' : 'rgba(189, 0 ,255, 0.3)'
                 },
                 '&:active': {
-                    backgroundColor: '#e7be95'
+                    backgroundColor: res ? '#fb7979' : 'rgba(189, 0 ,255, 0.6)'
                 },
             }}>
-                Reserve
+                {res ? 'Cancel' : 'Reserve'}
             </Button>
 
         </Dialog>
@@ -280,7 +312,7 @@ ReserveModal.propTypes = {
 }
 
 // main
-export default function Reserve({open, onClose, seatInfo, ttCol, ttColpre, setResDet, res}) {
+export default function Reserve({open, onClose, seatDet, ttCol, ttColpre, setResDet, resDet}) {
     const handleClose = () => () => onClose()
 
     return (
@@ -288,11 +320,11 @@ export default function Reserve({open, onClose, seatInfo, ttCol, ttColpre, setRe
         <ReserveModal
         open={open}
         onClose={handleClose()}
-        seatInfo={seatInfo}
+        seatDet={seatDet}
         ttCol={ttCol}
         ttColpre={ttColpre}
         setResDet={setResDet}
-        res={res}
+        resDet={resDet}
         />
         </>
   );

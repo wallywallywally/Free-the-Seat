@@ -1,5 +1,17 @@
-.test {
-    background-color: red;
+/* main.js */
+/* header hyperlink to cancel res */
+a.cancel {
+    cursor: pointer;
+    color: #fb7979;
+    font-weight: bold;
+}
+
+a.cancel:hover {
+    color: rgba(251, 121, 121, 0.75)
+}
+
+a.cancel:active {
+    color: #fb7979
 }
 
 /* reserve.js */

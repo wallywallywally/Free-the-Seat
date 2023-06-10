@@ -1,3 +1,4 @@
+import './styles.css'
 import {useState} from "react"
 
 // components
@@ -29,7 +30,7 @@ const dbRes = [
     {id: 6, user_id: 155, seat_id: 101, start_time: "0930", end_time: "1030"},
 ]
 
-// [DB int] process "reservations" to get "seats" - to finish
+// [DB int] process "reservations" to get "seats" at any given time
 // // get current time
 // let hour = String(new Date().getHours())
 // let min = String(new Date().getMinutes())
@@ -84,6 +85,77 @@ for (let i = 1; i <= numSeats; i++) {
     (seatNum % 2) === 0 ? seatInfo[seatNum] = 'emp' : seatInfo[seatNum] = 'occ'
 }
 
+// turn timing into id (0900-0930 -> 91)
+const timeToID = (start, end, arr) => {
+    // start at xx00
+    if (start.slice(2,4) === '00') {
+        switch (start.slice(0,2)) {
+            case '09':
+                end.slice(2,4) === '30' ? arr.push(91) : arr.push(91, 92)
+                break
+            case '10':
+                end.slice(2,4) === '30' ? arr.push(101) : arr.push(101, 102)
+                break
+            case '11':
+                end.slice(2,4) === '30' ? arr.push(111) : arr.push(111, 112)
+                break
+            case '12':
+                end.slice(2,4) === '30' ? arr.push(121) : arr.push(121, 122)
+                break
+            case '13':
+                end.slice(2,4) === '30' ? arr.push(131) : arr.push(131, 132)
+                break
+            case '14':
+                end.slice(2,4) === '30' ? arr.push(141) : arr.push(141, 142)
+                break
+            case '15':
+                end.slice(2,4) === '30' ? arr.push(151) : arr.push(151, 152)
+                break
+            case '16':
+                end.slice(2,4) === '30' ? arr.push(161) : arr.push(161, 162)
+                break
+            case '17':
+                end.slice(2,4) === '30' ? arr.push(171) : arr.push(171, 172)
+                break
+            default:
+                // do nothing
+        }
+    }
+    // start at xx30
+    if (start.slice(2,4) === '30') {
+        switch (start.slice(0,2)) {
+            case '09':
+                end.slice(2,4) === '00' ? arr.push(92) : arr.push(92, 101)
+                break
+            case '10':
+                end.slice(2,4) === '00' ? arr.push(102) : arr.push(102, 111)
+                break
+            case '11':
+                end.slice(2,4) === '00' ? arr.push(112) : arr.push(112, 121)
+                break
+            case '12':
+                end.slice(2,4) === '00' ? arr.push(122) : arr.push(122, 132)
+                break
+            case '13':
+                end.slice(2,4) === '00' ? arr.push(132) : arr.push(132, 141)
+                break
+            case '14':
+                end.slice(2,4) === '00' ? arr.push(142) : arr.push(142, 151)
+                break
+            case '15':
+                end.slice(2,4) === '00' ? arr.push(152) : arr.push(152, 161)
+                break
+            case '16':
+                end.slice(2,4) === '00' ? arr.push(162) : arr.push(162, 171)
+                break
+            case '17':
+                arr.push(172)
+                break
+            default:
+                // do nothing
+        }
+    }
+}
 
 
 // main
@@ -101,9 +173,9 @@ export default function Main({userid}) {
             resDetfirst = []
         }
     }
-    let [prevSeat, setprevSeat] = useState(resDetfirst[0])
     // state updates if user creates/deletes reservation
     const [resDet, setResDet] = useState(resDetfirst)
+    let [prevSeat, setprevSeat] = useState(resDetfirst[0])
 
     // level state
     const [level, setLevel] = useState(1)
@@ -111,7 +183,7 @@ export default function Main({userid}) {
         setLevel(event.target.value)
     }
  
-    // checked in state
+    // check in state
     const [checkin, setCheckin] = useState(false)
 
     // reserve modal
@@ -126,7 +198,8 @@ export default function Main({userid}) {
         setOpenRes(true)
 
         // update modal
-        const seatNum = event.target.id
+        // undefined for header hyperlink
+        const seatNum = event.target.value === undefined ? String(resDet[0]) : event.target.id
 
         // seat info
         setSeatDet([seatNum[0], seatNum[1] === '0' ? seatNum.slice(2) : seatNum.slice(1), seatNum])
@@ -136,75 +209,7 @@ export default function Main({userid}) {
         const ttdatapre = dbRes.filter((element) => element.seat_id === Number(seatNum))
         const ttdata = []
         for (var element of ttdatapre) {
-            // start at xx00
-            if (element.start_time.slice(2,4) === '00') {
-                switch (element.start_time.slice(0,2)) {
-                    case '09':
-                        element.end_time.slice(2,4) === '30' ? ttdata.push(91) : ttdata.push(91, 92)
-                        break
-                    case '10':
-                        element.end_time.slice(2,4) === '30' ? ttdata.push(101) : ttdata.push(101, 102)
-                        break
-                    case '11':
-                        element.end_time.slice(2,4) === '30' ? ttdata.push(111) : ttdata.push(111, 112)
-                        break
-                    case '12':
-                        element.end_time.slice(2,4) === '30' ? ttdata.push(121) : ttdata.push(121, 122)
-                        break
-                    case '13':
-                        element.end_time.slice(2,4) === '30' ? ttdata.push(131) : ttdata.push(131, 132)
-                        break
-                    case '14':
-                        element.end_time.slice(2,4) === '30' ? ttdata.push(141) : ttdata.push(141, 142)
-                        break
-                    case '15':
-                        element.end_time.slice(2,4) === '30' ? ttdata.push(151) : ttdata.push(151, 152)
-                        break
-                    case '16':
-                        element.end_time.slice(2,4) === '30' ? ttdata.push(161) : ttdata.push(161, 162)
-                        break
-                    case '17':
-                        element.end_time.slice(2,4) === '30' ? ttdata.push(171) : ttdata.push(171, 172)
-                        break
-                    default:
-                        // do nothing
-                }
-            }
-
-            // start at xx30
-            if (element.start_time.slice(2,4) === '30') {
-                switch (element.start_time.slice(0,2)) {
-                    case '09':
-                        element.end_time.slice(2,4) === '00' ? ttdata.push(92) : ttdata.push(92, 101)
-                        break
-                    case '10':
-                        element.end_time.slice(2,4) === '00' ? ttdata.push(102) : ttdata.push(102, 111)
-                        break
-                    case '11':
-                        element.end_time.slice(2,4) === '00' ? ttdata.push(112) : ttdata.push(112, 121)
-                        break
-                    case '12':
-                        element.end_time.slice(2,4) === '00' ? ttdata.push(122) : ttdata.push(122, 132)
-                        break
-                    case '13':
-                        element.end_time.slice(2,4) === '00' ? ttdata.push(132) : ttdata.push(132, 141)
-                        break
-                    case '14':
-                        element.end_time.slice(2,4) === '00' ? ttdata.push(142) : ttdata.push(142, 151)
-                        break
-                    case '15':
-                        element.end_time.slice(2,4) === '00' ? ttdata.push(152) : ttdata.push(152, 161)
-                        break
-                    case '16':
-                        element.end_time.slice(2,4) === '00' ? ttdata.push(162) : ttdata.push(162, 171)
-                        break
-                    case '17':
-                        ttdata.push(172)
-                        break
-                    default:
-                        // do nothing
-                }
-            }
+            timeToID(element.start_time, element.end_time, ttdata)
         }
         const ttCol = {
             91: 'tt-emp',
@@ -229,14 +234,20 @@ export default function Main({userid}) {
         for (var elementTT of ttdata) {
             ttCol[elementTT] = 'tt-occ'
         }
+        // reservation shown
+        if (resDet[0] === Number(seatNum)) {
+            const resToShow = []
+            timeToID(resDet[1], resDet[2], resToShow)
+            for (var slot of resToShow) {
+                ttCol[slot] = 'tt-res'
+            }
+        }
         setttCol(ttCol)
-
     };
 
-    const handleResClose = (value) => {
+    const handleResClose = () => {
         setOpenRes(false);
     };
-
 
 
     // main
@@ -282,14 +293,17 @@ export default function Main({userid}) {
                     onChange={handleChangeLevel}
                 >
                     <MenuItem value={1}>1</MenuItem>
-                    <MenuItem value={2} disabled>2</MenuItem>
-                    <MenuItem value={3} disabled>3</MenuItem>
+                    <MenuItem value={2}>2</MenuItem>
+                    <MenuItem value={3}>3</MenuItem>
                 </Select>
             </FormControl>
             <Typography variant='body1'>
                 {resDet.length === 0 ? 
                     "Click on a seat to reserve"
-                    : <span>Click on <span style={{color: '#bd00ff'}}>your seat</span> to cancel</span>
+                    : <span>Click on <span style={{color: '#bd00ff'}}>your seat </span>
+                    or <a 
+                    onClick={handleResOpen}
+                    className='cancel'>here</a> to cancel</span>
                 }
             </Typography>
         </Box>
@@ -315,19 +329,24 @@ export default function Main({userid}) {
         <ThemeProvider theme={levelLayout}>
             <div
             style={{
-                // ! fixed so i can get the horizontal scrollbar
+                // fixed so i can get the horizontal scrollbar
                 width: '90rem',
                 margin: '30px auto 0',
             }}>
-                <Lvl1 reserveModal={handleResOpen} reservation={resDet.length !== 0 ? resDet : 'emp'} prevSeat={[prevSeat, setprevSeat]} dbSeats={seatInfo}  />
+                <Lvl1 
+                reserveModal={handleResOpen} 
+                resDet={resDet.length !== 0 ? resDet : 'emp'} 
+                prevSeat={[prevSeat, setprevSeat]} 
+                dbSeats={seatInfo}
+                />
                 <Reserve
                 open={openRes} 
                 onClose={handleResClose} 
-                seatInfo={seatDet} 
+                seatDet={seatDet} 
                 ttCol={ttCol}
                 ttColpre={ttColpre}
                 setResDet={setResDet}
-                res={true}
+                resDet={resDet}
                 />
             </div>
         </ThemeProvider>
