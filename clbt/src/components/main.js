@@ -24,6 +24,48 @@ import Select from '@mui/material/Select'
 const levelLayout = createTheme({
 })
 
+// info for timetable
+const timetable = [91, 92, 101, 102, 111, 112, 121, 122, 131, 132, 141, 142, 151, 152, 161, 162, 171, 172]
+const timeslots30 = {
+    91: '0900 - 0930', 
+    92: '0930 - 1000', 
+    101: '1000 - 1030', 
+    102: '1030 - 1100', 
+    111: '1100 - 1130', 
+    112: '1130 - 1200', 
+    121: '1200 - 1230', 
+    122: '1230 - 1300', 
+    131: '1300 - 1330', 
+    132: '1330 - 1400', 
+    141: '1400 - 1430', 
+    142: '1430 - 1500', 
+    151: '1500 - 1530', 
+    152: '1530 - 1600', 
+    161: '1600 - 1630', 
+    162: '1630 - 1700',
+    171: '1700 - 1730', 
+    172: '1730 - 1800', 
+}
+const timeslots60 = {
+    91: '0900 - 1000', 
+    92: '0930 - 1030', 
+    101: '1000 - 1100', 
+    102: '1030 - 1130', 
+    111: '1100 - 1200', 
+    112: '1130 - 1230', 
+    121: '1200 - 1300', 
+    122: '1230 - 1330', 
+    131: '1300 - 1400', 
+    132: '1330 - 1430', 
+    141: '1400 - 1500', 
+    142: '1430 - 1530', 
+    151: '1500 - 1600', 
+    152: '1530 - 1630', 
+    161: '1600 - 1700', 
+    162: '1630 - 1730', 
+    171: '1700 - 1800', 
+}
+
 // [DB int] mimics "reservations" table
 // a database filtered by level is passed into each Lvl
 const dbRes = [
@@ -46,62 +88,20 @@ const dbRes = [
     {id: 6, user_id: 155, seat_id: 103, start_time: "1700", end_time: "1800"},
 ]
 
-// [DB int] process "reservations" to get "seats" at any given time
-// // get current time
-// let hour = String(new Date().getHours())
-// let min = String(new Date().getMinutes())
-// let currentTime = Number(hour + (min.length === 1 ? '0' + min : min))
-// currentTime = 1350
-
-// // process database
-// for (var element of dbRes) {
-//     // alr occ/ourres- skip other entries
-//     let currentStatus = seatInfo[element.seat_id]
-//     if ((currentStatus === 'occ') || (currentStatus === 'ourres')) {
-//         continue
-//     }
-//     // ! to fix
-//     // clear 'ourres' and re-render
-    
-//     // get start and end times
-//     let [start, end, start15b] = [0,0,0]
-//     start = Number(element.start_time.split(':').join(''))
-//     end = Number(element.end_time.split(':').join(''))
-//     start15b = String(start).substring(2) === '00' ? start - 100 + 45 : start - 15
-
-//     // check if current time is between start and end times and get status
-//     let status
-//     if ((currentTime >= start) && (currentTime <= end)) {
-//         status = 'occ'
-//     } else if ((currentTime <= start) && (currentTime >= start15b)) {
-//         status = 'res'
-//     } else {
-//         status = 'emp'
-//     }
-
-//     // alr res - skip emp entries
-//     if ((currentStatus === 'res') && (status === 'emp')) {
-//         continue
-//     }
-
-//     // update seat status
-//     seatInfo[element.seat_id] = status
-// }
-
-let breaker // comment readibility
-
-// [DB int] mimics "seats" table
-// initialise - {101: 'emp',...}
+// seatInfo {101: 'emp',...} stores info for all seats
+// ! id according to real clb levels
 const level = '1'
 const numSeats = 80
 let seatInfo = {}
 // let seatNum
 for (let i = 1; i <= numSeats; i++) {
     const seatNum = Number(level + (i <= 9 ? '0' + String(i) : String(i)));
-    (seatNum % 2) === 0 ? seatInfo[seatNum] = 'emp' : seatInfo[seatNum] = 'occ'
+    seatInfo[seatNum] = 'emp'
 }
+const seatInfoCopy = {...seatInfo}
+// to be reset for each selector change
 
-// turn timing into id (0900-0930 -> 91)
+// turn timing into id (0900 - 0930 -> 91)
 const timeToID = (start, end, arr) => {
     // start at xx00
     if (start.slice(2,4) === '00') {
@@ -214,24 +214,16 @@ export default function Main({userid}) {
             resDetfirst = []
         }
     }
-    const seatDetfirst = [
-        String(resDetfirst[0])[0],
-        String(resDetfirst[0])[1] === '0' ? String(resDetfirst[0]).slice(2) : String(resDetfirst[0]).slice(1),
-        resDetfirst[0]
-    ]
     // state updates if user creates/deletes reservation
     const [resDet, setResDet] = useState(resDetfirst)
-    let [prevSeat, setprevSeat] = useState(resDetfirst[0])
+    const resDetInfo = [String(resDet[0])[0], String(resDet[0])[1] === '0' ? String(resDet[0])[2] : String(resDet[0]).slice(1,3)]
+
 
     // reserve modal
     const [openRes, setOpenRes] = useState(false)
-    // seat details
-    const [seatDet, setSeatDet] = useState(seatDetfirst)
+    const [seatDet, setSeatDet] = useState([])
     const [ttCol, setttCol] = useState({})
-    const ttColpre = {}
-    Object.assign(ttColpre, ttCol)
     const [full, setFull] = useState(false)
-
     const handleResOpen = (event) => {
         setOpenRes(true)
 
@@ -239,7 +231,7 @@ export default function Main({userid}) {
         // 'hb' for header button
         const seatNum = event.target.value === 'hb' ? String(resDet[0]) : event.target.id
 
-        // seat info
+        // seat details
         setSeatDet([seatNum[0], seatNum[1] === '0' ? seatNum.slice(2) : seatNum.slice(1), seatNum])
 
         // timetable
@@ -286,6 +278,46 @@ export default function Main({userid}) {
         setFull(Object.values(ttCol).filter((element) => element === 'tt-emp').length === 0 ? true : false)
     }
     const handleResClose = () => setOpenRes(false)
+
+    // selects
+    // 1. duration
+    const [dur, setDur] = useState('')
+    const handleChangeDur = (event) => {
+        setDur(event.target.value)
+        // reset
+        setSlot('')
+        setSlotDis(false)
+    }
+    // 2. time slot
+    const [slot, setSlot] = useState('')
+    const [slotDis, setSlotDis] = useState(true)
+    const handleChangeSlot = (event) => {
+        setSlot(event.target.value)
+    }
+
+    // process DB "reservations" to update seatInfo
+    const slotID = []
+    timeToID(slot.slice(0,4), slot.slice(7, 11), slotID)
+    const tobeOccpre = []
+    for (var reservation of dbRes) {
+        const resID = []
+        timeToID(reservation.start_time, reservation.end_time, resID)
+        // check slotID in resID -> these are all 'occ'
+        for (var ele of slotID) {
+            resID.includes(ele) && tobeOccpre.push(reservation.seat_id)
+        }
+    }
+    let tobeOcc = [...new Set(tobeOccpre)]
+    // reset
+    Object.assign(seatInfo, seatInfoCopy)
+    // display occ and ourres seats
+    for (var seat of tobeOcc) {
+        seatInfo[seat] = 'occ'
+    }
+    if (resDet.length !== 0) {
+        seatInfo[resDet[0]] = 'ourres'
+    }
+    // ! to be filtered by Lvl before being passed under dbSeat
 
     // check in state
     const [checkin, setCheckin] = useState(false)
@@ -356,20 +388,65 @@ export default function Main({userid}) {
         </Container>
 
         {/* info tag */}
-        <Container sx={{textAlign: 'center', marginBottom: '4rem'}}>
+        <Container sx={{textAlign: 'center', marginBottom: '3rem'}}>
             <Typography variant="body1" 
             sx={{
                 visibility: resDet.length === 0 ? 'hidden' : 'visible',
-                marginTop: '20px'
+                marginTop: 2
             }}>
                 {checkin === false ?
-                    <span>You have reserved level <span style={{color: '#bd00ff', fontWeight: '700'}}>{seatDet[0]}</span> seat <span style={{color: '#bd00ff', fontWeight: '700'}}>
-                    {seatDet[1]}</span> from <span style={{fontWeight: '700'}}>{resDet[1]} - {resDet[2]}</span></span>
-                    : <span>You are now studying at level <span style={{color: '#0085ff', fontWeight: '700'}}>{seatDet[0]}</span> seat <span style={{color: '#0085ff', fontWeight: '700'}}>
-                    {seatDet[1]}</span> until <span style={{fontWeight: '700'}}>{resDet[2]}</span></span>
+                    <span>You have reserved level <span style={{color: '#bd00ff', fontWeight: '700'}}>{resDetInfo[0]}</span> seat <span style={{color: '#bd00ff', fontWeight: '700'}}>
+                    {resDetInfo[1]}</span> from <span style={{fontWeight: '700'}}>{resDet[1]} - {resDet[2]}</span></span>
+                    : <span>You are now studying at level <span style={{color: '#0085ff', fontWeight: '700'}}>{resDetInfo[0]}</span> seat <span style={{color: '#0085ff', fontWeight: '700'}}>
+                    {resDetInfo[1]}</span> until <span style={{fontWeight: '700'}}>{resDet[2]}</span></span>
                 }
             </Typography>
         </Container>
+
+        {/* time slot selector */}
+        <Box
+        sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: 1,
+            marginBottom: 5,
+            marginTop: -2,
+        }}
+        >
+            {/* 1. duration */}
+            <FormControl sx={{width: 170}}>
+                <InputLabel id="time-dur-label">Duration</InputLabel>
+                <Select
+                    labelId="time-dur-label"
+                    id="time-dur"
+                    value={dur}
+                    label="Duration"
+                    onChange={handleChangeDur}
+                >
+                    <MenuItem value={30}>30 min</MenuItem>
+                    <MenuItem value={60}>1 hour</MenuItem>
+                </Select>
+            </FormControl>      
+            {/* 2. time slot */}
+            <FormControl sx={{width: 170}} disabled={slotDis}>
+                <InputLabel id="time-slot-label">Time</InputLabel>
+                <Select
+                    labelId="time-slot-label"
+                    id="time-slot"
+                    value={slot}
+                    label="Time"
+                    onChange={handleChangeSlot}
+                >
+                    {timetable.map((ele) => (
+                        <MenuItem key={timetable.indexOf(ele)} value={dur === 30 ? timeslots30[ele]: timeslots60[ele]}>
+                            {dur === 30 ? timeslots30[ele]: timeslots60[ele]}
+                        </MenuItem>
+                    ))}
+                </Select>
+            </FormControl>
+        </Box>
 
         {/* level layout */}
         <ThemeProvider theme={levelLayout}>
@@ -378,14 +455,12 @@ export default function Main({userid}) {
                 // fixed so i can get the horizontal scrollbar
                 width: '95rem',
                 margin: 'auto',
-                height: '31rem',
+                height: '30rem',
             }}>
                 <Lvlx
                 level={level}
                 reserveModal={handleResOpen} 
-                resDet={resDet.length !== 0 ? resDet : 'emp'} 
-                prevSeat={[prevSeat, setprevSeat]}
-                dbSeats={seatInfo}
+                seatInfo={seatInfo}
                 />
             </div>
         </ThemeProvider>
@@ -405,6 +480,7 @@ export default function Main({userid}) {
             <Box
             display='flex'
             justifyContent='center'
+            sx={{marginBottom: 4}}
             >
                 <Button
                 id='break'
@@ -433,9 +509,10 @@ export default function Main({userid}) {
         onClose={handleResClose} 
         seatDet={seatDet} 
         ttCol={ttCol}
-        ttColpre={ttColpre}
         setResDet={setResDet}
         resDet={resDet}
+        slot={[slot, slotID]}
+        tobeOcc={tobeOcc}
         full={full}
         />
         <Break

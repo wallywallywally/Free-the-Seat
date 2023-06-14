@@ -6,7 +6,6 @@ import {createTheme, styled} from '@mui/material/styles'
 import Grid from '@mui/material/Grid'
 import Paper from '@mui/material/Paper'
 import { ThemeProvider } from '@emotion/react'
-import { useEffect } from 'react'
 
 
 // table
@@ -41,31 +40,7 @@ const table = createTheme({
 
 
 // main
-export default function Lvl2({reserveModal, resDet, prevSeat, dbSeats}) {
-    const seatInfo = dbSeats
-    
-    // process reservation to update "seats" locally
-    // first time
-    if (resDet !== 'emp') {
-        seatInfo[resDet[0]] = 'ourres'
-    }
-    // when reservation changes
-    // ! [DB int] cleared - set to previous state
-    useEffect(() => {
-        if (resDet !== 'emp') {
-            seatInfo[resDet[0]] = 'ourres'
-            if (resDet[0] !== prevSeat[0]) {
-                // reservation changed to diff seat - prevSeat cleared + new prevSeat
-                seatInfo[prevSeat[0]] = 'emp'
-                prevSeat[1](resDet[0])
-            }
-        } else {
-            // previous reserved seat cleared
-            seatInfo[prevSeat[0]] = 'emp'
-            prevSeat[1](prevSeat)
-        }
-    }, [resDet]) // eslint-disable-line react-hooks/exhaustive-deps
-
+export default function Lvl6({reserveModal, seatInfo}) {
     // reserve modal
     const handleReserve = () => (event) => reserveModal(event)
 
@@ -74,7 +49,7 @@ export default function Lvl2({reserveModal, resDet, prevSeat, dbSeats}) {
     return (
         <>
         <ThemeProvider theme={table}>
-        <Grid container id='main' justifyContent={'center'}>
+        <Grid container id='main' justifyContent={'space-around'}>
 
             <Grid item id='left-side' xs={4}>
 
