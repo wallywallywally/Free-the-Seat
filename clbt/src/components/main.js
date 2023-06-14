@@ -2,11 +2,17 @@ import './styles.css'
 import {useState} from "react"
 
 // components
-import Lvl1 from './lvl1.js'
+// levels
+import Lvl3 from './levels/lvl3.js'
+import Lvl4 from './levels/lvl4.js'
+import Lvl5 from './levels/lvl5.js'
+import Lvl6 from './levels/lvl6.js'
+// modals
 import Reserve from './modals/reserve.js'
+import Break from './modals/break.js'
 
 // mui
-import { Box, Container, Typography } from '@mui/material'
+import { Box, Button, Container, Typography } from '@mui/material'
 import {createTheme} from '@mui/material/styles'
 import { ThemeProvider } from '@emotion/react'
 import InputLabel from '@mui/material/InputLabel'
@@ -28,6 +34,16 @@ const dbRes = [
     {id: 5, user_id: 111, seat_id: 102, start_time: "1400", end_time: "1430"},
     {id: 6, user_id: 112, seat_id: 102, start_time: "1430", end_time: "1530"},
     {id: 6, user_id: 155, seat_id: 101, start_time: "0930", end_time: "1030"},
+
+    {id: 3, user_id: 553, seat_id: 103, start_time: "0900", end_time: "1000"},
+    {id: 2, user_id: 123, seat_id: 103, start_time: "1000", end_time: "1100"},
+    {id: 1, user_id: 236, seat_id: 103, start_time: "1100", end_time: "1200"},
+    {id: 4, user_id: 598, seat_id: 103, start_time: "1200", end_time: "1300"},
+    {id: 5, user_id: 111, seat_id: 103, start_time: "1300", end_time: "1400"},
+    {id: 6, user_id: 112, seat_id: 103, start_time: "1400", end_time: "1500"},
+    {id: 6, user_id: 155, seat_id: 103, start_time: "1500", end_time: "1600"},
+    {id: 6, user_id: 155, seat_id: 103, start_time: "1600", end_time: "1700"},
+    {id: 6, user_id: 155, seat_id: 103, start_time: "1700", end_time: "1800"},
 ]
 
 // [DB int] process "reservations" to get "seats" at any given time
@@ -157,12 +173,37 @@ const timeToID = (start, end, arr) => {
     }
 }
 
+// Lvlx display
+function Lvlx(props) {
+    let Lvlx
+    switch(props.level) {
+        case 3:
+            Lvlx = Lvl3
+            break
+        case 4:
+            Lvlx = Lvl4
+            break
+        case 5:
+            Lvlx = Lvl5
+            break
+        case 6:
+            Lvlx = Lvl6
+            break
+        default:
+            Lvlx = Lvl3
+    }
+    return <Lvlx {...props} />
+}
+
 
 // main
-// ! to decide
-// responsive: header ?
-// fixed: level
 export default function Main({userid}) {
+    // level state
+    const [level, setLevel] = useState(3)
+    const handleChangeLevel = (event) => {
+        setLevel(event.target.value)
+    }  
+    
     // check for reservation on the first time
     let resDetfirst = []
     for (var element of dbRes) {
@@ -173,33 +214,30 @@ export default function Main({userid}) {
             resDetfirst = []
         }
     }
+    const seatDetfirst = [
+        String(resDetfirst[0])[0],
+        String(resDetfirst[0])[1] === '0' ? String(resDetfirst[0]).slice(2) : String(resDetfirst[0]).slice(1),
+        resDetfirst[0]
+    ]
     // state updates if user creates/deletes reservation
     const [resDet, setResDet] = useState(resDetfirst)
     let [prevSeat, setprevSeat] = useState(resDetfirst[0])
 
-    // level state
-    const [level, setLevel] = useState(1)
-    const handleChangeLevel = (event) => {
-        setLevel(event.target.value)
-    }
- 
-    // check in state
-    const [checkin, setCheckin] = useState(false)
-
     // reserve modal
-    const [openRes, setOpenRes] = useState(false);
+    const [openRes, setOpenRes] = useState(false)
     // seat details
-    const [seatDet, setSeatDet] = useState([])
+    const [seatDet, setSeatDet] = useState(seatDetfirst)
     const [ttCol, setttCol] = useState({})
     const ttColpre = {}
     Object.assign(ttColpre, ttCol)
+    const [full, setFull] = useState(false)
 
     const handleResOpen = (event) => {
         setOpenRes(true)
 
         // update modal
-        // undefined for header hyperlink
-        const seatNum = event.target.value === undefined ? String(resDet[0]) : event.target.id
+        // 'hb' for header button
+        const seatNum = event.target.value === 'hb' ? String(resDet[0]) : event.target.id
 
         // seat info
         setSeatDet([seatNum[0], seatNum[1] === '0' ? seatNum.slice(2) : seatNum.slice(1), seatNum])
@@ -243,25 +281,34 @@ export default function Main({userid}) {
             }
         }
         setttCol(ttCol)
-    };
 
-    const handleResClose = () => {
-        setOpenRes(false);
-    };
+        // seat is fully booked
+        setFull(Object.values(ttCol).filter((element) => element === 'tt-emp').length === 0 ? true : false)
+    }
+    const handleResClose = () => setOpenRes(false)
+
+    // check in state
+    const [checkin, setCheckin] = useState(false)
+
+    // break modal
+    const [openBreak, setOpenBreak] = useState(false)
+    const handleBreakOpen = () => setOpenBreak(true)
+    const handleBreakClose = () => setOpenBreak(false)
 
 
     // main
+    // ! responsive or fixed
+    // Lvlx to be fixed, so we can scroll
+    // Header and button can be position: fixed ?
     return(
         <>
         {/* main header */}
         <Container sx={{marginTop: '30px'}}>
         <Box 
-        sx={{
-            display: 'flex',
-            flex: '1 1 auto',
-            justifyContent: 'space-between',
-            alignItems: 'center'
-        }}>
+        display='flex'
+        justifyContent='space-between'
+        alignItems='center'
+        >
             <Typography variant='h5'>
                 Welcome back, TEST!
             </Typography>    
@@ -273,16 +320,13 @@ export default function Main({userid}) {
         </Box>
         </Container>
 
-        <Container
-        sx={{marginTop: '15px'}}
-        >
+        <Container sx={{marginTop: '15px'}}>
         <Box
-        sx={{
-            display: 'flex',
-            flex: '1 1 auto',
-            alignItems: 'center',
-            gap: '2rem'
-        }}>
+        display='flex'
+        alignItems='center'
+        gap='2rem'
+        >
+            {/* level select */}
             <FormControl sx={{width: 100}}>
                 <InputLabel id="floor-select-label">Level</InputLabel>
                 <Select
@@ -292,18 +336,20 @@ export default function Main({userid}) {
                     label="Level"
                     onChange={handleChangeLevel}
                 >
-                    <MenuItem value={1}>1</MenuItem>
-                    <MenuItem value={2}>2</MenuItem>
                     <MenuItem value={3}>3</MenuItem>
+                    <MenuItem value={4}>4</MenuItem>
+                    <MenuItem value={5}>5</MenuItem>
+                    <MenuItem value={6}>6</MenuItem>
                 </Select>
             </FormControl>
             <Typography variant='body1'>
                 {resDet.length === 0 ? 
                     "Click on a seat to reserve"
                     : <span>Click on <span style={{color: '#bd00ff'}}>your seat </span>
-                    or <a 
+                    or <button
+                    value='hb'
                     onClick={handleResOpen}
-                    className='cancel'>here</a> to cancel</span>
+                    className='cancel'>here</button> to cancel</span>
                 }
             </Typography>
         </Box>
@@ -317,10 +363,10 @@ export default function Main({userid}) {
                 marginTop: '20px'
             }}>
                 {checkin === false ?
-                    <span>You have reserved level <span style={{color: '#bd00ff', fontWeight: '700'}}>{String(resDet[0]).substring(0,1)}</span> seat <span style={{color: '#bd00ff', fontWeight: '700'}}>
-                    {String(resDet[0]).substring(1,2) === '0' ? String(resDet[0]).substring(2,3) : String(resDet[0]).substring(1,3)}</span> from <span style={{fontWeight: '700'}}>{resDet[1]} - {resDet[2]}</span></span>
-                    : <span>You are now studying at level <span style={{color: '#0085ff', fontWeight: '700'}}>{String(resDet[0]).substring(0,1)}</span> seat <span style={{color: '#0085ff', fontWeight: '700'}}>
-                    {String(resDet[0]).substring(1,2) === '0' ? String(resDet[0]).substring(2,3) : String(resDet[0]).substring(1,3)}</span> until <span style={{fontWeight: '700'}}>{resDet[2]}</span></span>
+                    <span>You have reserved level <span style={{color: '#bd00ff', fontWeight: '700'}}>{seatDet[0]}</span> seat <span style={{color: '#bd00ff', fontWeight: '700'}}>
+                    {seatDet[1]}</span> from <span style={{fontWeight: '700'}}>{resDet[1]} - {resDet[2]}</span></span>
+                    : <span>You are now studying at level <span style={{color: '#0085ff', fontWeight: '700'}}>{seatDet[0]}</span> seat <span style={{color: '#0085ff', fontWeight: '700'}}>
+                    {seatDet[1]}</span> until <span style={{fontWeight: '700'}}>{resDet[2]}</span></span>
                 }
             </Typography>
         </Container>
@@ -330,27 +376,73 @@ export default function Main({userid}) {
             <div
             style={{
                 // fixed so i can get the horizontal scrollbar
-                width: '90rem',
-                margin: '30px auto 0',
+                width: '95rem',
+                margin: 'auto',
+                height: '31rem',
             }}>
-                <Lvl1 
+                <Lvlx
+                level={level}
                 reserveModal={handleResOpen} 
                 resDet={resDet.length !== 0 ? resDet : 'emp'} 
-                prevSeat={[prevSeat, setprevSeat]} 
+                prevSeat={[prevSeat, setprevSeat]}
                 dbSeats={seatInfo}
-                />
-                <Reserve
-                open={openRes} 
-                onClose={handleResClose} 
-                seatDet={seatDet} 
-                ttCol={ttCol}
-                ttColpre={ttColpre}
-                setResDet={setResDet}
-                resDet={resDet}
                 />
             </div>
         </ThemeProvider>
 
+        {/* checked in */}
+        {checkin &&
+        <>
+            <Typography 
+            variant='body1' 
+            sx={{
+                textAlign: 'center',
+                marginBottom: '2rem'
+            }}>
+                If you are away from your seat for more than <span style={{fontWeight: 'bold'}}>5</span> min,
+                <br/> your seat will be marked as empty and your items will be cleared 
+            </Typography>
+            <Box
+            display='flex'
+            justifyContent='center'
+            >
+                <Button
+                id='break'
+                variant='contained'
+                disableElevation
+                onClick={handleBreakOpen}
+                sx={{
+                    backgroundColor: '#e7be95',
+                    color: '#000',
+                    borderRadius: 0.7,
+                    border: '1px solid rgba(0,0,0,0.25)',
+                    width: '10%',
+                    '&:hover': {backgroundColor: 'rgba(231, 190, 149, 0.7)'},
+                    '&:active': {backgroundColor: '#e7be95'},
+                }}
+                >
+                    Take a break
+                </Button>
+            </Box>
+        </>
+        }
+
+        {/* modals */}
+        <Reserve
+        open={openRes}
+        onClose={handleResClose} 
+        seatDet={seatDet} 
+        ttCol={ttCol}
+        ttColpre={ttColpre}
+        setResDet={setResDet}
+        resDet={resDet}
+        full={full}
+        />
+        <Break
+        open={openBreak}
+        onClose={handleBreakClose} 
+        seatDet={seatDet}
+        />
         </>
     )
 }

@@ -55,11 +55,12 @@ const timeslots60 = {
     171: '1700 - 1800', 
 }
 
+
 // reservation system modal
 // ! to fix
 // timetable + timings don't line up - add another and hide visibility or smth
 function ReserveModal(props) {
-    const { onClose, open, seatDet, ttCol, ttColpre, setResDet, resDet } = props;
+    const {onClose, open, seatDet, ttCol, ttColpre, setResDet, resDet, full} = props;
 
     // on close
     const handleClose = () => {
@@ -154,9 +155,10 @@ function ReserveModal(props) {
         <Dialog fullWidth={true} maxWidth='lg' onClose={handleClose} open={open} keepMounted>
             <DialogTitle>
             <span
-            style={{visibility: res && !resISseat ? 'collapse' : 'revert'}}
-            >
-                {res === false ? 'You are now reserving:' : 'You have reserved:'}
+            style={{
+                visibility: (res && !resISseat) || full ? 'collapse' : 'revert'
+            }}>
+                {res === true ? 'You have reserved:' :'You are now reserving:'}
             </span>
             </DialogTitle>
 
@@ -222,11 +224,31 @@ function ReserveModal(props) {
                 <p>1800</p>
             </Box>
 
+            {full && <Typography variant='h6' sx={{textAlign:'center'}}>Fully booked for today!</Typography>}
+
             {/* selects */}
-            {/* if reservation exists, this is pointless */}
-            {res  ? 
-            <></> 
-            : 
+            {res ? 
+            (resISseat ?
+            <>
+            <Typography variant='h6' sx={{textAlign:'center'}}>Time slot:</Typography>
+            <Box
+            display='flex'
+            justifyContent='center'
+            >
+                <Typography 
+                variant='h6' 
+                sx={{
+                    textAlign:'center', 
+                    border:'1px solid black',
+                    width: '12rem',
+                }}>
+                    {resDet[1]} - {resDet[2]}
+                </Typography>
+            </Box>
+            </>
+            : <></>
+            ) : 
+            (!full ?
             <>
             <Typography variant='h6' sx={{textAlign:'center'}}>Time slot:</Typography>
             <Box
@@ -239,7 +261,7 @@ function ReserveModal(props) {
             }}
             >
                 {/* 1. duration */}
-                <FormControl sx={{width: 170}} required>
+                <FormControl sx={{width: 170}}>
                     <InputLabel id="time-dur-label">Duration</InputLabel>
                     <Select
                         labelId="time-dur-label"
@@ -270,6 +292,8 @@ function ReserveModal(props) {
                 </FormControl>
             </Box>
             </>
+            : <></>
+            )
             }
 
             {/* button */}
@@ -280,7 +304,7 @@ function ReserveModal(props) {
             variant='contained'
             disableElevation
             sx={{
-                visibility: !res || resISseat ? 'revert' : 'hidden',
+                visibility: (res && !resISseat) || full ? 'hidden' : 'revert',
                 marginTop: 5,
                 borderRadius: 0,
                 backgroundColor: res ? '#fb7979' : 'rgba(189, 0 ,255, 0.6)',
@@ -305,7 +329,7 @@ ReserveModal.propTypes = {
 }
 
 // main
-export default function Reserve({open, onClose, seatDet, ttCol, ttColpre, setResDet, resDet}) {
+export default function Reserve({open, onClose, seatDet, ttCol, ttColpre, setResDet, resDet, full}) {
     const handleClose = () => () => onClose()
 
     return (
@@ -318,6 +342,7 @@ export default function Reserve({open, onClose, seatDet, ttCol, ttColpre, setRes
         ttColpre={ttColpre}
         setResDet={setResDet}
         resDet={resDet}
+        full={full}
         />
         </>
   );

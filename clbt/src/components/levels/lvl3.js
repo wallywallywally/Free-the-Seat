@@ -64,7 +64,7 @@ export default function Lvl1({reserveModal, resDet, prevSeat, dbSeats}) {
             seatInfo[prevSeat[0]] = 'emp'
             prevSeat[1](prevSeat)
         }
-    }, [resDet, seatInfo, prevSeat])
+    }, [resDet]) // eslint-disable-line react-hooks/exhaustive-deps
 
     // reserve modal
     const handleReserve = () => (event) => reserveModal(event)
