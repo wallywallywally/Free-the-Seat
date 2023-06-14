@@ -1,5 +1,6 @@
 import './styles.css'
 import {useState} from "react"
+import { supabase } from "../supabase"
 
 // components
 import Lvl1 from './lvl1.js'
