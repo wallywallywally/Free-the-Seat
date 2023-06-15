@@ -34,7 +34,7 @@ const SeatBtn = styled(Button)(({status}) => ({
         backgroundColor: seatClr[status]
     }
 }))
-
+    
 export default function Seat({status, reserve, id}) {
     const handleReserve = () => (event) => reserve(event)
 
