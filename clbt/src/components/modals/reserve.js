@@ -26,7 +26,7 @@ function ReserveModal(props) {
     const res = resDet.length !== 0
     const resISseat = resDet[0] === Number(seatDet[2])
     const alrOcc = tobeOcc.includes(Number(seatDet[2]))
-    const noslot = slot[1].length === 0
+    const noslotSelected = slot[1].length === 0
 
     // on close
     const handleClose = () => {
@@ -63,7 +63,7 @@ function ReserveModal(props) {
             <DialogTitle>
             <span
             style={{
-                visibility: (res && !resISseat) || full || alrOcc || (noslot && !res) ? 'collapse' : 'revert'
+                visibility: (res && !resISseat) || full || alrOcc || (noslotSelected && !res) ? 'collapse' : 'revert'
             }}>
                 {res === true ? 'You have reserved:' :'You are now reserving:'}
             </span>
@@ -132,7 +132,7 @@ function ReserveModal(props) {
             </Box>
 
             {full && <Typography variant='h6' sx={{textAlign:'center'}}>Fully booked for today!</Typography>}
-            {!res && noslot && <Typography variant='h6' sx={{textAlign:'center'}}>Select a duration and time to start reserving</Typography>}
+            {!res && noslotSelected && <Typography variant='h6' sx={{textAlign:'center'}}>Select a duration and time to start reserving</Typography>}
             {!full && alrOcc && <Typography variant='h6' sx={{textAlign:'center'}}>Booked for the selected time slot</Typography>}
 
             {/* delete info */}
@@ -164,7 +164,7 @@ function ReserveModal(props) {
             variant='contained'
             disableElevation
             sx={{
-                visibility: (res && !resISseat) || full || alrOcc || (noslot && !res) ? 'hidden' : 'revert',
+                visibility: (res && !resISseat) || full || alrOcc || (noslotSelected && !res) ? 'hidden' : 'revert',
                 marginTop: 5,
                 borderRadius: 0,
                 backgroundColor: res ? '#fb7979' : 'rgba(189, 0 ,255, 0.6)',

@@ -70,29 +70,29 @@ const timeslots60 = {
 // [DB int] mimics "reservations" table
 // a database filtered by level is passed into each Lvl
 const dbRes = [
-    {id: 2, user_id: 123, seat_id: 101, start_time: "1530", end_time: "1600"},
-    {id: 1, user_id: 236, seat_id: 101, start_time: "1330", end_time: "1430"},
-    {id: 3, user_id: 553, seat_id: 112, start_time: "0900", end_time: "1000"},
-    {id: 4, user_id: 598, seat_id: 112, start_time: "1330", end_time: "1430"},
-    {id: 5, user_id: 111, seat_id: 102, start_time: "1400", end_time: "1430"},
-    {id: 6, user_id: 112, seat_id: 102, start_time: "1430", end_time: "1530"},
-    {id: 6, user_id: 155, seat_id: 101, start_time: "0930", end_time: "1030"},
+    {id: 2, user_id: 123, seat_id: 301, start_time: "1530", end_time: "1600"},
+    {id: 1, user_id: 236, seat_id: 301, start_time: "1330", end_time: "1430"},
+    {id: 3, user_id: 553, seat_id: 312, start_time: "0900", end_time: "1000"},
+    {id: 4, user_id: 598, seat_id: 312, start_time: "1330", end_time: "1430"},
+    {id: 5, user_id: 111, seat_id: 302, start_time: "1400", end_time: "1430"},
+    {id: 6, user_id: 112, seat_id: 302, start_time: "1430", end_time: "1530"},
+    {id: 6, user_id: 155, seat_id: 301, start_time: "0930", end_time: "1030"},
 
-    {id: 3, user_id: 553, seat_id: 103, start_time: "0900", end_time: "1000"},
-    {id: 2, user_id: 123, seat_id: 103, start_time: "1000", end_time: "1100"},
-    {id: 1, user_id: 236, seat_id: 103, start_time: "1100", end_time: "1200"},
-    {id: 4, user_id: 598, seat_id: 103, start_time: "1200", end_time: "1300"},
-    {id: 5, user_id: 111, seat_id: 103, start_time: "1300", end_time: "1400"},
-    {id: 6, user_id: 112, seat_id: 103, start_time: "1400", end_time: "1500"},
-    {id: 6, user_id: 155, seat_id: 103, start_time: "1500", end_time: "1600"},
-    {id: 6, user_id: 155, seat_id: 103, start_time: "1600", end_time: "1700"},
-    {id: 6, user_id: 155, seat_id: 103, start_time: "1700", end_time: "1800"},
+    {id: 3, user_id: 553, seat_id: 303, start_time: "0900", end_time: "1000"},
+    {id: 2, user_id: 123, seat_id: 303, start_time: "1000", end_time: "1100"},
+    {id: 1, user_id: 236, seat_id: 303, start_time: "1100", end_time: "1200"},
+    {id: 4, user_id: 598, seat_id: 303, start_time: "1200", end_time: "1300"},
+    {id: 5, user_id: 111, seat_id: 303, start_time: "1300", end_time: "1400"},
+    {id: 6, user_id: 112, seat_id: 303, start_time: "1400", end_time: "1500"},
+    {id: 6, user_id: 155, seat_id: 303, start_time: "1500", end_time: "1600"},
+    {id: 6, user_id: 155, seat_id: 303, start_time: "1600", end_time: "1700"},
+    {id: 6, user_id: 155, seat_id: 303, start_time: "1700", end_time: "1800"},
 ]
 
 // seatInfo {101: 'emp',...} stores info for all seats
 // ! id according to real clb levels
-const level = '1'
-const numSeats = 80
+const level = '3'
+const numSeats = 100
 let seatInfo = {}
 // let seatNum
 for (let i = 1; i <= numSeats; i++) {
@@ -454,9 +454,9 @@ export default function Main({userid}) {
             <div
             style={{
                 // fixed so i can get the horizontal scrollbar
-                width: '95rem',
-                margin: 'auto',
-                height: '30rem',
+                // width: '95rem',
+                // margin: 'auto',
+                marginBottom: '2rem'
             }}>
                 <Lvlx
                 level={level}

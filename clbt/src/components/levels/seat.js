@@ -12,7 +12,7 @@ const seatClr = createTheme({
 })
 
 // Seat
-const seatSide = 35
+const seatSide = 45
 const SeatBtn = styled(Button)(({status}) => ({
     minWidth: seatSide,
     height: seatSide,

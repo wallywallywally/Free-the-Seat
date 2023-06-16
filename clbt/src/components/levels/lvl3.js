@@ -1,3 +1,5 @@
+import '../styles.css'
+
 // components
 import Seat from './seat.js'
 
@@ -8,7 +10,7 @@ import Paper from '@mui/material/Paper'
 import { ThemeProvider } from '@emotion/react'
 
 
-// table
+// components for styling
 const Table = styled(Paper)(() => ({
     padding: 18,
     backgroundColor: '#d3c4a2',
@@ -17,9 +19,35 @@ const Table = styled(Paper)(() => ({
     textAlign: 'center'
 }))
 
-const TableFull = styled(Grid)(() => ({
-    width: '230px',
-    height: '30px'
+const FillerTop = styled(Paper)(() => ({
+    padding: '5rem 29.6rem',
+    backgroundColor: '#aaa',
+    borderRadius: 3,
+    textAlign: 'center',
+}))
+
+const FillerBot = styled(Paper)(() => ({
+    padding: '32.4rem 0',
+    backgroundColor: '#aaa',
+    borderRadius: 3,
+    textAlign: 'center',
+}))
+
+const FillerWtv = styled(Paper)(() => ({
+    padding: '22rem 0',
+    backgroundColor: '#aaa',
+    borderRadius: 3,
+    textAlign: 'center',
+}))
+
+const Table4 = styled(Grid)(() => ({
+    width: '110px',
+    height: '45px'
+}))
+
+const Table2 = styled(Grid)(() => ({
+    width: '70px',
+    height: '45px'
 }))
 
 const table = createTheme({
@@ -44,360 +72,627 @@ export default function Lvl3({reserveModal, seatInfo}) {
     // reserve modal
     const handleReserve = () => (event) => reserveModal(event)
 
+    // seat format:
+    // <Seat id='101' status={seatInfo[101]} reserve={handleReserve()}/>
 
     // main
     return (
         <>
         <ThemeProvider theme={table}>
-        <Grid container id='main' justifyContent={'space-around'}>
 
-            <Grid item id='left-side' xs={4}>
+        {/* collab space */}
+        <Grid container justifyContent='center'>
+            <FillerTop />
+        </Grid>
 
-                <Grid container id='left-top'>
+        <div className='center'>
+        <Grid container columns={16} justifyContent='center' marginTop={2} width={1500}>
 
-                    <Grid item xs={6}>
-                    <TableFull container>
-                        <Grid item>
-                            <Seat id='101' status={seatInfo[101]} reserve={handleReserve()}/>
-                        </Grid>
-                        <Grid item>
-                            <Seat id='102' status={seatInfo[102]} reserve={handleReserve()}/>
-                        </Grid>
-                        <Grid item>
-                            <Seat id= '103' status={seatInfo[103]} reserve={handleReserve()}/>
-                        </Grid>
-                        <Grid item>
-                            <Seat status={seatInfo[104]} reserve={handleReserve()}/>
-                        </Grid>
-                        <Grid item>
-                            <Seat status={seatInfo[105]} reserve={handleReserve()}/>
-                        </Grid>
-
-                        <Grid item xs={12}>
-                            <Table>1</Table>
-                        </Grid>
-
-                        <Grid item>
-                            <Seat status={seatInfo[106]} reserve={handleReserve()}/>
-                        </Grid>
-                        <Grid item>
-                            <Seat status={seatInfo[107]} reserve={handleReserve()}/>
-                        </Grid>
-                        <Grid item>
-                            <Seat status={seatInfo[108]} reserve={handleReserve()}/>
-                        </Grid>
-                        <Grid item>
-                            <Seat status={seatInfo[109]} reserve={handleReserve()}/>
-                        </Grid>
-                        <Grid item>
-                            <Seat status={seatInfo[110]} reserve={handleReserve()}/>
-                        </Grid>
-                    </TableFull>
+            {/* window tables L */}
+            <Grid container item xs={1} rowSpacing={5}>
+                <Table4 container item>
+                    <Grid item>
+                        <Seat id='301' status={seatInfo[301]} reserve={handleReserve()}/>
+                    </Grid>
+                    <Grid item>
+                        <Seat id='302' status={seatInfo[302]} reserve={handleReserve()}/>
                     </Grid>
 
-                    <Grid item xs={6}>
-                    <TableFull container>
-                        <Grid item>
-                            <Seat status={seatInfo[111]} reserve={handleReserve()}/>
-                        </Grid>
-                        <Grid item>
-                            <Seat id='112' status={seatInfo[112]} reserve={handleReserve()}/>
-                        </Grid>
-                        <Grid item>
-                            <Seat status={seatInfo[113]} reserve={handleReserve()}/>
-                        </Grid>
-                        <Grid item>
-                            <Seat status={seatInfo[114]} reserve={handleReserve()}/>
-                        </Grid>
-                        <Grid item>
-                            <Seat status={seatInfo[115]} reserve={handleReserve()}/>
-                        </Grid>
-
-                        <Grid item xs={12}>
-                            <Table>2</Table>
-                        </Grid>
-
-                        <Grid item>
-                            <Seat status={seatInfo[116]} reserve={handleReserve()}/>
-                        </Grid>
-                        <Grid item>
-                            <Seat status={seatInfo[117]} reserve={handleReserve()}/>
-                        </Grid>
-                        <Grid item>
-                            <Seat status={seatInfo[118]} reserve={handleReserve()}/>
-                        </Grid>
-                        <Grid item>
-                            <Seat status={seatInfo[119]} reserve={handleReserve()}/>
-                        </Grid>
-                        <Grid item>
-                            <Seat status={seatInfo[120]} reserve={handleReserve()}/>
-                        </Grid>
-                    </TableFull>
+                    <Grid item xs={12}>
+                        <Table />
                     </Grid>
 
-                </Grid>
-
-                <Grid container id='left-bottom'
-                sx={{marginTop: '180px'}}>
-
-                    <Grid item xs={6}>
-                    <TableFull container>
-                        <Grid item>
-                            <Seat status={seatInfo[121]} reserve={handleReserve()}/>
-                        </Grid>
-                        <Grid item>
-                            <Seat status={seatInfo[122]} reserve={handleReserve()}/>
-                        </Grid>
-                        <Grid item>
-                            <Seat status={seatInfo[123]} reserve={handleReserve()}/>
-                        </Grid>
-                        <Grid item>
-                            <Seat status={seatInfo[124]} reserve={handleReserve()}/>
-                        </Grid>
-                        <Grid item>
-                            <Seat status={seatInfo[125]} reserve={handleReserve()}/>
-                        </Grid>
-
-                        <Grid item xs={12}>
-                            <Table>3</Table>
-                        </Grid>
-
-                        <Grid item>
-                            <Seat status={seatInfo[126]} reserve={handleReserve()}/>
-                        </Grid>
-                        <Grid item>
-                            <Seat status={seatInfo[127]} reserve={handleReserve()}/>
-                        </Grid>
-                        <Grid item>
-                            <Seat status={seatInfo[128]} reserve={handleReserve()}/>
-                        </Grid>
-                        <Grid item>
-                            <Seat status={seatInfo[129]} reserve={handleReserve()}/>
-                        </Grid>
-                        <Grid item>
-                            <Seat status={seatInfo[130]} reserve={handleReserve()}/>
-                        </Grid>
-                    </TableFull>
+                    <Grid item>
+                        <Seat id='303' status={seatInfo[303]} reserve={handleReserve()}/>
+                    </Grid>
+                    <Grid item>
+                        <Seat id='304' status={seatInfo[304]} reserve={handleReserve()}/>
+                    </Grid>
+                </Table4>
+                <Table4 container item>
+                    <Grid item>
+                        <Seat id='305' status={seatInfo[305]} reserve={handleReserve()}/>
+                    </Grid>
+                    <Grid item>
+                        <Seat id='306' status={seatInfo[306]} reserve={handleReserve()}/>
                     </Grid>
 
-                    <Grid item xs={6}>
-                    <TableFull container>
-                        <Grid item>
-                            <Seat status={seatInfo[131]} reserve={handleReserve()}/>
-                        </Grid>
-                        <Grid item>
-                            <Seat status={seatInfo[132]} reserve={handleReserve()}/>
-                        </Grid>
-                        <Grid item>
-                            <Seat status={seatInfo[133]} reserve={handleReserve()}/>
-                        </Grid>
-                        <Grid item>
-                            <Seat status={seatInfo[134]} reserve={handleReserve()}/>
-                        </Grid>
-                        <Grid item>
-                            <Seat status={seatInfo[135]} reserve={handleReserve()}/>
-                        </Grid>
-
-                        <Grid item xs={12}>
-                            <Table>4</Table>
-                        </Grid>
-
-                        <Grid item>
-                            <Seat status={seatInfo[136]} reserve={handleReserve()}/>
-                        </Grid>
-                        <Grid item>
-                            <Seat status={seatInfo[137]} reserve={handleReserve()}/>
-                        </Grid>
-                        <Grid item>
-                            <Seat status={seatInfo[138]} reserve={handleReserve()}/>
-                        </Grid>
-                        <Grid item>
-                            <Seat status={seatInfo[139]} reserve={handleReserve()}/>
-                        </Grid>
-                        <Grid item>
-                            <Seat status={seatInfo[140]} reserve={handleReserve()}/>
-                        </Grid>
-                    </TableFull>
+                    <Grid item xs={12}>
+                        <Table />
                     </Grid>
 
-                </Grid>
+                    <Grid item>
+                        <Seat id='307' status={seatInfo[307]} reserve={handleReserve()}/>
+                    </Grid>
+                    <Grid item>
+                        <Seat id='308' status={seatInfo[308]} reserve={handleReserve()}/>
+                    </Grid>
+                </Table4>
+                <Table4 container item>
+                    <Grid item>
+                        <Seat id='309' status={seatInfo[309]} reserve={handleReserve()}/>
+                    </Grid>
+                    <Grid item>
+                        <Seat id='310' status={seatInfo[310]} reserve={handleReserve()}/>
+                    </Grid>
+
+                    <Grid item xs={12}>
+                        <Table />
+                    </Grid>
+
+                    <Grid item>
+                        <Seat id='311' status={seatInfo[311]} reserve={handleReserve()}/>
+                    </Grid>
+                    <Grid item>
+                        <Seat id='312' status={seatInfo[312]} reserve={handleReserve()}/>
+                    </Grid>
+                </Table4>
+                <Table4 container item>
+                    <Grid item>
+                        <Seat id='313' status={seatInfo[313]} reserve={handleReserve()}/>
+                    </Grid>
+                    <Grid item>
+                        <Seat id='314' status={seatInfo[314]} reserve={handleReserve()}/>
+                    </Grid>
+
+                    <Grid item xs={12}>
+                        <Table />
+                    </Grid>
+
+                    <Grid item>
+                        <Seat id='315' status={seatInfo[315]} reserve={handleReserve()}/>
+                    </Grid>
+                    <Grid item>
+                        <Seat id='316' status={seatInfo[316]} reserve={handleReserve()}/>
+                    </Grid>
+                </Table4>
+                <Table4 container item>
+                    <Grid item>
+                        <Seat id='317' status={seatInfo[317]} reserve={handleReserve()}/>
+                    </Grid>
+                    <Grid item>
+                        <Seat id='318' status={seatInfo[318]} reserve={handleReserve()}/>
+                    </Grid>
+
+                    <Grid item xs={12}>
+                        <Table />
+                    </Grid>
+
+                    <Grid item>
+                        <Seat id='319' status={seatInfo[319]} reserve={handleReserve()}/>
+                    </Grid>
+                    <Grid item>
+                        <Seat id='320' status={seatInfo[320]} reserve={handleReserve()}/>
+                    </Grid>
+                </Table4>
+                <Table4 container item>
+                    <Grid item>
+                        <Seat id='321' status={seatInfo[321]} reserve={handleReserve()}/>
+                    </Grid>
+                    <Grid item>
+                        <Seat id='322' status={seatInfo[322]} reserve={handleReserve()}/>
+                    </Grid>
+
+                    <Grid item xs={12}>
+                        <Table />
+                    </Grid>
+
+                    <Grid item>
+                        <Seat id='323' status={seatInfo[323]} reserve={handleReserve()}/>
+                    </Grid>
+                    <Grid item>
+                        <Seat id='324' status={seatInfo[324]} reserve={handleReserve()}/>
+                    </Grid>
+                </Table4>
 
             </Grid>
 
-            <Grid item id='right-side' xs={4}>
-
-                <Grid container id='right-top'>
-
-                    <Grid item xs={6}>
-                    <TableFull container>
-                        <Grid item>
-                            <Seat status={seatInfo[141]} reserve={handleReserve()}/>
-                        </Grid>
-                        <Grid item>
-                            <Seat status={seatInfo[142]} reserve={handleReserve()}/>
-                        </Grid>
-                        <Grid item>
-                            <Seat status={seatInfo[143]} reserve={handleReserve()}/>
-                        </Grid>
-                        <Grid item>
-                            <Seat status={seatInfo[144]} reserve={handleReserve()}/>
-                        </Grid>
-                        <Grid item>
-                            <Seat status={seatInfo[145]} reserve={handleReserve()}/>
-                        </Grid>
-
-                        <Grid item xs={12}>
-                            <Table>5</Table>
-                        </Grid>
-
-                        <Grid item>
-                            <Seat status={seatInfo[146]} reserve={handleReserve()}/>
-                        </Grid>
-                        <Grid item>
-                            <Seat status={seatInfo[147]} reserve={handleReserve()}/>
-                        </Grid>
-                        <Grid item>
-                            <Seat status={seatInfo[148]} reserve={handleReserve()}/>
-                        </Grid>
-                        <Grid item>
-                            <Seat status={seatInfo[149]} reserve={handleReserve()}/>
-                        </Grid>
-                        <Grid item>
-                            <Seat status={seatInfo[150]} reserve={handleReserve()}/>
-                        </Grid>
-                    </TableFull>
+            {/* booths L */}
+            <Grid container item xs={1} rowSpacing={8}>
+                <Grid container item direction='column' alignItems='center'>
+                    <Grid item >
+                        <Seat id='325' status={seatInfo[325]} reserve={handleReserve()}/>
                     </Grid>
-
-                    <Grid item xs={6}>
-                    <TableFull container>
-                        <Grid item>
-                            <Seat status={seatInfo[151]} reserve={handleReserve()}/>
-                        </Grid>
-                        <Grid item>
-                            <Seat status={seatInfo[152]} reserve={handleReserve()}/>
-                        </Grid>
-                        <Grid item>
-                            <Seat status={seatInfo[153]} reserve={handleReserve()}/>
-                        </Grid>
-                        <Grid item>
-                            <Seat status={seatInfo[154]} reserve={handleReserve()}/>
-                        </Grid>
-                        <Grid item>
-                            <Seat status={seatInfo[155]} reserve={handleReserve()}/>
-                        </Grid>
-
-                        <Grid item xs={12}>
-                            <Table>6</Table>
-                        </Grid>
-
-                        <Grid item>
-                            <Seat status={seatInfo[156]} reserve={handleReserve()}/>
-                        </Grid>
-                        <Grid item>
-                            <Seat status={seatInfo[157]} reserve={handleReserve()}/>
-                        </Grid>
-                        <Grid item>
-                            <Seat status={seatInfo[158]} reserve={handleReserve()}/>
-                        </Grid>
-                        <Grid item>
-                            <Seat status={seatInfo[159]} reserve={handleReserve()}/>
-                        </Grid>
-                        <Grid item>
-                            <Seat status={seatInfo[160]} reserve={handleReserve()}/>
-                        </Grid>
-                    </TableFull>
+                    <Grid item >
+                        <Seat id='326' status={seatInfo[326]} reserve={handleReserve()}/>
                     </Grid>
-
                 </Grid>
+                <Grid container item direction='column' alignItems='center'>
+                    <Grid item >
+                        <Seat id='327' status={seatInfo[327]} reserve={handleReserve()}/>
+                    </Grid>
+                    <Grid item >
+                        <Seat id='328' status={seatInfo[328]} reserve={handleReserve()}/>
+                    </Grid>
+                </Grid>
+                <Grid container item direction='column' alignItems='center'>
+                    <Grid item >
+                        <Seat id='329' status={seatInfo[329]} reserve={handleReserve()}/>
+                    </Grid>
+                    <Grid item >
+                        <Seat id='330' status={seatInfo[330]} reserve={handleReserve()}/>
+                    </Grid>
+                </Grid>
+                <Grid container item direction='column' alignItems='center'>
+                    <Grid item >
+                        <Seat id='331' status={seatInfo[331]} reserve={handleReserve()}/>
+                    </Grid>
+                    <Grid item >
+                        <Seat id='332' status={seatInfo[332]} reserve={handleReserve()}/>
+                    </Grid>
+                </Grid>
+                <Grid container item direction='column' alignItems='center'>
+                    <Grid item >
+                        <Seat id='333' status={seatInfo[333]} reserve={handleReserve()}/>
+                    </Grid>
+                    <Grid item >
+                        <Seat id='334' status={seatInfo[334]} reserve={handleReserve()}/>
+                    </Grid>
+                </Grid>
+                <Grid container item direction='column' alignItems='center'>
+                    <Grid item >
+                        <Seat id='335' status={seatInfo[335]} reserve={handleReserve()}/>
+                    </Grid>
+                    <Grid item >
+                        <Seat id='336' status={seatInfo[336]} reserve={handleReserve()}/>
+                    </Grid>
+                </Grid>
+                <Grid container item direction='column' alignItems='center'>
+                    <Grid item >
+                        <Seat id='337' status={seatInfo[337]} reserve={handleReserve()}/>
+                    </Grid>
+                    <Grid item >
+                        <Seat id='338' status={seatInfo[338]} reserve={handleReserve()}/>
+                    </Grid>
+                </Grid>            
+            </Grid>
 
-                <Grid container id='right-bottom'
-                sx={{marginTop: '180px'}}>
+            {/* collab space */}
+            <Grid item xs={5} marginTop={-3}>
+                <FillerBot>Collaborative <br/> space</FillerBot>
+            </Grid>
 
-                    <Grid item xs={6}>
-                    <TableFull container>
-                        <Grid item>
-                            <Seat status={seatInfo[161]} reserve={handleReserve()}/>
-                        </Grid>
-                        <Grid item>
-                            <Seat status={seatInfo[162]} reserve={handleReserve()}/>
-                        </Grid>
-                        <Grid item>
-                            <Seat status={seatInfo[163]} reserve={handleReserve()}/>
-                        </Grid>
-                        <Grid item>
-                            <Seat status={seatInfo[164]} reserve={handleReserve()}/>
-                        </Grid>
-                        <Grid item>
-                            <Seat status={seatInfo[165]} reserve={handleReserve()}/>
-                        </Grid>
+            {/* booths R */}
+            <Grid container item xs={1} rowSpacing={8}>
+                <Grid container item direction='column' alignItems='center'>
+                    <Grid item >
+                        <Seat id='339' status={seatInfo[339]} reserve={handleReserve()}/>
+                    </Grid>
+                    <Grid item >
+                        <Seat id='340' status={seatInfo[340]} reserve={handleReserve()}/>
+                    </Grid>
+                </Grid>
+                <Grid container item direction='column' alignItems='center'>
+                    <Grid item >
+                        <Seat id='341' status={seatInfo[341]} reserve={handleReserve()}/>
+                    </Grid>
+                    <Grid item >
+                        <Seat id='342' status={seatInfo[342]} reserve={handleReserve()}/>
+                    </Grid>
+                </Grid>
+                <Grid container item direction='column' alignItems='center'>
+                    <Grid item >
+                        <Seat id='343' status={seatInfo[343]} reserve={handleReserve()}/>
+                    </Grid>
+                    <Grid item >
+                        <Seat id='344' status={seatInfo[344]} reserve={handleReserve()}/>
+                    </Grid>
+                </Grid>
+                <Grid container item direction='column' alignItems='center'>
+                    <Grid item >
+                        <Seat id='345' status={seatInfo[345]} reserve={handleReserve()}/>
+                    </Grid>
+                    <Grid item >
+                        <Seat id='346' status={seatInfo[346]} reserve={handleReserve()}/>
+                    </Grid>
+                </Grid>
+                <Grid container item direction='column' alignItems='center'>
+                    <Grid item >
+                        <Seat id='3347' status={seatInfo[347]} reserve={handleReserve()}/>
+                    </Grid>
+                    <Grid item >
+                        <Seat id='348' status={seatInfo[348]} reserve={handleReserve()}/>
+                    </Grid>
+                </Grid>
+                <Grid container item direction='column' alignItems='center'>
+                    <Grid item >
+                        <Seat id='349' status={seatInfo[349]} reserve={handleReserve()}/>
+                    </Grid>
+                    <Grid item >
+                        <Seat id='350' status={seatInfo[350]} reserve={handleReserve()}/>
+                    </Grid>
+                </Grid>
+                <Grid container item direction='column' alignItems='center'>
+                    <Grid item >
+                        <Seat id='351' status={seatInfo[351]} reserve={handleReserve()}/>
+                    </Grid>
+                    <Grid item >
+                        <Seat id='352' status={seatInfo[352]} reserve={handleReserve()}/>
+                    </Grid>
+                </Grid>             
+            </Grid>
 
-                        <Grid item xs={12}>
-                            <Table>7</Table>
-                        </Grid>
-
-                        <Grid item>
-                            <Seat status={seatInfo[166]} reserve={handleReserve()}/>
-                        </Grid>
-                        <Grid item>
-                            <Seat status={seatInfo[167]} reserve={handleReserve()}/>
-                        </Grid>
-                        <Grid item>
-                            <Seat status={seatInfo[168]} reserve={handleReserve()}/>
-                        </Grid>
-                        <Grid item>
-                            <Seat status={seatInfo[169]} reserve={handleReserve()}/>
-                        </Grid>
-                        <Grid item>
-                            <Seat status={seatInfo[170]} reserve={handleReserve()}/>
-                        </Grid>
-                    </TableFull>
+            {/* window tables R */}
+            <Grid container item xs={1} justifyContent='end' rowSpacing={5}>
+                <Table4 container item>
+                    <Grid item>
+                        <Seat id='353' status={seatInfo[353]} reserve={handleReserve()}/>
+                    </Grid>
+                    <Grid item>
+                        <Seat id='354' status={seatInfo[354]} reserve={handleReserve()}/>
                     </Grid>
 
-                    <Grid item xs={6}>
-                    <TableFull container>
-                        <Grid item>
-                            <Seat status={seatInfo[171]} reserve={handleReserve()}/>
-                        </Grid>
-                        <Grid item>
-                            <Seat status={seatInfo[172]} reserve={handleReserve()}/>
-                        </Grid>
-                        <Grid item>
-                            <Seat status={seatInfo[173]} reserve={handleReserve()}/>
-                        </Grid>
-                        <Grid item>
-                            <Seat status={seatInfo[174]} reserve={handleReserve()}/>
-                        </Grid>
-                        <Grid item>
-                            <Seat status={seatInfo[175]} reserve={handleReserve()}/>
-                        </Grid>
-
-                        <Grid item xs={12}>
-                            <Table>8</Table>
-                        </Grid>
-
-                        <Grid item>
-                            <Seat status={seatInfo[176]} reserve={handleReserve()}/>
-                        </Grid>
-                        <Grid item>
-                            <Seat status={seatInfo[177]} reserve={handleReserve()}/>
-                        </Grid>
-                        <Grid item>
-                            <Seat status={seatInfo[178]} reserve={handleReserve()}/>
-                        </Grid>
-                        <Grid item>
-                            <Seat status={seatInfo[179]} reserve={handleReserve()}/>
-                        </Grid>
-                        <Grid item>
-                            <Seat status={seatInfo[180]} reserve={handleReserve()}/>
-                        </Grid>
-                    </TableFull>
+                    <Grid item xs={12}>
+                        <Table />
                     </Grid>
 
-                </Grid>                
+                    <Grid item>
+                        <Seat id='355' status={seatInfo[355]} reserve={handleReserve()}/>
+                    </Grid>
+                    <Grid item>
+                        <Seat id='356' status={seatInfo[356]} reserve={handleReserve()}/>
+                    </Grid>
+                </Table4>
+                <Table4 container item>
+                    <Grid item>
+                        <Seat id='357' status={seatInfo[357]} reserve={handleReserve()}/>
+                    </Grid>
+                    <Grid item>
+                        <Seat id='358' status={seatInfo[358]} reserve={handleReserve()}/>
+                    </Grid>
 
+                    <Grid item xs={12}>
+                        <Table />
+                    </Grid>
+
+                    <Grid item>
+                        <Seat id='359' status={seatInfo[359]} reserve={handleReserve()}/>
+                    </Grid>
+                    <Grid item>
+                        <Seat id='360' status={seatInfo[360]} reserve={handleReserve()}/>
+                    </Grid>
+                </Table4>
+                <Table4 container item>
+                    <Grid item>
+                        <Seat id='361' status={seatInfo[361]} reserve={handleReserve()}/>
+                    </Grid>
+                    <Grid item>
+                        <Seat id='362' status={seatInfo[362]} reserve={handleReserve()}/>
+                    </Grid>
+
+                    <Grid item xs={12}>
+                        <Table />
+                    </Grid>
+
+                    <Grid item>
+                        <Seat id='363' status={seatInfo[363]} reserve={handleReserve()}/>
+                    </Grid>
+                    <Grid item>
+                        <Seat id='364' status={seatInfo[364]} reserve={handleReserve()}/>
+                    </Grid>
+                </Table4>
+                <Table4 container item>
+                    <Grid item>
+                        <Seat id='365' status={seatInfo[365]} reserve={handleReserve()}/>
+                    </Grid>
+                    <Grid item>
+                        <Seat id='366' status={seatInfo[366]} reserve={handleReserve()}/>
+                    </Grid>
+
+                    <Grid item xs={12}>
+                        <Table />
+                    </Grid>
+
+                    <Grid item>
+                        <Seat id='367' status={seatInfo[367]} reserve={handleReserve()}/>
+                    </Grid>
+                    <Grid item>
+                        <Seat id='368' status={seatInfo[368]} reserve={handleReserve()}/>
+                    </Grid>
+                </Table4>
+                <Table4 container item>
+                    <Grid item>
+                        <Seat id='369' status={seatInfo[369]} reserve={handleReserve()}/>
+                    </Grid>
+                    <Grid item>
+                        <Seat id='370' status={seatInfo[370]} reserve={handleReserve()}/>
+                    </Grid>
+
+                    <Grid item xs={12}>
+                        <Table />
+                    </Grid>
+
+                    <Grid item>
+                        <Seat id='371' status={seatInfo[371]} reserve={handleReserve()}/>
+                    </Grid>
+                    <Grid item>
+                        <Seat id='372' status={seatInfo[372]} reserve={handleReserve()}/>
+                    </Grid>
+                </Table4>
+                <Table4 container item>
+                    <Grid item>
+                        <Seat id='373' status={seatInfo[373]} reserve={handleReserve()}/>
+                    </Grid>
+                    <Grid item>
+                        <Seat id='374' status={seatInfo[374]} reserve={handleReserve()}/>
+                    </Grid>
+
+                    <Grid item xs={12}>
+                        <Table />
+                    </Grid>
+
+                    <Grid item>
+                        <Seat id='375' status={seatInfo[375]} reserve={handleReserve()}/>
+                    </Grid>
+                    <Grid item>
+                        <Seat id='376' status={seatInfo[376]} reserve={handleReserve()}/>
+                    </Grid>
+                </Table4>
+
+            </Grid>
+        </Grid>
+        </div>
+
+        <div className='center'>
+        <Grid container columns={16} justifyContent='center' marginTop={3} width={1500} gap={6.4}>
+
+            {/* sofas */}
+            <Grid container item xs={1} sx={{marginRight: -1}} rowSpacing={5}>
+                <Table2 container item>
+                    <Grid container item justifyContent='center' alignItems='center'>
+                        <Seat id='377' status={seatInfo[377]} reserve={handleReserve()}/>
+                    </Grid>
+
+                    <Grid container item>
+                        <Table sx={{width: '100%', margin: '8px 0'}}/>
+                    </Grid>
+
+                    <Grid container item justifyContent='center' alignItems='center'>
+                        <Seat id='378' status={seatInfo[378]} reserve={handleReserve()}/>
+                    </Grid>
+                </Table2>
+                <Table2 container item>
+                    <Grid container item justifyContent='center' alignItems='center'>
+                        <Seat id='379' status={seatInfo[379]} reserve={handleReserve()}/>
+                    </Grid>
+
+                    <Grid container item>
+                        <Table sx={{width: '100%', margin: '8px 0'}}/>
+                    </Grid>
+
+                    <Grid container item justifyContent='center' alignItems='center'>
+                        <Seat id='380' status={seatInfo[380]} reserve={handleReserve()}/>
+                    </Grid>
+                </Table2>
+                <Table2 container item>
+                    <Grid container item justifyContent='center' alignItems='center'>
+                        <Seat id='381' status={seatInfo[381]} reserve={handleReserve()}/>
+                    </Grid>
+
+                    <Grid container item>
+                        <Table sx={{width: '100%', margin: '8px 0'}}/>
+                    </Grid>
+
+                    <Grid container item justifyContent='center' alignItems='center'>
+                        <Seat id='382' status={seatInfo[382]} reserve={handleReserve()}/>
+                    </Grid>
+                </Table2>
+                <Table2 container item>
+                    <Grid container item justifyContent='center' alignItems='center'>
+                        <Seat id='383' status={seatInfo[383]} reserve={handleReserve()}/>
+                    </Grid>
+
+                    <Grid container item>
+                        <Table sx={{width: '100%', margin: '8px 0'}}/>
+                    </Grid>
+
+                    <Grid container item justifyContent='center' alignItems='center'>
+                        <Seat id='384' status={seatInfo[384]} reserve={handleReserve()}/>
+                    </Grid>
+                </Table2>
+            </Grid>
+
+            {/* singles */}
+            <Grid container item xs={1} sx={{marginRight: -3}} rowSpacing={5}>
+                <Table2 container item>
+                    <Grid container item>
+                        <Table sx={{width: '100%', margin: '8px 0'}}/>
+                    </Grid>
+
+                    <Grid container item justifyContent='center' alignItems='center'>
+                        <Seat id='385' status={seatInfo[385]} reserve={handleReserve()}/>
+                    </Grid>
+                </Table2>
+                <Table2 container item>
+                    <Grid container item>
+                        <Table sx={{width: '100%', margin: '8px 0'}}/>
+                    </Grid>
+
+                    <Grid container item justifyContent='center' alignItems='center'>
+                        <Seat id='386' status={seatInfo[386]} reserve={handleReserve()}/>
+                    </Grid>
+                </Table2>
+                <Table2 container item>
+                    <Grid container item>
+                        <Table sx={{width: '100%', margin: '8px 0'}}/>
+                    </Grid>
+
+                    <Grid container item justifyContent='center' alignItems='center'>
+                        <Seat id='387' status={seatInfo[387]} reserve={handleReserve()}/>
+                    </Grid>
+                </Table2>
+            </Grid>
+
+            {/* tables with pillar */}
+            <Grid container item xs={1} alignItems='stretch' rowSpacing={5}>
+                <Table4 container item>
+                    <Grid item>
+                        <Seat id='388' status={seatInfo[388]} reserve={handleReserve()}/>
+                    </Grid>
+                    <Grid item>
+                        <Seat id='389' status={seatInfo[389]} reserve={handleReserve()}/>
+                    </Grid>
+
+                    <Grid item xs={12}>
+                        <Table />
+                    </Grid>
+
+                    <Grid item>
+                        <Seat id='390' status={seatInfo[390]} reserve={handleReserve()}/>
+                    </Grid>
+                    <Grid item>
+                        <Seat id='391' status={seatInfo[391]} reserve={handleReserve()}/>
+                    </Grid>
+                </Table4>
+                <Table4 container item>
+                    <Grid item>
+                        <Seat id='392' status={seatInfo[392]} reserve={handleReserve()}/>
+                    </Grid>
+                    <Grid item>
+                        <Seat id='393' status={seatInfo[393]} reserve={handleReserve()}/>
+                    </Grid>
+
+                    <Grid item xs={12}>
+                        <Table />
+                    </Grid>
+
+                    <Grid item>
+                        <Seat id='394' status={seatInfo[394]} reserve={handleReserve()}/>
+                    </Grid>
+                    <Grid item>
+                        <Seat id='395' status={seatInfo[395]} reserve={handleReserve()}/>
+                    </Grid>
+                </Table4>
+                <Table4 container item>
+                    <Grid item>
+                        <Seat id='396' status={seatInfo[396]} reserve={handleReserve()}/>
+                    </Grid>
+                    <Grid item>
+                        <Seat id='397' status={seatInfo[397]} reserve={handleReserve()}/>
+                    </Grid>
+
+                    <Grid item xs={12}>
+                        <Table />
+                    </Grid>
+
+                    <Grid item>
+                        <Seat id='398' status={seatInfo[398]} reserve={handleReserve()}/>
+                    </Grid>
+                    <Grid item>
+                        <Seat id='399' status={seatInfo[399]} reserve={handleReserve()}/>
+                    </Grid>
+                </Table4>
+            </Grid>
+
+            {/* tables - over 100, ignore */}
+            {/* <Grid container item xs={1} sx={{marginLeft: 2, marginRight: 2}} rowSpacing={5}>
+                <Table4 container item>
+                    <Grid item>
+                        <Seat id='101' status={seatInfo[101]} reserve={handleReserve()}/>
+                    </Grid>
+                    <Grid item>
+                        <Seat id='102' status={seatInfo[102]} reserve={handleReserve()}/>
+                    </Grid>
+
+                    <Grid item xs={12}>
+                        <Table />
+                    </Grid>
+
+                    <Grid item>
+                        <Seat status={seatInfo[106]} reserve={handleReserve()}/>
+                    </Grid>
+                    <Grid item>
+                        <Seat status={seatInfo[107]} reserve={handleReserve()}/>
+                    </Grid>
+                </Table4>
+                <Table4 container item>
+                    <Grid item>
+                        <Seat id='101' status={seatInfo[101]} reserve={handleReserve()}/>
+                    </Grid>
+                    <Grid item>
+                        <Seat id='102' status={seatInfo[102]} reserve={handleReserve()}/>
+                    </Grid>
+
+                    <Grid item xs={12}>
+                        <Table />
+                    </Grid>
+
+                    <Grid item>
+                        <Seat status={seatInfo[106]} reserve={handleReserve()}/>
+                    </Grid>
+                    <Grid item>
+                        <Seat status={seatInfo[107]} reserve={handleReserve()}/>
+                    </Grid>
+                </Table4>
+                <Table4 container item>
+                    <Grid item>
+                        <Seat id='101' status={seatInfo[101]} reserve={handleReserve()}/>
+                    </Grid>
+                    <Grid item>
+                        <Seat id='102' status={seatInfo[102]} reserve={handleReserve()}/>
+                    </Grid>
+
+                    <Grid item xs={12}>
+                        <Table />
+                    </Grid>
+
+                    <Grid item>
+                        <Seat status={seatInfo[106]} reserve={handleReserve()}/>
+                    </Grid>
+                    <Grid item>
+                        <Seat status={seatInfo[107]} reserve={handleReserve()}/>
+                    </Grid>
+                </Table4>
+                <Table4 container item>
+                    <Grid item>
+                        <Seat id='101' status={seatInfo[101]} reserve={handleReserve()}/>
+                    </Grid>
+                    <Grid item>
+                        <Seat id='102' status={seatInfo[102]} reserve={handleReserve()}/>
+                    </Grid>
+
+                    <Grid item xs={12}>
+                        <Table />
+                    </Grid>
+
+                    <Grid item>
+                        <Seat status={seatInfo[106]} reserve={handleReserve()}/>
+                    </Grid>
+                    <Grid item>
+                        <Seat status={seatInfo[107]} reserve={handleReserve()}/>
+                    </Grid>
+                </Table4>
+            </Grid> */}
+
+            {/* misc stuff */}
+            <Grid item xs={5} marginTop={-1}>
+                <FillerWtv>Staircase/Rooms</FillerWtv>
             </Grid>
 
         </Grid>
+        </div>
+
+
         </ThemeProvider>
         </>
     )
