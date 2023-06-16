@@ -1,9 +1,9 @@
 import './styles.css'
-import {useState} from "react"
+import {useState, useEffect, useCallback } from "react"
 import { supabase } from "../supabase"
 
 // components
-// levels
+// levels 
 import Lvl3 from './levels/lvl3.js'
 import Lvl4 from './levels/lvl4.js'
 import Lvl5 from './levels/lvl5.js'
@@ -201,20 +201,38 @@ function Lvlx(props) {
 export default function Main({userid}) {
     // level state
     const [level, setLevel] = useState(3)
-    const handleChangeLevel = (event) => {
+    const [reservations, setReservations] = useState([])
+    const [error, setError] = useState(null)
+     const handleChangeLevel = (event) => {
         setLevel(event.target.value)
     }  
+    const fetchReservations = useCallback(() => {
+        supabase
+          .from("reservations")
+          .select()
+          .order("id")
+          .then(({ data: reservations, error }) => {
+            setReservations(reservations);
+            setError(error);
+          })
+          .catch((error) => {
+            setError(error);
+          });
+      }, [setReservations, setError]);
     
-    // check for reservation on the first time
+      useEffect(() => {
+        fetchReservations();
+      }, [fetchReservations]);
+    // check for reservation on the first time, goes through database and checks if userid in reservations = user id of session
     let resDetfirst = []
-    for (var element of dbRes) {
+    for (var element of reservations) {
         if (element.user_id === userid) {
             resDetfirst = [element.seat_id, element.start_time, element.end_time]
             break
         } else {
             resDetfirst = []
         }
-    }
+    }   
     // state updates if user creates/deletes reservation
     const [resDet, setResDet] = useState(resDetfirst)
     const resDetInfo = [String(resDet[0])[0], String(resDet[0])[1] === '0' ? String(resDet[0])[2] : String(resDet[0]).slice(1,3)]
@@ -237,7 +255,7 @@ export default function Main({userid}) {
 
         // timetable
         // [DB int] checks "reservations" table
-        const ttdatapre = dbRes.filter((element) => element.seat_id === Number(seatNum))
+        const ttdatapre = reservations.filter((element) => element.seat_id === Number(seatNum))
         const ttdata = []
         for (var element of ttdatapre) {
             timeToID(element.start_time, element.end_time, ttdata)
@@ -300,7 +318,7 @@ export default function Main({userid}) {
     const slotID = []
     timeToID(slot.slice(0,4), slot.slice(7, 11), slotID)
     const tobeOccpre = []
-    for (var reservation of dbRes) {
+    for (var reservation of reservations) {
         const resID = []
         timeToID(reservation.start_time, reservation.end_time, resID)
         // check slotID in resID -> these are all 'occ'

@@ -30,7 +30,7 @@ const main = createTheme({
 // app
 function App() {
     // log in state
-    const [log, setLog] = useState(true)
+    const [log, setLog] = useState(false)
     const logInToggle = (event) => {
         setLog(!log)
     }
