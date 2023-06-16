@@ -19,7 +19,17 @@ button.cancel:active {
     color: #fb7979
 }
 
-/* levels */
+/* levels/lvlx.js */
+/* unresponsive grid */
+.grid {
+    display: grid
+}
+
+.flex-col {
+    display: flex;
+    flex-direction: column;
+}
+
 /* centering div */
 .center {
     display: flex;

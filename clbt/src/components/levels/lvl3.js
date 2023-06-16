@@ -8,6 +8,7 @@ import {createTheme, styled} from '@mui/material/styles'
 import Grid from '@mui/material/Grid'
 import Paper from '@mui/material/Paper'
 import { ThemeProvider } from '@emotion/react'
+import { Box } from '@mui/material'
 
 
 // components for styling
@@ -20,22 +21,22 @@ const Table = styled(Paper)(() => ({
 }))
 
 const FillerTop = styled(Paper)(() => ({
-    padding: '5rem 29.6rem',
-    backgroundColor: '#aaa',
+    padding: '5rem 24.7rem',
+    backgroundColor: '#ddd',
     borderRadius: 3,
     textAlign: 'center',
 }))
 
 const FillerBot = styled(Paper)(() => ({
-    padding: '32.4rem 0',
-    backgroundColor: '#aaa',
+    padding: '31.8rem 0',
+    backgroundColor: '#ddd',
     borderRadius: 3,
     textAlign: 'center',
 }))
 
 const FillerWtv = styled(Paper)(() => ({
-    padding: '22rem 0',
-    backgroundColor: '#aaa',
+    padding: '20.5rem 0',
+    backgroundColor: '#ddd',
     borderRadius: 3,
     textAlign: 'center',
 }))
@@ -75,6 +76,8 @@ export default function Lvl3({reserveModal, seatInfo}) {
     // seat format:
     // <Seat id='101' status={seatInfo[101]} reserve={handleReserve()}/>
 
+    // use css grid to prevent responsiveness
+
     // main
     return (
         <>
@@ -85,11 +88,14 @@ export default function Lvl3({reserveModal, seatInfo}) {
             <FillerTop />
         </Grid>
 
-        <div className='center'>
-        <Grid container columns={16} justifyContent='center' marginTop={2} width={1500}>
-
+        <div className='center' style={{marginTop: 10}}>
+        <Box className='grid'
+        sx={{
+            gridTemplateColumns: '2fr 1fr 6fr 1fr 2fr',
+            columnGap: '2rem'
+        }}>
             {/* window tables L */}
-            <Grid container item xs={1} rowSpacing={5}>
+            <Box className='flex-col' sx={{gap:'8rem'}}>
                 <Table4 container item>
                     <Grid item>
                         <Seat id='301' status={seatInfo[301]} reserve={handleReserve()}/>
@@ -204,11 +210,10 @@ export default function Lvl3({reserveModal, seatInfo}) {
                         <Seat id='324' status={seatInfo[324]} reserve={handleReserve()}/>
                     </Grid>
                 </Table4>
-
-            </Grid>
+            </Box>
 
             {/* booths L */}
-            <Grid container item xs={1} rowSpacing={8}>
+            <Box className='flex-col' sx={{gap:'3rem'}}>
                 <Grid container item direction='column' alignItems='center'>
                     <Grid item >
                         <Seat id='325' status={seatInfo[325]} reserve={handleReserve()}/>
@@ -265,15 +270,15 @@ export default function Lvl3({reserveModal, seatInfo}) {
                         <Seat id='338' status={seatInfo[338]} reserve={handleReserve()}/>
                     </Grid>
                 </Grid>            
-            </Grid>
+            </Box>
 
             {/* collab space */}
-            <Grid item xs={5} marginTop={-3}>
+            <Grid marginTop={-10}>
                 <FillerBot>Collaborative <br/> space</FillerBot>
             </Grid>
 
             {/* booths R */}
-            <Grid container item xs={1} rowSpacing={8}>
+            <Box className='flex-col' sx={{gap:'3rem'}}>
                 <Grid container item direction='column' alignItems='center'>
                     <Grid item >
                         <Seat id='339' status={seatInfo[339]} reserve={handleReserve()}/>
@@ -330,10 +335,10 @@ export default function Lvl3({reserveModal, seatInfo}) {
                         <Seat id='352' status={seatInfo[352]} reserve={handleReserve()}/>
                     </Grid>
                 </Grid>             
-            </Grid>
+            </Box>
 
             {/* window tables R */}
-            <Grid container item xs={1} justifyContent='end' rowSpacing={5}>
+            <Box className='flex-col' sx={{gap:'8rem'}}>
                 <Table4 container item>
                     <Grid item>
                         <Seat id='353' status={seatInfo[353]} reserve={handleReserve()}/>
@@ -449,15 +454,21 @@ export default function Lvl3({reserveModal, seatInfo}) {
                     </Grid>
                 </Table4>
 
-            </Grid>
-        </Grid>
+            </Box>
+        
+        </Box>
         </div>
 
         <div className='center'>
-        <Grid container columns={16} justifyContent='center' marginTop={3} width={1500} gap={6.4}>
+        <Box className='grid' 
+        sx={{
+            gridTemplateColumns: '1fr 1fr 1fr 3.3fr',
+            columnGap: '1.8rem'
+        }}
+        marginTop={3}>
 
             {/* sofas */}
-            <Grid container item xs={1} sx={{marginRight: -1}} rowSpacing={5}>
+            <Box className='flex-col' sx={{gap:'8.5rem'}}>
                 <Table2 container item>
                     <Grid container item justifyContent='center' alignItems='center'>
                         <Seat id='377' status={seatInfo[377]} reserve={handleReserve()}/>
@@ -510,10 +521,10 @@ export default function Lvl3({reserveModal, seatInfo}) {
                         <Seat id='384' status={seatInfo[384]} reserve={handleReserve()}/>
                     </Grid>
                 </Table2>
-            </Grid>
+            </Box>
 
             {/* singles */}
-            <Grid container item xs={1} sx={{marginRight: -3}} rowSpacing={5}>
+            <Box className='flex-col' sx={{gap:'10rem'}}>
                 <Table2 container item>
                     <Grid container item>
                         <Table sx={{width: '100%', margin: '8px 0'}}/>
@@ -541,10 +552,10 @@ export default function Lvl3({reserveModal, seatInfo}) {
                         <Seat id='387' status={seatInfo[387]} reserve={handleReserve()}/>
                     </Grid>
                 </Table2>
-            </Grid>
+            </Box>
 
             {/* tables with pillar */}
-            <Grid container item xs={1} alignItems='stretch' rowSpacing={5}>
+            <Box className='flex-col' sx={{gap:'13.5rem'}}>
                 <Table4 container item>
                     <Grid item>
                         <Seat id='388' status={seatInfo[388]} reserve={handleReserve()}/>
@@ -602,10 +613,10 @@ export default function Lvl3({reserveModal, seatInfo}) {
                         <Seat id='399' status={seatInfo[399]} reserve={handleReserve()}/>
                     </Grid>
                 </Table4>
-            </Grid>
-
+            </Box>
+        
             {/* tables - over 100, ignore */}
-            {/* <Grid container item xs={1} sx={{marginLeft: 2, marginRight: 2}} rowSpacing={5}>
+            {/* <Box sx={{marginLeft: 2, marginRight: 2}}>
                 <Table4 container item>
                     <Grid item>
                         <Seat id='101' status={seatInfo[101]} reserve={handleReserve()}/>
@@ -682,14 +693,14 @@ export default function Lvl3({reserveModal, seatInfo}) {
                         <Seat status={seatInfo[107]} reserve={handleReserve()}/>
                     </Grid>
                 </Table4>
-            </Grid> */}
+            </Box> */}
 
             {/* misc stuff */}
-            <Grid item xs={5} marginTop={-1}>
+            <Grid marginTop={-1}>
                 <FillerWtv>Staircase/Rooms</FillerWtv>
             </Grid>
 
-        </Grid>
+        </Box>
         </div>
 
 

@@ -454,8 +454,8 @@ export default function Main({userid}) {
             <div
             style={{
                 // fixed so i can get the horizontal scrollbar
-                // width: '95rem',
-                // margin: 'auto',
+                minWidth: '50rem',
+                margin: 'auto',
                 marginBottom: '2rem'
             }}>
                 <Lvlx
