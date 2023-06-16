@@ -8,6 +8,8 @@
     "@fontsource/inter": "^5.0.3",
     "@mui/icons-material": "^5.11.16",
     "@mui/material": "^5.13.2",
+    "@supabase/auth-ui-react": "^0.4.2",
+    "@supabase/auth-ui-shared": "^0.1.6",
     "@supabase/supabase-js": "^2.25.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^14.0.0",

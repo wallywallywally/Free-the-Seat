@@ -1,10 +1,12 @@
 import './css/App.css'
 
-import {useState} from 'react'
+import {useState, useEffect} from 'react'
+import {supabase} from "./supabase"
 
 // components
 import Welcome from "./components/welcome.js"
 import Main from './components/main.js'
+import LoginScreen from './components/loginscreen.js'
 
 // mui
 import { CssBaseline } from '@mui/material'
@@ -31,9 +33,18 @@ const main = createTheme({
 function App() {
     // log in state
     const [log, setLog] = useState(false)
-    const logInToggle = (event) => {
-        setLog(!log)
-    }
+    const [session, setSession] = useState(null);
+
+    useEffect(() => {
+        const subscription = supabase.auth.onAuthStateChange((_event, session) => {
+            setSession(session);
+        })
+        return () => subscription.data.subscription.unsubscribe();
+    }, []);
+
+    // const logInToggle = (event) => {
+    //     setLog(!log)
+    // }
 
     // !! to implement database stuff
     // user id state
@@ -45,9 +56,8 @@ function App() {
         <ThemeProvider theme={main}>
         <CssBaseline />
 
-        {log === false ?
-            <Welcome handleLogIn={logInToggle} />
-            : <Main userid={userid} />
+        {session ?
+             <Main userid={userid}/> : <LoginScreen/>
         }
 
         </ThemeProvider>
