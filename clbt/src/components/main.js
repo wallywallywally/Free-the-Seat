@@ -206,13 +206,13 @@ function Lvlx(props) {
 export default function Main({userid}) {
     // level state
     const [level, setLevel] = useState(3)
+    const handleChangeLevel = (event) => {
+        setLevel(event.target.value)
+    } 
 
-    // check for reservation on the first time, goes through database and checks if userid in reservations = user id of session
+    // DB - getting reservations
     const [reservations, setReservations] = useState([])
     const [error, setError] = useState(null)
-     const handleChangeLevel = (event) => {
-        setLevel(event.target.value)
-    }  
     const fetchReservations = useCallback(() => {
         supabase
             .from("reservations")
@@ -225,13 +225,15 @@ export default function Main({userid}) {
             .catch((error) => {
                 setError(error);
             });
-        }, [setReservations, setError]);
+    }, [setReservations, setError]);
     
-        useEffect(() => {
-            fetchReservations();
+    useEffect(() => {
+        fetchReservations();
     }, [fetchReservations]);
+    // check for reservation on the first time, goes through database and checks if userid in reservations = user id of session
     let resDetfirst = []
-    for (var element of reservations) {
+    // !switch to actual DB
+    for (var element of dbRes) {
         if (element.user_id === userid) {
             resDetfirst.push([element.seat_id, element.start_time, element.end_time, element.id])
         }
@@ -255,11 +257,12 @@ export default function Main({userid}) {
     const handleChangeSlot = (event) => {
         setSlot(event.target.value)
     }
-    // [DB int] process DB "reservations" to update seatInfo and Lvlx display
+    // process DB to update seatInfo for Lvlx display
     const slotID = []
     timeToID(slot.slice(0,4), slot.slice(7, 11), slotID)
     const tobeOccpre = []
-    for (var reservation of reservations) {
+    // !switch to actual DB
+    for (var reservation of dbRes) {
         const resID = []
         timeToID(reservation.start_time, reservation.end_time, resID)
         // check slotID in resID -> these are all 'occ'
@@ -306,8 +309,9 @@ export default function Main({userid}) {
         setSeatDet([level, seatNum, seatId])
 
         // timetable
-        // [DB int] checks "reservations" table - change dbRes to query
-        const ttdatapre = reservations.filter((element) => element.seat_id === Number(seatId))
+        // checks "reservations" table
+        // !switch to actual DB
+        const ttdatapre = dbRes.filter((element) => element.seat_id === Number(seatId))
         const ttdata = []
         for (var element of ttdatapre) {
             timeToID(element.start_time, element.end_time, ttdata)
@@ -367,6 +371,7 @@ export default function Main({userid}) {
     const [openBreak, setOpenBreak] = useState(false)
     const handleBreakOpen = () => setOpenBreak(true)
     const handleBreakClose = () => setOpenBreak(false)
+
 
 
     // main

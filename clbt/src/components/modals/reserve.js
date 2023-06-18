@@ -53,21 +53,32 @@ function ReserveModal(props) {
         }
     }
     
-    // [DB int] CREATE reservation
+    // [DB int]
+    // after creation/deletion in DB, we probably need to process Main's resDet again
+    // so [FRONTEND] stuff will be modified 
+
+    // CREATE reservation
     const handleSubmitCreate = () => {
-        // this entry is to be pushed to DB ?
+        // this entry is to be pushed to DB
         const resToPush = [Number(seatDet[2]), slot[0].slice(0,4), slot[0].slice(7,11)]
+
+        // [FRONTEND] pushes it to resDet
+        // pushed with no reservation id tho
         const newRD = [...resDet, resToPush]
         setResDet(newRD)
+
         handleClose()
     }
 
-    // [DB int] DELETE reservation
-    console.log(resToDel)
-    // this entry is to be removed from DB ?
+    // DELETE reservation
     const handleSubmitDelete = () => {
+        // resToDel has id - this entry is to be removed from DB
+        // console.log(resToDel)
 
-        setResDet()
+        // [FRONTEND] removes it from resDet
+        const resToKeep = resDet.filter((res) => res[3] !== resToDel[0])
+        setResDet(resToKeep)
+
         setDelMod(false)
         handleClose()
     }
@@ -156,17 +167,9 @@ function ReserveModal(props) {
 
             {/* delete info */}
             {delMod &&
-            <>
-            <Typography variant='h6' sx={{textAlign:'center'}}>Cancel time slot:</Typography>
-            <Box
-            display='flex'
-            justifyContent='center'
-            >
-                <Typography variant='body1' sx={{textAlign:'center'}}>
-                    test
-                </Typography>
-            </Box>
-            </>
+            <Typography variant='h6' sx={{textAlign:'center'}}>
+                Cancel time slot:<br/>{resToDel[1]} - {resToDel[2]}
+            </Typography>
             }
 
             {/* button */}

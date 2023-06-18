@@ -46,7 +46,6 @@ function App() {
     //     setLog(!log)
     // }
 
-    // !! to implement database stuff
     // user id state
     const [userid, setUserid] = useState(123)
     
@@ -56,9 +55,11 @@ function App() {
         <ThemeProvider theme={main}>
         <CssBaseline />
 
-        {session ?
-             <Main userid={userid}/> : <LoginScreen/>
-        }
+        {/* {session ?
+            <Main userid={userid}/> : <LoginScreen/>
+        } */}
+
+        <Main userid={userid}/>
 
         </ThemeProvider>
         </>
