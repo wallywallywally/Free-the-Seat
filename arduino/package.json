@@ -1,0 +1,12 @@
+{
+  
+  "dependencies": {
+
+    "@supabase/supabase-js": "^2.25.0",
+
+    "serialport": "^11.0.0"
+
+  }
+
+}
+
