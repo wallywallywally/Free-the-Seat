@@ -11,6 +11,7 @@ import Lvl6 from './levels/lvl6.js'
 // modals
 import Reserve from './modals/reserve.js'
 import Break from './modals/break.js'
+import Manage from './modals/manageres.js'
 
 // mui
 import { Box, Button, Container, Typography } from '@mui/material'
@@ -67,43 +68,47 @@ const timeslots60 = {
     171: '1700 - 1800', 
 }
 
+// [DB] seats: 
+// [id, light_status, floor]
+
 // [DB int] mimics "reservations" table
 // a database filtered by level is passed into each Lvl
 const dbRes = [
-    {id: 2, user_id: 123, seat_id: 301, start_time: "1530", end_time: "1600"},
-    {id: 1, user_id: 236, seat_id: 301, start_time: "1330", end_time: "1430"},
-    {id: 3, user_id: 553, seat_id: 312, start_time: "0900", end_time: "1000"},
-    {id: 4, user_id: 598, seat_id: 312, start_time: "1330", end_time: "1430"},
-    {id: 5, user_id: 111, seat_id: 302, start_time: "1400", end_time: "1430"},
-    {id: 6, user_id: 112, seat_id: 302, start_time: "1430", end_time: "1530"},
-    {id: 6, user_id: 155, seat_id: 301, start_time: "0930", end_time: "1030"},
+    {id: 22, user_id: 123, seat_id: 101, start_time: "1700", end_time: "1800"},
+    {id: 21, user_id: 123, seat_id: 101, start_time: "1530", end_time: "1600"},
+    {id: 25, user_id: 123, seat_id: 105, start_time: "1530", end_time: "1600"},
+    {id: 28, user_id: 123, seat_id: 104, start_time: "1530", end_time: "1600"},
+    {id: 91, user_id: 236, seat_id: 101, start_time: "1330", end_time: "1430"},
+    {id: 32, user_id: 553, seat_id: 112, start_time: "0900", end_time: "1000"},
+    {id: 41, user_id: 598, seat_id: 112, start_time: "1330", end_time: "1430"},
+    {id: 52, user_id: 111, seat_id: 102, start_time: "1400", end_time: "1430"},
+    {id: 61, user_id: 112, seat_id: 102, start_time: "1430", end_time: "1530"},
+    {id: 63, user_id: 155, seat_id: 101, start_time: "0930", end_time: "1030"},
 
-    {id: 3, user_id: 553, seat_id: 303, start_time: "0900", end_time: "1000"},
-    {id: 2, user_id: 123, seat_id: 303, start_time: "1000", end_time: "1100"},
-    {id: 1, user_id: 236, seat_id: 303, start_time: "1100", end_time: "1200"},
-    {id: 4, user_id: 598, seat_id: 303, start_time: "1200", end_time: "1300"},
-    {id: 5, user_id: 111, seat_id: 303, start_time: "1300", end_time: "1400"},
-    {id: 6, user_id: 112, seat_id: 303, start_time: "1400", end_time: "1500"},
-    {id: 6, user_id: 155, seat_id: 303, start_time: "1500", end_time: "1600"},
-    {id: 6, user_id: 155, seat_id: 303, start_time: "1600", end_time: "1700"},
-    {id: 6, user_id: 155, seat_id: 303, start_time: "1700", end_time: "1800"},
+    {id: 3, user_id: 553, seat_id: 103, start_time: "0900", end_time: "1000"},
+    {id: 2, user_id: 123, seat_id: 103, start_time: "1000", end_time: "1100"},
+    {id: 1, user_id: 236, seat_id: 103, start_time: "1100", end_time: "1200"},
+    {id: 4, user_id: 598, seat_id: 103, start_time: "1200", end_time: "1300"},
+    {id: 5, user_id: 111, seat_id: 103, start_time: "1300", end_time: "1400"},
+    {id: 6, user_id: 112, seat_id: 103, start_time: "1400", end_time: "1500"},
+    {id: 7, user_id: 155, seat_id: 103, start_time: "1500", end_time: "1600"},
+    {id: 8, user_id: 155, seat_id: 103, start_time: "1600", end_time: "1700"},
+    {id: 9, user_id: 155, seat_id: 103, start_time: "1700", end_time: "1800"},
 ]
 
 // seatInfo {101: 'emp',...} stores info for all seats
-// ! id according to real clb levels
-const level = '3'
-const numSeats = 100
+// !! initialise according to seat_ids
+const numSeats = 120
 let seatInfo = {}
-// let seatNum
 for (let i = 1; i <= numSeats; i++) {
-    const seatNum = Number(level + (i <= 9 ? '0' + String(i) : String(i)));
+    const seatNum = 100 + i
     seatInfo[seatNum] = 'emp'
 }
 const seatInfoCopy = {...seatInfo}
 // to be reset for each selector change
 
 // turn timing into id (0900 - 0930 -> 91)
-const timeToID = (start, end, arr) => {
+export const timeToID = (start, end, arr) => {
     // start at xx00
     if (start.slice(2,4) === '00') {
         switch (start.slice(0,2)) {
@@ -206,38 +211,84 @@ export default function Main({userid}) {
     }  
     
     // check for reservation on the first time
+    // [DB int] query to get all reservations for logged-in user
     let resDetfirst = []
     for (var element of dbRes) {
         if (element.user_id === userid) {
-            resDetfirst = [element.seat_id, element.start_time, element.end_time]
-            break
-        } else {
-            resDetfirst = []
+            resDetfirst.push([element.seat_id, element.start_time, element.end_time, element.id])
         }
     }
     // state updates if user creates/deletes reservation
     const [resDet, setResDet] = useState(resDetfirst)
-    const resDetInfo = [String(resDet[0])[0], String(resDet[0])[1] === '0' ? String(resDet[0])[2] : String(resDet[0]).slice(1,3)]
+    const resDetInfo = [String(resDet[0])[0], String(resDet[0])[1] === '0' ? String(resDet[0])[2] : String(resDet[0]).slice(1,3)] // !res
 
-
+    // selects
+    // 1. duration
+    const [dur, setDur] = useState('')
+    const handleChangeDur = (event) => {
+        setDur(event.target.value)
+        // reset
+        setSlot('')
+        setSlotDis(false)
+    }
+    // 2. time slot
+    const [slot, setSlot] = useState('')
+    const [slotDis, setSlotDis] = useState(true)
+    const handleChangeSlot = (event) => {
+        setSlot(event.target.value)
+    }
+    // [DB int] process DB "reservations" to update seatInfo and Lvlx display
+    const slotID = []
+    timeToID(slot.slice(0,4), slot.slice(7, 11), slotID)
+    const tobeOccpre = []
+    for (var reservation of dbRes) {
+        const resID = []
+        timeToID(reservation.start_time, reservation.end_time, resID)
+        // check slotID in resID -> these are all 'occ'
+        for (var ele of slotID) {
+            resID.includes(ele) && tobeOccpre.push(reservation.seat_id)
+        }
+    }
+    let tobeOcc = [...new Set(tobeOccpre)]
+    // reset
+    Object.assign(seatInfo, seatInfoCopy)
+    // display occ and ourres seats
+    for (var seat of tobeOcc) {
+        seatInfo[seat] = 'occ'
+    }
+    for (var res of resDet) {
+        seatInfo[res[0]] = 'ourres'
+    }
     // reserve modal
     const [openRes, setOpenRes] = useState(false)
+    // seat info
     const [seatDet, setSeatDet] = useState([])
     const [ttCol, setttCol] = useState({})
     const [full, setFull] = useState(false)
+    // reservation to delete
+    const [resToDel, setResToDel] = useState([])
     const handleResOpen = (event) => {
         setOpenRes(true)
 
         // update modal
-        // 'hb' for header button
-        const seatNum = event.target.value === 'hb' ? String(resDet[0]) : event.target.id
+        let seatId, seatNum
+        if (event.target.id === 'delRes') {
+            const resDel = event.target.value.split(',')
+            seatId = resDel[2]
+            seatNum = resDel[1]
+            // pass reservation to delete to reserve.js
+            setResToDel([Number(resDel[5]), resDel[3], resDel[4]])
+        } else {
+            seatId = event.target.id
+            seatNum = event.target.value
+        }
 
         // seat details
-        setSeatDet([seatNum[0], seatNum[1] === '0' ? seatNum.slice(2) : seatNum.slice(1), seatNum])
+        setSeatDet([level, seatNum, seatId])
 
         // timetable
-        // [DB int] checks "reservations" table
-        const ttdatapre = dbRes.filter((element) => element.seat_id === Number(seatNum))
+        // [DB int] checks "reservations" table - change dbRes to query
+        const ttdatapre = dbRes.filter((element) => element.seat_id === Number(seatId))
         const ttdata = []
         for (var element of ttdatapre) {
             timeToID(element.start_time, element.end_time, ttdata)
@@ -266,9 +317,11 @@ export default function Main({userid}) {
             ttCol[elementTT] = 'tt-occ'
         }
         // reservation shown
-        if (resDet[0] === Number(seatNum)) {
+        for (var res of resDet) {
             const resToShow = []
-            timeToID(resDet[1], resDet[2], resToShow)
+            if (res[0] === Number(seatId)) {
+                timeToID(res[1], res[2], resToShow)
+            }
             for (var slot of resToShow) {
                 ttCol[slot] = 'tt-res'
             }
@@ -279,46 +332,14 @@ export default function Main({userid}) {
         setFull(Object.values(ttCol).filter((element) => element === 'tt-emp').length === 0 ? true : false)
     }
     const handleResClose = () => setOpenRes(false)
+    // delete modal
+    const [delMod, setDelMod] = useState(false)
 
-    // selects
-    // 1. duration
-    const [dur, setDur] = useState('')
-    const handleChangeDur = (event) => {
-        setDur(event.target.value)
-        // reset
-        setSlot('')
-        setSlotDis(false)
-    }
-    // 2. time slot
-    const [slot, setSlot] = useState('')
-    const [slotDis, setSlotDis] = useState(true)
-    const handleChangeSlot = (event) => {
-        setSlot(event.target.value)
-    }
+    // manage reservations modal
+    const [openManage, setOpenManage] = useState(false)
+    const handleManageOpen = () => setOpenManage(true)
+    const handleManageClose = () => setOpenManage(false)
 
-    // process DB "reservations" to update seatInfo
-    const slotID = []
-    timeToID(slot.slice(0,4), slot.slice(7, 11), slotID)
-    const tobeOccpre = []
-    for (var reservation of dbRes) {
-        const resID = []
-        timeToID(reservation.start_time, reservation.end_time, resID)
-        // check slotID in resID -> these are all 'occ'
-        for (var ele of slotID) {
-            resID.includes(ele) && tobeOccpre.push(reservation.seat_id)
-        }
-    }
-    let tobeOcc = [...new Set(tobeOccpre)]
-    // reset
-    Object.assign(seatInfo, seatInfoCopy)
-    // display occ and ourres seats
-    for (var seat of tobeOcc) {
-        seatInfo[seat] = 'occ'
-    }
-    if (resDet.length !== 0) {
-        seatInfo[resDet[0]] = 'ourres'
-    }
-    // ! to be filtered by Lvl before being passed under dbSeat
 
     // check in state
     const [checkin, setCheckin] = useState(false)
@@ -353,6 +374,7 @@ export default function Main({userid}) {
         </Box>
         </Container>
 
+        {/* sub-header */}
         <Container sx={{marginTop: '15px'}}>
         <Box
         display='flex'
@@ -361,7 +383,7 @@ export default function Main({userid}) {
         >
             {/* level select */}
             <FormControl sx={{width: 100}}>
-                <InputLabel id="floor-select-label">Level</InputLabel>
+                <InputLabel id="level-select-label">Level</InputLabel>
                 <Select
                     labelId="level-select-label"
                     id="level-select"
@@ -375,33 +397,41 @@ export default function Main({userid}) {
                     <MenuItem value={6}>6</MenuItem>
                 </Select>
             </FormControl>
-            <Typography variant='body1'>
-                {resDet.length === 0 ? 
-                    "Click on a seat to reserve"
-                    : <span>Click on <span style={{color: '#bd00ff'}}>your seat </span>
-                    or <button
-                    value='hb'
-                    onClick={handleResOpen}
-                    className='cancel'>here</button> to cancel</span>
-                }
-            </Typography>
         </Box>
         </Container>
 
         {/* info tag */}
-        <Container sx={{textAlign: 'center', marginBottom: '3rem'}}>
-            <Typography variant="body1" 
+        <Container sx={{textAlign: 'center', marginTop:'-1rem', marginBottom: '3rem'}}>
+            {resDet.length === 0 &&
+            <Typography variant="body1">
+                Select a duration and time to start reserving
+            </Typography>
+            }
+
+            {/* upcoming - changes to show check in */}
+            <Typography variant='h6'
             sx={{
                 visibility: resDet.length === 0 ? 'hidden' : 'visible',
-                marginTop: 2
+                marginBottom: 2
             }}>
                 {checkin === false ?
-                    <span>You have reserved level <span style={{color: '#bd00ff', fontWeight: '700'}}>{resDetInfo[0]}</span> seat <span style={{color: '#bd00ff', fontWeight: '700'}}>
+                    <span>Upcoming reservation at level <span style={{color: '#bd00ff', fontWeight: '700'}}>{resDetInfo[0]}</span> seat <span style={{color: '#bd00ff', fontWeight: '700'}}>
                     {resDetInfo[1]}</span> from <span style={{fontWeight: '700'}}>{resDet[1]} - {resDet[2]}</span></span>
-                    : <span>You are now studying at level <span style={{color: '#0085ff', fontWeight: '700'}}>{resDetInfo[0]}</span> seat <span style={{color: '#0085ff', fontWeight: '700'}}>
+                    : <span>Now studying at level <span style={{color: '#0085ff', fontWeight: '700'}}>{resDetInfo[0]}</span> seat <span style={{color: '#0085ff', fontWeight: '700'}}>
                     {resDetInfo[1]}</span> until <span style={{fontWeight: '700'}}>{resDet[2]}</span></span>
                 }
             </Typography>
+
+            {/* if you have more reservations, opens a new modal to show */}
+            <Typography variant='body1'>
+                {resDet.length !== 0 &&
+                    <span>Click <button
+                    value='cancelRes'
+                    onClick={handleManageOpen}
+                    className='cancel'>here</button> to manage reservations</span>
+                }
+            </Typography>
+            
         </Container>
 
         {/* time slot selector */}
@@ -506,20 +536,25 @@ export default function Main({userid}) {
 
         {/* modals */}
         <Reserve
-        open={openRes}
-        onClose={handleResClose} 
+        open={openRes} onClose={handleResClose} 
         seatDet={seatDet} 
         ttCol={ttCol}
-        setResDet={setResDet}
-        resDet={resDet}
-        slot={[slot, slotID]}
-        tobeOcc={tobeOcc}
+        setResDet={setResDet} resDet={resDet}
+        slot={[slot, slotID]} tobeOcc={tobeOcc}
         full={full}
+        resToDel={resToDel} delMod={delMod} setDelMod={setDelMod}
         />
         <Break
         open={openBreak}
         onClose={handleBreakClose} 
         seatDet={seatDet}
+        />
+        <Manage
+        open={openManage}
+        onClose={handleManageClose} 
+        resDet={resDet}
+        handleResOpen={handleResOpen}
+        setDelMod={setDelMod}
         />
         </>
     )

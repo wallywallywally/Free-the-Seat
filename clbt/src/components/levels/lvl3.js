@@ -21,7 +21,7 @@ const Table = styled(Paper)(() => ({
 }))
 
 const FillerTop = styled(Paper)(() => ({
-    padding: '5rem 24.7rem',
+    padding: '5rem 26.6rem',
     backgroundColor: '#ddd',
     borderRadius: 3,
     textAlign: 'center',
@@ -74,7 +74,7 @@ export default function Lvl3({reserveModal, seatInfo}) {
     const handleReserve = () => (event) => reserveModal(event)
 
     // seat format:
-    // <Seat id='101' status={seatInfo[101]} reserve={handleReserve()}/>
+    // <Seat value='seat num for that level' id='seat_id' status={seatInfo[seat_id]} reserve={handleReserve()}/>
 
     // use css grid to prevent responsiveness
 
@@ -83,25 +83,27 @@ export default function Lvl3({reserveModal, seatInfo}) {
         <>
         <ThemeProvider theme={table}>
 
+        <div className='lvl3' id='3'>
+
         {/* collab space */}
         <Grid container justifyContent='center'>
             <FillerTop />
         </Grid>
 
-        <div className='center' style={{marginTop: 10}}>
+        <div className='center' style={{marginTop: 20}}>
         <Box className='grid'
         sx={{
             gridTemplateColumns: '2fr 1fr 6fr 1fr 2fr',
-            columnGap: '2rem'
+            columnGap: '3rem'
         }}>
             {/* window tables L */}
             <Box className='flex-col' sx={{gap:'8rem'}}>
                 <Table4 container item>
                     <Grid item>
-                        <Seat id='301' status={seatInfo[301]} reserve={handleReserve()}/>
+                        <Seat value='1' id='101' status={seatInfo[101]} reserve={handleReserve()}/>
                     </Grid>
                     <Grid item>
-                        <Seat id='302' status={seatInfo[302]} reserve={handleReserve()}/>
+                        <Seat value='2' id='102' status={seatInfo[102]} reserve={handleReserve()}/>
                     </Grid>
 
                     <Grid item xs={12}>
@@ -109,18 +111,18 @@ export default function Lvl3({reserveModal, seatInfo}) {
                     </Grid>
 
                     <Grid item>
-                        <Seat id='303' status={seatInfo[303]} reserve={handleReserve()}/>
+                        <Seat value='3' id='103' status={seatInfo[103]} reserve={handleReserve()}/>
                     </Grid>
                     <Grid item>
-                        <Seat id='304' status={seatInfo[304]} reserve={handleReserve()}/>
+                        <Seat value='4' id='104' status={seatInfo[104]} reserve={handleReserve()}/>
                     </Grid>
                 </Table4>
                 <Table4 container item>
                     <Grid item>
-                        <Seat id='305' status={seatInfo[305]} reserve={handleReserve()}/>
+                        <Seat value='5' id='105' status={seatInfo[105]} reserve={handleReserve()}/>
                     </Grid>
                     <Grid item>
-                        <Seat id='306' status={seatInfo[306]} reserve={handleReserve()}/>
+                        <Seat value='6' id='106' status={seatInfo[106]} reserve={handleReserve()}/>
                     </Grid>
 
                     <Grid item xs={12}>
@@ -128,18 +130,18 @@ export default function Lvl3({reserveModal, seatInfo}) {
                     </Grid>
 
                     <Grid item>
-                        <Seat id='307' status={seatInfo[307]} reserve={handleReserve()}/>
+                        <Seat value='7' id='107' status={seatInfo[107]} reserve={handleReserve()}/>
                     </Grid>
                     <Grid item>
-                        <Seat id='308' status={seatInfo[308]} reserve={handleReserve()}/>
+                        <Seat value='8' id='108' status={seatInfo[108]} reserve={handleReserve()}/>
                     </Grid>
                 </Table4>
                 <Table4 container item>
                     <Grid item>
-                        <Seat id='309' status={seatInfo[309]} reserve={handleReserve()}/>
+                        <Seat value='9' id='109' status={seatInfo[109]} reserve={handleReserve()}/>
                     </Grid>
                     <Grid item>
-                        <Seat id='310' status={seatInfo[310]} reserve={handleReserve()}/>
+                        <Seat value='10' id='110' status={seatInfo[110]} reserve={handleReserve()}/>
                     </Grid>
 
                     <Grid item xs={12}>
@@ -147,18 +149,18 @@ export default function Lvl3({reserveModal, seatInfo}) {
                     </Grid>
 
                     <Grid item>
-                        <Seat id='311' status={seatInfo[311]} reserve={handleReserve()}/>
+                        <Seat value='11' id='111' status={seatInfo[111]} reserve={handleReserve()}/>
                     </Grid>
                     <Grid item>
-                        <Seat id='312' status={seatInfo[312]} reserve={handleReserve()}/>
+                        <Seat value='12' id='112' status={seatInfo[112]} reserve={handleReserve()}/>
                     </Grid>
                 </Table4>
                 <Table4 container item>
                     <Grid item>
-                        <Seat id='313' status={seatInfo[313]} reserve={handleReserve()}/>
+                        <Seat value='13' id='113' status={seatInfo[113]} reserve={handleReserve()}/>
                     </Grid>
                     <Grid item>
-                        <Seat id='314' status={seatInfo[314]} reserve={handleReserve()}/>
+                        <Seat value='13' id='114' status={seatInfo[114]} reserve={handleReserve()}/>
                     </Grid>
 
                     <Grid item xs={12}>
@@ -166,18 +168,18 @@ export default function Lvl3({reserveModal, seatInfo}) {
                     </Grid>
 
                     <Grid item>
-                        <Seat id='315' status={seatInfo[315]} reserve={handleReserve()}/>
+                        <Seat value='15' id='115' status={seatInfo[115]} reserve={handleReserve()}/>
                     </Grid>
                     <Grid item>
-                        <Seat id='316' status={seatInfo[316]} reserve={handleReserve()}/>
+                        <Seat value='16' id='116' status={seatInfo[116]} reserve={handleReserve()}/>
                     </Grid>
                 </Table4>
                 <Table4 container item>
                     <Grid item>
-                        <Seat id='317' status={seatInfo[317]} reserve={handleReserve()}/>
+                        <Seat value='17' id='117' status={seatInfo[117]} reserve={handleReserve()}/>
                     </Grid>
                     <Grid item>
-                        <Seat id='318' status={seatInfo[318]} reserve={handleReserve()}/>
+                        <Seat value='18' id='118' status={seatInfo[118]} reserve={handleReserve()}/>
                     </Grid>
 
                     <Grid item xs={12}>
@@ -185,18 +187,18 @@ export default function Lvl3({reserveModal, seatInfo}) {
                     </Grid>
 
                     <Grid item>
-                        <Seat id='319' status={seatInfo[319]} reserve={handleReserve()}/>
+                        <Seat value='19' id='119' status={seatInfo[119]} reserve={handleReserve()}/>
                     </Grid>
                     <Grid item>
-                        <Seat id='320' status={seatInfo[320]} reserve={handleReserve()}/>
+                        <Seat value='20' id='120' status={seatInfo[120]} reserve={handleReserve()}/>
                     </Grid>
                 </Table4>
                 <Table4 container item>
                     <Grid item>
-                        <Seat id='321' status={seatInfo[321]} reserve={handleReserve()}/>
+                        <Seat value='21' id='121' status={seatInfo[121]} reserve={handleReserve()}/>
                     </Grid>
                     <Grid item>
-                        <Seat id='322' status={seatInfo[322]} reserve={handleReserve()}/>
+                        <Seat value='22' id='122' status={seatInfo[122]} reserve={handleReserve()}/>
                     </Grid>
 
                     <Grid item xs={12}>
@@ -204,10 +206,10 @@ export default function Lvl3({reserveModal, seatInfo}) {
                     </Grid>
 
                     <Grid item>
-                        <Seat id='323' status={seatInfo[323]} reserve={handleReserve()}/>
+                        <Seat value='23' id='123' status={seatInfo[123]} reserve={handleReserve()}/>
                     </Grid>
                     <Grid item>
-                        <Seat id='324' status={seatInfo[324]} reserve={handleReserve()}/>
+                        <Seat value='24' id='124' status={seatInfo[124]} reserve={handleReserve()}/>
                     </Grid>
                 </Table4>
             </Box>
@@ -216,58 +218,58 @@ export default function Lvl3({reserveModal, seatInfo}) {
             <Box className='flex-col' sx={{gap:'3rem'}}>
                 <Grid container item direction='column' alignItems='center'>
                     <Grid item >
-                        <Seat id='325' status={seatInfo[325]} reserve={handleReserve()}/>
+                        <Seat value='25' id='125' status={seatInfo[125]} reserve={handleReserve()}/>
                     </Grid>
                     <Grid item >
-                        <Seat id='326' status={seatInfo[326]} reserve={handleReserve()}/>
-                    </Grid>
-                </Grid>
-                <Grid container item direction='column' alignItems='center'>
-                    <Grid item >
-                        <Seat id='327' status={seatInfo[327]} reserve={handleReserve()}/>
-                    </Grid>
-                    <Grid item >
-                        <Seat id='328' status={seatInfo[328]} reserve={handleReserve()}/>
+                        <Seat value='26' id='126' status={seatInfo[126]} reserve={handleReserve()}/>
                     </Grid>
                 </Grid>
                 <Grid container item direction='column' alignItems='center'>
                     <Grid item >
-                        <Seat id='329' status={seatInfo[329]} reserve={handleReserve()}/>
+                        <Seat value='27' id='127' status={seatInfo[127]} reserve={handleReserve()}/>
                     </Grid>
                     <Grid item >
-                        <Seat id='330' status={seatInfo[330]} reserve={handleReserve()}/>
-                    </Grid>
-                </Grid>
-                <Grid container item direction='column' alignItems='center'>
-                    <Grid item >
-                        <Seat id='331' status={seatInfo[331]} reserve={handleReserve()}/>
-                    </Grid>
-                    <Grid item >
-                        <Seat id='332' status={seatInfo[332]} reserve={handleReserve()}/>
+                        <Seat value='28' id='128' status={seatInfo[128]} reserve={handleReserve()}/>
                     </Grid>
                 </Grid>
                 <Grid container item direction='column' alignItems='center'>
                     <Grid item >
-                        <Seat id='333' status={seatInfo[333]} reserve={handleReserve()}/>
+                        <Seat value='29' id='129' status={seatInfo[129]} reserve={handleReserve()}/>
                     </Grid>
                     <Grid item >
-                        <Seat id='334' status={seatInfo[334]} reserve={handleReserve()}/>
-                    </Grid>
-                </Grid>
-                <Grid container item direction='column' alignItems='center'>
-                    <Grid item >
-                        <Seat id='335' status={seatInfo[335]} reserve={handleReserve()}/>
-                    </Grid>
-                    <Grid item >
-                        <Seat id='336' status={seatInfo[336]} reserve={handleReserve()}/>
+                        <Seat value='30' id='130' status={seatInfo[130]} reserve={handleReserve()}/>
                     </Grid>
                 </Grid>
                 <Grid container item direction='column' alignItems='center'>
                     <Grid item >
-                        <Seat id='337' status={seatInfo[337]} reserve={handleReserve()}/>
+                        <Seat value='31' id='131' status={seatInfo[131]} reserve={handleReserve()}/>
                     </Grid>
                     <Grid item >
-                        <Seat id='338' status={seatInfo[338]} reserve={handleReserve()}/>
+                        <Seat value='32' id='132' status={seatInfo[132]} reserve={handleReserve()}/>
+                    </Grid>
+                </Grid>
+                <Grid container item direction='column' alignItems='center'>
+                    <Grid item >
+                        <Seat value='33' id='133' status={seatInfo[133]} reserve={handleReserve()}/>
+                    </Grid>
+                    <Grid item >
+                        <Seat value='34' id='134' status={seatInfo[134]} reserve={handleReserve()}/>
+                    </Grid>
+                </Grid>
+                <Grid container item direction='column' alignItems='center'>
+                    <Grid item >
+                        <Seat value='35' id='135' status={seatInfo[135]} reserve={handleReserve()}/>
+                    </Grid>
+                    <Grid item >
+                        <Seat value='36' id='136' status={seatInfo[136]} reserve={handleReserve()}/>
+                    </Grid>
+                </Grid>
+                <Grid container item direction='column' alignItems='center'>
+                    <Grid item >
+                        <Seat value='37' id='137' status={seatInfo[137]} reserve={handleReserve()}/>
+                    </Grid>
+                    <Grid item >
+                        <Seat value='38' id='138' status={seatInfo[138]} reserve={handleReserve()}/>
                     </Grid>
                 </Grid>            
             </Box>
@@ -281,58 +283,58 @@ export default function Lvl3({reserveModal, seatInfo}) {
             <Box className='flex-col' sx={{gap:'3rem'}}>
                 <Grid container item direction='column' alignItems='center'>
                     <Grid item >
-                        <Seat id='339' status={seatInfo[339]} reserve={handleReserve()}/>
+                        <Seat value='39' id='139' status={seatInfo[139]} reserve={handleReserve()}/>
                     </Grid>
                     <Grid item >
-                        <Seat id='340' status={seatInfo[340]} reserve={handleReserve()}/>
-                    </Grid>
-                </Grid>
-                <Grid container item direction='column' alignItems='center'>
-                    <Grid item >
-                        <Seat id='341' status={seatInfo[341]} reserve={handleReserve()}/>
-                    </Grid>
-                    <Grid item >
-                        <Seat id='342' status={seatInfo[342]} reserve={handleReserve()}/>
+                        <Seat value='40' id='140' status={seatInfo[140]} reserve={handleReserve()}/>
                     </Grid>
                 </Grid>
                 <Grid container item direction='column' alignItems='center'>
                     <Grid item >
-                        <Seat id='343' status={seatInfo[343]} reserve={handleReserve()}/>
+                        <Seat value='41' id='141' status={seatInfo[141]} reserve={handleReserve()}/>
                     </Grid>
                     <Grid item >
-                        <Seat id='344' status={seatInfo[344]} reserve={handleReserve()}/>
-                    </Grid>
-                </Grid>
-                <Grid container item direction='column' alignItems='center'>
-                    <Grid item >
-                        <Seat id='345' status={seatInfo[345]} reserve={handleReserve()}/>
-                    </Grid>
-                    <Grid item >
-                        <Seat id='346' status={seatInfo[346]} reserve={handleReserve()}/>
+                        <Seat value='42' id='142' status={seatInfo[142]} reserve={handleReserve()}/>
                     </Grid>
                 </Grid>
                 <Grid container item direction='column' alignItems='center'>
                     <Grid item >
-                        <Seat id='3347' status={seatInfo[347]} reserve={handleReserve()}/>
+                        <Seat value='43' id='143' status={seatInfo[143]} reserve={handleReserve()}/>
                     </Grid>
                     <Grid item >
-                        <Seat id='348' status={seatInfo[348]} reserve={handleReserve()}/>
-                    </Grid>
-                </Grid>
-                <Grid container item direction='column' alignItems='center'>
-                    <Grid item >
-                        <Seat id='349' status={seatInfo[349]} reserve={handleReserve()}/>
-                    </Grid>
-                    <Grid item >
-                        <Seat id='350' status={seatInfo[350]} reserve={handleReserve()}/>
+                        <Seat value='44' id='144' status={seatInfo[144]} reserve={handleReserve()}/>
                     </Grid>
                 </Grid>
                 <Grid container item direction='column' alignItems='center'>
                     <Grid item >
-                        <Seat id='351' status={seatInfo[351]} reserve={handleReserve()}/>
+                        <Seat value='45' id='145' status={seatInfo[145]} reserve={handleReserve()}/>
                     </Grid>
                     <Grid item >
-                        <Seat id='352' status={seatInfo[352]} reserve={handleReserve()}/>
+                        <Seat value='46' id='146' status={seatInfo[146]} reserve={handleReserve()}/>
+                    </Grid>
+                </Grid>
+                <Grid container item direction='column' alignItems='center'>
+                    <Grid item >
+                        <Seat value='47' id='147' status={seatInfo[147]} reserve={handleReserve()}/>
+                    </Grid>
+                    <Grid item >
+                        <Seat value='48' id='148' status={seatInfo[148]} reserve={handleReserve()}/>
+                    </Grid>
+                </Grid>
+                <Grid container item direction='column' alignItems='center'>
+                    <Grid item >
+                        <Seat value='49' id='149' status={seatInfo[149]} reserve={handleReserve()}/>
+                    </Grid>
+                    <Grid item >
+                        <Seat value='50' id='150' status={seatInfo[150]} reserve={handleReserve()}/>
+                    </Grid>
+                </Grid>
+                <Grid container item direction='column' alignItems='center'>
+                    <Grid item >
+                        <Seat value='51' id='151' status={seatInfo[151]} reserve={handleReserve()}/>
+                    </Grid>
+                    <Grid item >
+                        <Seat value='52' id='152' status={seatInfo[152]} reserve={handleReserve()}/>
                     </Grid>
                 </Grid>             
             </Box>
@@ -341,10 +343,10 @@ export default function Lvl3({reserveModal, seatInfo}) {
             <Box className='flex-col' sx={{gap:'8rem'}}>
                 <Table4 container item>
                     <Grid item>
-                        <Seat id='353' status={seatInfo[353]} reserve={handleReserve()}/>
+                        <Seat value='53' id='153' status={seatInfo[153]} reserve={handleReserve()}/>
                     </Grid>
                     <Grid item>
-                        <Seat id='354' status={seatInfo[354]} reserve={handleReserve()}/>
+                        <Seat value='54' id='154' status={seatInfo[154]} reserve={handleReserve()}/>
                     </Grid>
 
                     <Grid item xs={12}>
@@ -352,18 +354,18 @@ export default function Lvl3({reserveModal, seatInfo}) {
                     </Grid>
 
                     <Grid item>
-                        <Seat id='355' status={seatInfo[355]} reserve={handleReserve()}/>
+                        <Seat value='55' id='155' status={seatInfo[155]} reserve={handleReserve()}/>
                     </Grid>
                     <Grid item>
-                        <Seat id='356' status={seatInfo[356]} reserve={handleReserve()}/>
+                        <Seat value='56' id='156' status={seatInfo[156]} reserve={handleReserve()}/>
                     </Grid>
                 </Table4>
                 <Table4 container item>
                     <Grid item>
-                        <Seat id='357' status={seatInfo[357]} reserve={handleReserve()}/>
+                        <Seat value='57' id='157' status={seatInfo[157]} reserve={handleReserve()}/>
                     </Grid>
                     <Grid item>
-                        <Seat id='358' status={seatInfo[358]} reserve={handleReserve()}/>
+                        <Seat value='58' id='158' status={seatInfo[158]} reserve={handleReserve()}/>
                     </Grid>
 
                     <Grid item xs={12}>
@@ -371,18 +373,18 @@ export default function Lvl3({reserveModal, seatInfo}) {
                     </Grid>
 
                     <Grid item>
-                        <Seat id='359' status={seatInfo[359]} reserve={handleReserve()}/>
+                        <Seat value='59' id='159' status={seatInfo[159]} reserve={handleReserve()}/>
                     </Grid>
                     <Grid item>
-                        <Seat id='360' status={seatInfo[360]} reserve={handleReserve()}/>
+                        <Seat value='60' id='160' status={seatInfo[160]} reserve={handleReserve()}/>
                     </Grid>
                 </Table4>
                 <Table4 container item>
                     <Grid item>
-                        <Seat id='361' status={seatInfo[361]} reserve={handleReserve()}/>
+                        <Seat value='61' id='161' status={seatInfo[161]} reserve={handleReserve()}/>
                     </Grid>
                     <Grid item>
-                        <Seat id='362' status={seatInfo[362]} reserve={handleReserve()}/>
+                        <Seat value='62' id='162' status={seatInfo[162]} reserve={handleReserve()}/>
                     </Grid>
 
                     <Grid item xs={12}>
@@ -390,18 +392,18 @@ export default function Lvl3({reserveModal, seatInfo}) {
                     </Grid>
 
                     <Grid item>
-                        <Seat id='363' status={seatInfo[363]} reserve={handleReserve()}/>
+                        <Seat value='63' id='163' status={seatInfo[163]} reserve={handleReserve()}/>
                     </Grid>
                     <Grid item>
-                        <Seat id='364' status={seatInfo[364]} reserve={handleReserve()}/>
+                        <Seat value='64' id='164' status={seatInfo[164]} reserve={handleReserve()}/>
                     </Grid>
                 </Table4>
                 <Table4 container item>
                     <Grid item>
-                        <Seat id='365' status={seatInfo[365]} reserve={handleReserve()}/>
+                        <Seat value='65' id='165' status={seatInfo[165]} reserve={handleReserve()}/>
                     </Grid>
                     <Grid item>
-                        <Seat id='366' status={seatInfo[366]} reserve={handleReserve()}/>
+                        <Seat value='66' id='166' status={seatInfo[166]} reserve={handleReserve()}/>
                     </Grid>
 
                     <Grid item xs={12}>
@@ -409,18 +411,18 @@ export default function Lvl3({reserveModal, seatInfo}) {
                     </Grid>
 
                     <Grid item>
-                        <Seat id='367' status={seatInfo[367]} reserve={handleReserve()}/>
+                        <Seat value='67' id='167' status={seatInfo[167]} reserve={handleReserve()}/>
                     </Grid>
                     <Grid item>
-                        <Seat id='368' status={seatInfo[368]} reserve={handleReserve()}/>
+                        <Seat value='68' id='168' status={seatInfo[168]} reserve={handleReserve()}/>
                     </Grid>
                 </Table4>
                 <Table4 container item>
                     <Grid item>
-                        <Seat id='369' status={seatInfo[369]} reserve={handleReserve()}/>
+                        <Seat value='69' id='169' status={seatInfo[169]} reserve={handleReserve()}/>
                     </Grid>
                     <Grid item>
-                        <Seat id='370' status={seatInfo[370]} reserve={handleReserve()}/>
+                        <Seat value='70' id='170' status={seatInfo[170]} reserve={handleReserve()}/>
                     </Grid>
 
                     <Grid item xs={12}>
@@ -428,18 +430,18 @@ export default function Lvl3({reserveModal, seatInfo}) {
                     </Grid>
 
                     <Grid item>
-                        <Seat id='371' status={seatInfo[371]} reserve={handleReserve()}/>
+                        <Seat value='71' id='171' status={seatInfo[171]} reserve={handleReserve()}/>
                     </Grid>
                     <Grid item>
-                        <Seat id='372' status={seatInfo[372]} reserve={handleReserve()}/>
+                        <Seat value='72' id='172' status={seatInfo[172]} reserve={handleReserve()}/>
                     </Grid>
                 </Table4>
                 <Table4 container item>
                     <Grid item>
-                        <Seat id='373' status={seatInfo[373]} reserve={handleReserve()}/>
+                        <Seat value='73' id='173' status={seatInfo[173]} reserve={handleReserve()}/>
                     </Grid>
                     <Grid item>
-                        <Seat id='374' status={seatInfo[374]} reserve={handleReserve()}/>
+                        <Seat value='74' id='174' status={seatInfo[174]} reserve={handleReserve()}/>
                     </Grid>
 
                     <Grid item xs={12}>
@@ -447,10 +449,10 @@ export default function Lvl3({reserveModal, seatInfo}) {
                     </Grid>
 
                     <Grid item>
-                        <Seat id='375' status={seatInfo[375]} reserve={handleReserve()}/>
+                        <Seat value='75' id='175' status={seatInfo[175]} reserve={handleReserve()}/>
                     </Grid>
                     <Grid item>
-                        <Seat id='376' status={seatInfo[376]} reserve={handleReserve()}/>
+                        <Seat value='76' id='176' status={seatInfo[176]} reserve={handleReserve()}/>
                     </Grid>
                 </Table4>
 
@@ -462,7 +464,7 @@ export default function Lvl3({reserveModal, seatInfo}) {
         <div className='center'>
         <Box className='grid' 
         sx={{
-            gridTemplateColumns: '1fr 1fr 1fr 3.3fr',
+            gridTemplateColumns: '0.7fr 0.7fr 1fr 1fr 3.3fr',
             columnGap: '1.8rem'
         }}
         marginTop={3}>
@@ -471,7 +473,7 @@ export default function Lvl3({reserveModal, seatInfo}) {
             <Box className='flex-col' sx={{gap:'8.5rem'}}>
                 <Table2 container item>
                     <Grid container item justifyContent='center' alignItems='center'>
-                        <Seat id='377' status={seatInfo[377]} reserve={handleReserve()}/>
+                        <Seat value='77' id='177' status={seatInfo[177]} reserve={handleReserve()}/>
                     </Grid>
 
                     <Grid container item>
@@ -479,12 +481,12 @@ export default function Lvl3({reserveModal, seatInfo}) {
                     </Grid>
 
                     <Grid container item justifyContent='center' alignItems='center'>
-                        <Seat id='378' status={seatInfo[378]} reserve={handleReserve()}/>
+                        <Seat value='78' id='178' status={seatInfo[178]} reserve={handleReserve()}/>
                     </Grid>
                 </Table2>
                 <Table2 container item>
                     <Grid container item justifyContent='center' alignItems='center'>
-                        <Seat id='379' status={seatInfo[379]} reserve={handleReserve()}/>
+                        <Seat value='79' id='179' status={seatInfo[179]} reserve={handleReserve()}/>
                     </Grid>
 
                     <Grid container item>
@@ -492,12 +494,12 @@ export default function Lvl3({reserveModal, seatInfo}) {
                     </Grid>
 
                     <Grid container item justifyContent='center' alignItems='center'>
-                        <Seat id='380' status={seatInfo[380]} reserve={handleReserve()}/>
+                        <Seat value='80' id='180' status={seatInfo[180]} reserve={handleReserve()}/>
                     </Grid>
                 </Table2>
                 <Table2 container item>
                     <Grid container item justifyContent='center' alignItems='center'>
-                        <Seat id='381' status={seatInfo[381]} reserve={handleReserve()}/>
+                        <Seat value='81' id='181' status={seatInfo[181]} reserve={handleReserve()}/>
                     </Grid>
 
                     <Grid container item>
@@ -505,12 +507,12 @@ export default function Lvl3({reserveModal, seatInfo}) {
                     </Grid>
 
                     <Grid container item justifyContent='center' alignItems='center'>
-                        <Seat id='382' status={seatInfo[382]} reserve={handleReserve()}/>
+                        <Seat value='82' id='182' status={seatInfo[182]} reserve={handleReserve()}/>
                     </Grid>
                 </Table2>
                 <Table2 container item>
                     <Grid container item justifyContent='center' alignItems='center'>
-                        <Seat id='383' status={seatInfo[383]} reserve={handleReserve()}/>
+                        <Seat value='83' id='183' status={seatInfo[183]} reserve={handleReserve()}/>
                     </Grid>
 
                     <Grid container item>
@@ -518,7 +520,7 @@ export default function Lvl3({reserveModal, seatInfo}) {
                     </Grid>
 
                     <Grid container item justifyContent='center' alignItems='center'>
-                        <Seat id='384' status={seatInfo[384]} reserve={handleReserve()}/>
+                        <Seat value='84' id='184' status={seatInfo[184]} reserve={handleReserve()}/>
                     </Grid>
                 </Table2>
             </Box>
@@ -531,7 +533,7 @@ export default function Lvl3({reserveModal, seatInfo}) {
                     </Grid>
 
                     <Grid container item justifyContent='center' alignItems='center'>
-                        <Seat id='385' status={seatInfo[385]} reserve={handleReserve()}/>
+                        <Seat value='85' id='185' status={seatInfo[185]} reserve={handleReserve()}/>
                     </Grid>
                 </Table2>
                 <Table2 container item>
@@ -540,7 +542,7 @@ export default function Lvl3({reserveModal, seatInfo}) {
                     </Grid>
 
                     <Grid container item justifyContent='center' alignItems='center'>
-                        <Seat id='386' status={seatInfo[386]} reserve={handleReserve()}/>
+                        <Seat value='86' id='186' status={seatInfo[186]} reserve={handleReserve()}/>
                     </Grid>
                 </Table2>
                 <Table2 container item>
@@ -549,7 +551,7 @@ export default function Lvl3({reserveModal, seatInfo}) {
                     </Grid>
 
                     <Grid container item justifyContent='center' alignItems='center'>
-                        <Seat id='387' status={seatInfo[387]} reserve={handleReserve()}/>
+                        <Seat value='87' id='187' status={seatInfo[187]} reserve={handleReserve()}/>
                     </Grid>
                 </Table2>
             </Box>
@@ -558,10 +560,10 @@ export default function Lvl3({reserveModal, seatInfo}) {
             <Box className='flex-col' sx={{gap:'13.5rem'}}>
                 <Table4 container item>
                     <Grid item>
-                        <Seat id='388' status={seatInfo[388]} reserve={handleReserve()}/>
+                        <Seat value='88' id='188' status={seatInfo[188]} reserve={handleReserve()}/>
                     </Grid>
                     <Grid item>
-                        <Seat id='389' status={seatInfo[389]} reserve={handleReserve()}/>
+                        <Seat value='89' id='189' status={seatInfo[189]} reserve={handleReserve()}/>
                     </Grid>
 
                     <Grid item xs={12}>
@@ -569,18 +571,18 @@ export default function Lvl3({reserveModal, seatInfo}) {
                     </Grid>
 
                     <Grid item>
-                        <Seat id='390' status={seatInfo[390]} reserve={handleReserve()}/>
+                        <Seat value='90' id='190' status={seatInfo[190]} reserve={handleReserve()}/>
                     </Grid>
                     <Grid item>
-                        <Seat id='391' status={seatInfo[391]} reserve={handleReserve()}/>
+                        <Seat value='91' id='191' status={seatInfo[191]} reserve={handleReserve()}/>
                     </Grid>
                 </Table4>
                 <Table4 container item>
                     <Grid item>
-                        <Seat id='392' status={seatInfo[392]} reserve={handleReserve()}/>
+                        <Seat value='92' id='192' status={seatInfo[192]} reserve={handleReserve()}/>
                     </Grid>
                     <Grid item>
-                        <Seat id='393' status={seatInfo[393]} reserve={handleReserve()}/>
+                        <Seat value='93' id='193' status={seatInfo[193]} reserve={handleReserve()}/>
                     </Grid>
 
                     <Grid item xs={12}>
@@ -588,18 +590,18 @@ export default function Lvl3({reserveModal, seatInfo}) {
                     </Grid>
 
                     <Grid item>
-                        <Seat id='394' status={seatInfo[394]} reserve={handleReserve()}/>
+                        <Seat value='94' id='194' status={seatInfo[194]} reserve={handleReserve()}/>
                     </Grid>
                     <Grid item>
-                        <Seat id='395' status={seatInfo[395]} reserve={handleReserve()}/>
+                        <Seat value='95' id='195' status={seatInfo[195]} reserve={handleReserve()}/>
                     </Grid>
                 </Table4>
                 <Table4 container item>
                     <Grid item>
-                        <Seat id='396' status={seatInfo[396]} reserve={handleReserve()}/>
+                        <Seat value='96' id='196' status={seatInfo[196]} reserve={handleReserve()}/>
                     </Grid>
                     <Grid item>
-                        <Seat id='397' status={seatInfo[397]} reserve={handleReserve()}/>
+                        <Seat value='97' id='197' status={seatInfo[197]} reserve={handleReserve()}/>
                     </Grid>
 
                     <Grid item xs={12}>
@@ -607,22 +609,22 @@ export default function Lvl3({reserveModal, seatInfo}) {
                     </Grid>
 
                     <Grid item>
-                        <Seat id='398' status={seatInfo[398]} reserve={handleReserve()}/>
+                        <Seat value='98' id='198' status={seatInfo[198]} reserve={handleReserve()}/>
                     </Grid>
                     <Grid item>
-                        <Seat id='399' status={seatInfo[399]} reserve={handleReserve()}/>
+                        <Seat value='99' id='199' status={seatInfo[199]} reserve={handleReserve()}/>
                     </Grid>
                 </Table4>
             </Box>
         
-            {/* tables - over 100, ignore */}
-            {/* <Box sx={{marginLeft: 2, marginRight: 2}}>
+            {/* tables */}
+            <Box className='flex-col' sx={{gap:'8.2rem'}}>
                 <Table4 container item>
                     <Grid item>
-                        <Seat id='101' status={seatInfo[101]} reserve={handleReserve()}/>
+                        <Seat value='100' id='200' status={seatInfo[200]} reserve={handleReserve()}/>
                     </Grid>
                     <Grid item>
-                        <Seat id='102' status={seatInfo[102]} reserve={handleReserve()}/>
+                        <Seat value='101' id='201' status={seatInfo[201]} reserve={handleReserve()}/>
                     </Grid>
 
                     <Grid item xs={12}>
@@ -630,18 +632,18 @@ export default function Lvl3({reserveModal, seatInfo}) {
                     </Grid>
 
                     <Grid item>
-                        <Seat status={seatInfo[106]} reserve={handleReserve()}/>
+                        <Seat value='102' id='202' status={seatInfo[202]} reserve={handleReserve()}/>
                     </Grid>
                     <Grid item>
-                        <Seat status={seatInfo[107]} reserve={handleReserve()}/>
+                        <Seat value='103' id='203' status={seatInfo[203]} reserve={handleReserve()}/>
                     </Grid>
                 </Table4>
                 <Table4 container item>
                     <Grid item>
-                        <Seat id='101' status={seatInfo[101]} reserve={handleReserve()}/>
+                        <Seat value='104' id='204' status={seatInfo[204]} reserve={handleReserve()}/>
                     </Grid>
                     <Grid item>
-                        <Seat id='102' status={seatInfo[102]} reserve={handleReserve()}/>
+                        <Seat value='105' id='205' status={seatInfo[205]} reserve={handleReserve()}/>
                     </Grid>
 
                     <Grid item xs={12}>
@@ -649,18 +651,18 @@ export default function Lvl3({reserveModal, seatInfo}) {
                     </Grid>
 
                     <Grid item>
-                        <Seat status={seatInfo[106]} reserve={handleReserve()}/>
+                        <Seat value='106' id='206' status={seatInfo[206]} reserve={handleReserve()}/>
                     </Grid>
                     <Grid item>
-                        <Seat status={seatInfo[107]} reserve={handleReserve()}/>
+                        <Seat value='107' id='207' status={seatInfo[207]} reserve={handleReserve()}/>
                     </Grid>
                 </Table4>
                 <Table4 container item>
                     <Grid item>
-                        <Seat id='101' status={seatInfo[101]} reserve={handleReserve()}/>
+                        <Seat value='108' id='208' status={seatInfo[208]} reserve={handleReserve()}/>
                     </Grid>
                     <Grid item>
-                        <Seat id='102' status={seatInfo[102]} reserve={handleReserve()}/>
+                        <Seat value='109' id='209' status={seatInfo[209]} reserve={handleReserve()}/>
                     </Grid>
 
                     <Grid item xs={12}>
@@ -668,18 +670,18 @@ export default function Lvl3({reserveModal, seatInfo}) {
                     </Grid>
 
                     <Grid item>
-                        <Seat status={seatInfo[106]} reserve={handleReserve()}/>
+                        <Seat value='110' id='210' status={seatInfo[210]} reserve={handleReserve()}/>
                     </Grid>
                     <Grid item>
-                        <Seat status={seatInfo[107]} reserve={handleReserve()}/>
+                        <Seat value='111' id='211' status={seatInfo[211]} reserve={handleReserve()}/>
                     </Grid>
                 </Table4>
                 <Table4 container item>
                     <Grid item>
-                        <Seat id='101' status={seatInfo[101]} reserve={handleReserve()}/>
+                        <Seat value='112' id='212' status={seatInfo[212]} reserve={handleReserve()}/>
                     </Grid>
                     <Grid item>
-                        <Seat id='102' status={seatInfo[102]} reserve={handleReserve()}/>
+                        <Seat value='113' id='213' status={seatInfo[213]} reserve={handleReserve()}/>
                     </Grid>
 
                     <Grid item xs={12}>
@@ -687,13 +689,13 @@ export default function Lvl3({reserveModal, seatInfo}) {
                     </Grid>
 
                     <Grid item>
-                        <Seat status={seatInfo[106]} reserve={handleReserve()}/>
+                        <Seat value='114' id='214' status={seatInfo[214]} reserve={handleReserve()}/>
                     </Grid>
                     <Grid item>
-                        <Seat status={seatInfo[107]} reserve={handleReserve()}/>
+                        <Seat value='115' id='215' status={seatInfo[215]} reserve={handleReserve()}/>
                     </Grid>
                 </Table4>
-            </Box> */}
+            </Box>
 
             {/* misc stuff */}
             <Grid marginTop={-1}>
@@ -701,6 +703,8 @@ export default function Lvl3({reserveModal, seatInfo}) {
             </Grid>
 
         </Box>
+        </div>
+
         </div>
 
 
