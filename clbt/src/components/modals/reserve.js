@@ -8,9 +8,6 @@ import DialogTitle from '@mui/material/DialogTitle'
 import Dialog from '@mui/material/Dialog'
 import Typography from '@mui/material/Typography'
 import { Box } from '@mui/material'
-import MenuItem from '@mui/material/MenuItem'
-import FormControl from '@mui/material/FormControl'
-import Select from '@mui/material/Select'
 
 
 // reservation system modal
@@ -55,12 +52,15 @@ function ReserveModal(props) {
     
     // [DB int]
     // after creation/deletion in DB, we probably need to process Main's resDet again
-    // so [FRONTEND] stuff will be modified 
+    // so [FRONTEND] stuff will be modified
+    // useState for a DB CRUD - affects Main's useEffect
 
     // CREATE reservation
     const handleSubmitCreate = () => {
         // this entry is to be pushed to DB
-        const resToPush = [Number(seatDet[2]), slot[0].slice(0,4), slot[0].slice(7,11)]
+        // for frontend testing purposes
+        const fakeID = Math.floor(Math.random() * 10)
+        const resToPush = [Number(seatDet[2]), slot[0].slice(0,4), slot[0].slice(7,11), fakeID]
 
         // [FRONTEND] pushes it to resDet
         // pushed with no reservation id tho
@@ -70,6 +70,7 @@ function ReserveModal(props) {
         handleClose()
     }
 
+    console.log(resToDel)
     // DELETE reservation
     const handleSubmitDelete = () => {
         // resToDel has id - this entry is to be removed from DB
@@ -90,7 +91,7 @@ function ReserveModal(props) {
             <DialogTitle>
             <span
             style={{
-                visibility: (noslotSelected && !resISseat)|| full || (alrOcc && !resISseat) ? 'collapse' : 'revert'
+                visibility: (noslotSelected && !resISseat) || full || (alrOcc && !resISseat) ? 'collapse' : 'revert'
             }}>
                 {resISseat === true ? 'You have reserved:' :'You are now reserving:'}
             </span>
@@ -164,6 +165,11 @@ function ReserveModal(props) {
             <Typography variant='h6' sx={{textAlign:'center'}}>
                 Booked for the selected time slot:<br/>{slot[0]}
             </Typography>}
+
+            {/* {resISseat &&
+            <Typography variant='h6' sx={{textAlign:'center'}}>
+                Time slot:<br/>{slot[0]}
+            </Typography>} */}
 
             {/* delete info */}
             {delMod &&

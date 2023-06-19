@@ -5,18 +5,18 @@ button.cancel {
     background: none;
     border: none;
     padding: 0;
-    color: #fb7979;
+    color: rgba(189, 0 ,255);
     font-weight: bold;
     font-family: 'Inter';
     font-size: medium;
 }
 
 button.cancel:hover {
-    color: rgba(251, 121, 121, 0.75)
+    color: rgba(189, 0 ,255, 0.6)
 }
 
 button.cancel:active {
-    color: #fb7979
+    color: rgba(189, 0 ,255)
 }
 
 /* levels/lvlx.js */

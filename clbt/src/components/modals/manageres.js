@@ -8,7 +8,6 @@ import DialogTitle from '@mui/material/DialogTitle'
 import Dialog from '@mui/material/Dialog'
 import Typography from '@mui/material/Typography'
 import { Box } from '@mui/material'
-import Reserve from './reserve'
 
 
 // break system modal
@@ -21,7 +20,7 @@ function ManageModal(props) {
     }
     
     // processing details of resDet
-    const [reservations, setReservations] = useState([])
+    const [resToShow, setResToShow] = useState([])
     useEffect(() => {
         const reservations = []
         for (var res of resDet) {
@@ -34,10 +33,10 @@ function ManageModal(props) {
             if (a[2] === b[2]) return Number(a[3]) - Number(b[3])
             return a[2] - b[2]
         })
-        setReservations(reservationsSorted)
+        setResToShow(reservationsSorted)
     }, [resDet])
 
-    // cancelling res
+    // click to cancel selected res
     const handleCancel = (event) => {
         setDelMod(true)
         handleClose()
@@ -64,7 +63,7 @@ function ManageModal(props) {
             {/* list of reservations */}
             <Box className='center' sx={{marginTop:3}}>
             <Box className='flex-col' gap='1rem' marginBottom='2rem'>
-                {reservations.map((res) => {
+                {resToShow.map((res) => {
                 return(
                     <Box key={(res)}
                     display='flex'
