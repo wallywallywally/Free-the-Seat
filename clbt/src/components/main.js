@@ -198,7 +198,7 @@ function Lvlx(props) {
 
 
 // main
-export default function Main({userid}) {
+export default function Main({user}) {
     // level state
     const [level, setLevel] = useState(3)
     const [reservations, setReservations] = useState([])

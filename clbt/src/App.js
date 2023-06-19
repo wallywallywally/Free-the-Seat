@@ -57,7 +57,7 @@ function App() {
         <CssBaseline />
 
         {session ?
-             <Main userid={userid}/> : <LoginScreen/>
+             <Main user={userid}/> : <LoginScreen/>
         }
 
         </ThemeProvider>
