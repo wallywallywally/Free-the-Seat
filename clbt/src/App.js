@@ -57,14 +57,13 @@ function App() {
 
         {session ?
              <Main user={userid}/> : <LoginScreen/>
-        }
-=======
+}
         {/* {session ?
             <Main userid={userid}/> : <LoginScreen/>
         } */}
 
-        <Main userid={userid}/>
->>>>>>> 591a19539730a41e12df135e3c0442a6f316f577
+       // <Main userid={userid}/>
+
 
         </ThemeProvider>
         </>
