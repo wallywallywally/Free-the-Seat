@@ -8,6 +8,8 @@ import DialogTitle from '@mui/material/DialogTitle'
 import Dialog from '@mui/material/Dialog'
 import Typography from '@mui/material/Typography'
 import { Box } from '@mui/material'
+import { supabase } from '../../supabase'
+
 
 
 // reservation system modal
@@ -22,8 +24,8 @@ function ReserveModal(props) {
         slot, tobeOcc, 
         full,
         resToDel, delMod, setDelMod,
+        userID,
     } = props
-
     // expressions
     const res = resDet.length !== 0
 
@@ -56,27 +58,35 @@ function ReserveModal(props) {
     // useState for a DB CRUD - affects Main's useEffect
 
     // CREATE reservation
-    const handleSubmitCreate = () => {
+    const handleSubmitCreate = async () => {
         // this entry is to be pushed to DB
         // for frontend testing purposes
         const fakeID = Math.floor(Math.random() * 10)
-        const resToPush = [Number(seatDet[2]), slot[0].slice(0,4), slot[0].slice(7,11), fakeID]
-
+        const resToPush = [Number(seatDet[2]), slot[0].slice(0,4), slot[0].slice(7,11), userID] //seat id, start time, end time, user id
         // [FRONTEND] pushes it to resDet
         // pushed with no reservation id tho
-        const newRD = [...resDet, resToPush]
-        setResDet(newRD)
+        // const { data, error } = await supabase
+        // .from('reservations')
+        // .insert({seat_id: seatDet[2], user_id: user.id, start_time: slot[0].slice(0,4), end_time: slot[0].slice(7,11)})
+        // .select()
+        // const newRD = [...resDet, data]
+        // setResDet(newRD)
 
         handleClose()
     }
 
     console.log(resToDel)
     // DELETE reservation
-    const handleSubmitDelete = () => {
+    const handleSubmitDelete = async () => {
         // resToDel has id - this entry is to be removed from DB
         // console.log(resToDel)
 
         // [FRONTEND] removes it from resDet
+        const {error} = await supabase
+        .from('reservations')
+        .delete()
+        .eq('id', resToDel[0])
+
         const resToKeep = resDet.filter((res) => res[3] !== resToDel[0])
         setResDet(resToKeep)
 
@@ -215,7 +225,8 @@ export default function Reserve({open, onClose,
     setResDet, resDet, 
     slot, tobeOcc, 
     full, 
-    resToDel, delMod, setDelMod}) 
+    resToDel, delMod, setDelMod,
+    userID}) 
     {
         const handleClose = () => () => onClose()
 
@@ -229,6 +240,7 @@ export default function Reserve({open, onClose,
             slot={slot} tobeOcc={tobeOcc}
             full={full}
             resToDel={resToDel} delMod={delMod} setDelMod={setDelMod}
+            userID={userID}
             />
             </>
         );
