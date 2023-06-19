@@ -1,5 +1,6 @@
 import '../styles.css'
 import {useState} from "react"
+import { timeToID } from '../main'
 
 // mui
 import PropTypes from 'prop-types'
@@ -12,29 +13,54 @@ import { Box } from '@mui/material'
 
 // reservation system modal
 // ! to fix styling
-// timetable + timings don't line up - add another and hide visibility or smth
+// timetable + timings don't line up when window is minimised - add another and hide visibility or smth
 function ReserveModal(props) {
     const {
         onClose, open, 
-        seatDet, 
+        seatDet, userid,
         ttCol,
         setResDet, resDet, 
-        slot, tobeOcc, 
+        slot, resetSelect, tobeOcc, 
         full,
         resToDel, delMod, setDelMod,
+        userResSlotBool,
     } = props
 
     // expressions
-    const res = resDet.length !== 0
-
-    const ourReservations = []
+    const ourReservationsSeats = []
     for (var reservation of resDet) {
-        ourReservations.push(reservation[0])
+        ourReservationsSeats.push(reservation[0])
     }
-    const resISseat = ourReservations.includes(Number(seatDet[2]))
+    const resISseat = ourReservationsSeats.includes(Number(seatDet[2]))
     
     const alrOcc = tobeOcc.includes(Number(seatDet[2]))
     const noslotSelected = slot[1].length === 0
+
+    // check that slot is the same time as our reservations for that seat
+    const res4seat = resDet.filter((res) => res[0] === Number(seatDet[2]))
+    const res4seatSlots = []
+    for (var reservation of res4seat) {
+        const ourResSlots = []
+        timeToID(reservation[1], reservation[2], ourResSlots)
+        res4seatSlots.push(...ourResSlots)
+    }
+    let slotISseatres = false
+    for (var thisSlot of slot[1]) {
+        slotISseatres = res4seatSlots.includes(thisSlot)
+        if (slotISseatres) break
+    }
+
+    // expressions for DOM elements
+    const headerExp = !delMod && 
+        (noslotSelected || full || userResSlotBool
+            || alrOcc   // ! test after DB CRUD
+        )
+        ? 'collapse' : 'revert'
+    const buttonExp = !delMod && 
+        (noslotSelected || full || slotISseatres || userResSlotBool
+            || alrOcc  // ! test after DB CRUD
+        )
+        ? 'hidden' : 'revert'
 
     // on close
     const handleClose = () => {
@@ -44,9 +70,13 @@ function ReserveModal(props) {
     }
 
     // timetable displays selected slot during reservation
-    if (!alrOcc && !resISseat) {
-        for (var key of slot[1]) {
-            ttCol[key] = 'tt-res'
+    // black border to differentiate from existing reservations
+    if (!alrOcc && !userResSlotBool) {
+        if (slot[1].length === 1) {
+            ttCol[slot[1][0]] = 'tt-res tt-resB'
+        } else {
+            ttCol[slot[1][0]] = 'tt-res tt-resB-L'
+            ttCol[slot[1][1]] = 'tt-res tt-resB-R'
         }
     }
     
@@ -66,11 +96,13 @@ function ReserveModal(props) {
         // pushed with no reservation id tho
         const newRD = [...resDet, resToPush]
         setResDet(newRD)
-
+        
         handleClose()
+        resetSelect[0]('')
+        resetSelect[1]('')
+        resetSelect[2](true)
     }
 
-    console.log(resToDel)
     // DELETE reservation
     const handleSubmitDelete = () => {
         // resToDel has id - this entry is to be removed from DB
@@ -91,9 +123,9 @@ function ReserveModal(props) {
             <DialogTitle>
             <span
             style={{
-                visibility: (noslotSelected && !resISseat) || full || (alrOcc && !resISseat) ? 'collapse' : 'revert'
+                visibility: headerExp
             }}>
-                {resISseat === true ? 'You have reserved:' :'You are now reserving:'}
+                {delMod ? 'You have reserved:' :'You are now reserving:'}
             </span>
             </DialogTitle>
 
@@ -160,21 +192,39 @@ function ReserveModal(props) {
                 <p>1800</p>
             </Box>
 
-            {full && !delMod && <Typography variant='h6' sx={{textAlign:'center'}}>Fully booked for today!</Typography>}
-            {!full && alrOcc && !resISseat &&
+            {/* full */}
+            {!delMod && full && <Typography variant='h6' sx={{textAlign:'center'}}>Fully reserved for today!</Typography>}
+
+            {/* occupied */}
+            {!delMod && !full && alrOcc && 
             <Typography variant='h6' sx={{textAlign:'center'}}>
-                Booked for the selected time slot:<br/>{slot[0]}
+                Reserved for the selected slot:<br/>{slot[0]}
             </Typography>}
 
-            {/* {resISseat &&
+            {/* reserve current slot */}
+            {!delMod && !full && !alrOcc && !noslotSelected && !userResSlotBool &&
             <Typography variant='h6' sx={{textAlign:'center'}}>
                 Time slot:<br/>{slot[0]}
-            </Typography>} */}
+            </Typography>}
+
+            {/* reserved slots */}
+            {!delMod && resISseat && noslotSelected && 
+            <>
+                <Typography variant='h6' sx={{textAlign:'center'}} marginTop={full ? 2.5 : 0} marginBottom={0.5}>
+                    You have reserved this seat for the following slots:<br/>{slot[0]}
+                </Typography>
+                {res4seat.map((res) => (
+                    <Typography key={res} variant='h6' sx={{textAlign:'center'}}>
+                        {res[1]} - {res[2]}
+                    </Typography>
+                ))}
+            </>
+            }
 
             {/* delete info */}
             {delMod &&
             <Typography variant='h6' sx={{textAlign:'center'}}>
-                Cancel time slot:<br/>{resToDel[1]} - {resToDel[2]}
+                Cancel slot:<br/>{resToDel[1]} - {resToDel[2]}
             </Typography>
             }
 
@@ -184,7 +234,7 @@ function ReserveModal(props) {
             variant='contained'
             disableElevation
             sx={{
-                visibility: (noslotSelected && !resISseat) || (full && !delMod) || alrOcc || (resISseat && !delMod) ? 'hidden' : 'revert',
+                visibility: buttonExp,
                 marginTop: 5,
                 borderRadius: 0,
                 backgroundColor: delMod ? '#fb7979' : 'rgba(189, 0 ,255, 0.6)',
@@ -209,13 +259,15 @@ ReserveModal.propTypes = {
 }
 
 // main
-export default function Reserve({open, onClose, 
-    seatDet, 
+export default function Reserve({
+    open, onClose, 
+    seatDet, userid,
     ttCol, 
     setResDet, resDet, 
-    slot, tobeOcc, 
+    slot, resetSelect, tobeOcc, 
     full, 
-    resToDel, delMod, setDelMod}) 
+    resToDel, delMod, setDelMod,
+    userResSlotBool}) 
     {
         const handleClose = () => () => onClose()
 
@@ -223,12 +275,13 @@ export default function Reserve({open, onClose,
             <>
             <ReserveModal
             open={open} onClose={handleClose()}
-            seatDet={seatDet}
+            seatDet={seatDet} userid={userid}
             ttCol={ttCol}
             setResDet={setResDet} resDet={resDet}
-            slot={slot} tobeOcc={tobeOcc}
+            slot={slot} resetSelect={resetSelect} tobeOcc={tobeOcc}
             full={full}
             resToDel={resToDel} delMod={delMod} setDelMod={setDelMod}
+            userResSlotBool={userResSlotBool}
             />
             </>
         );

@@ -25,7 +25,7 @@ function ManageModal(props) {
         const reservations = []
         for (var res of resDet) {
             const element = document.getElementById(String(res[0]))
-            const lvl = element.closest('.lvl3').id
+            const lvl = element.closest('.lvl').id
             const seat = element.value
             reservations.push([lvl, seat, ...res])
         }
@@ -46,7 +46,7 @@ function ManageModal(props) {
 
     // what's displayed
     return (
-        <Dialog fullWidth={true} maxWidth='lg' onClose={handleClose} open={open} keepMounted>
+        <Dialog fullWidth={true} maxWidth='md' onClose={handleClose} open={open} keepMounted>
             <div
             id='seat-num'
             style={{

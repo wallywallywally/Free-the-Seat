@@ -67,47 +67,6 @@ const timeslots60 = {
     162: '1630 - 1730', 
     171: '1700 - 1800', 
 }
-
-// [DB] seats: 
-// [id, light_status, floor]
-
-// [DB int] mimics "reservations" table
-// a database filtered by level is passed into each Lvl
-const dbRes = [
-    {id: 22, user_id: 123, seat_id: 101, start_time: "1700", end_time: "1800"},
-    {id: 21, user_id: 123, seat_id: 101, start_time: "1530", end_time: "1600"},
-    {id: 25, user_id: 123, seat_id: 105, start_time: "1530", end_time: "1600"},
-    {id: 28, user_id: 123, seat_id: 104, start_time: "1530", end_time: "1600"},
-    {id: 91, user_id: 236, seat_id: 101, start_time: "1330", end_time: "1430"},
-    {id: 32, user_id: 553, seat_id: 112, start_time: "0900", end_time: "1000"},
-    {id: 41, user_id: 598, seat_id: 112, start_time: "1330", end_time: "1430"},
-    {id: 52, user_id: 111, seat_id: 102, start_time: "1400", end_time: "1430"},
-    {id: 61, user_id: 112, seat_id: 102, start_time: "1430", end_time: "1530"},
-    {id: 63, user_id: 155, seat_id: 101, start_time: "0930", end_time: "1030"},
-
-    {id: 3, user_id: 553, seat_id: 103, start_time: "0900", end_time: "1000"},
-    {id: 2, user_id: 123, seat_id: 103, start_time: "1000", end_time: "1100"},
-    {id: 1, user_id: 236, seat_id: 103, start_time: "1100", end_time: "1200"},
-    {id: 4, user_id: 598, seat_id: 103, start_time: "1200", end_time: "1300"},
-    {id: 5, user_id: 111, seat_id: 103, start_time: "1300", end_time: "1400"},
-    {id: 6, user_id: 112, seat_id: 103, start_time: "1400", end_time: "1500"},
-    {id: 7, user_id: 155, seat_id: 103, start_time: "1500", end_time: "1600"},
-    {id: 8, user_id: 155, seat_id: 103, start_time: "1600", end_time: "1700"},
-    {id: 9, user_id: 155, seat_id: 103, start_time: "1700", end_time: "1800"},
-]
-
-// seatInfo {101: 'emp',...} stores info for all seats
-// !! initialise according to seat_ids
-const numSeats = 120
-const seatInfo = {}
-for (let i = 1; i <= numSeats; i++) {
-    const seatNum = 100 + i
-    // 1st for colour, 2nd for border
-    seatInfo[seatNum] = ['emp', 'emp']
-}
-// deep copy for reset on selector change
-const seatInfoCopy = JSON.stringify(seatInfo)
-
 // turn timing into id (0900 - 0930 -> 91)
 export const timeToID = (start, end, arr) => {
     // start at xx00
@@ -180,6 +139,46 @@ export const timeToID = (start, end, arr) => {
     }
 }
 
+// [DB] seats: 
+// [id, light_status, floor]
+
+// [DB int] mimics "reservations" table
+// a database filtered by level is passed into each Lvl
+const dbRes = [
+    {id: 22, user_id: 123, seat_id: 101, start_time: "1700", end_time: "1800"},
+    {id: 21, user_id: 123, seat_id: 101, start_time: "1530", end_time: "1600"},
+    {id: 25, user_id: 123, seat_id: 105, start_time: "1630", end_time: "1700"},
+    {id: 28, user_id: 123, seat_id: 104, start_time: "1200", end_time: "1230"},
+    {id: 91, user_id: 236, seat_id: 101, start_time: "1330", end_time: "1430"},
+    {id: 32, user_id: 553, seat_id: 112, start_time: "0900", end_time: "1000"},
+    {id: 41, user_id: 598, seat_id: 112, start_time: "1330", end_time: "1430"},
+    {id: 52, user_id: 111, seat_id: 102, start_time: "1400", end_time: "1430"},
+    {id: 61, user_id: 112, seat_id: 102, start_time: "1430", end_time: "1530"},
+    {id: 63, user_id: 155, seat_id: 101, start_time: "0930", end_time: "1030"},
+
+    {id: 3, user_id: 553, seat_id: 103, start_time: "0900", end_time: "1000"},
+    {id: 2, user_id: 123, seat_id: 103, start_time: "1000", end_time: "1100"},
+    {id: 1, user_id: 236, seat_id: 103, start_time: "1100", end_time: "1200"},
+    {id: 4, user_id: 598, seat_id: 103, start_time: "1200", end_time: "1300"},
+    {id: 5, user_id: 111, seat_id: 103, start_time: "1300", end_time: "1400"},
+    {id: 6, user_id: 112, seat_id: 103, start_time: "1400", end_time: "1500"},
+    {id: 7, user_id: 155, seat_id: 103, start_time: "1500", end_time: "1600"},
+    {id: 8, user_id: 155, seat_id: 103, start_time: "1600", end_time: "1700"},
+    {id: 9, user_id: 155, seat_id: 103, start_time: "1700", end_time: "1800"},
+]
+
+// seatInfo {101: 'emp',...} stores info for all seats
+// !! initialise according to seat_ids
+const numSeats = 120
+const seatInfo = {}
+for (let i = 1; i <= numSeats; i++) {
+    const seatNum = 100 + i
+    // 1st for colour, 2nd for border
+    seatInfo[seatNum] = ['emp', 'emp']
+}
+// deep copy for reset on selector change
+const seatInfoCopy = JSON.stringify(seatInfo)
+
 // Lvlx display
 function Lvlx(props) {
     let Lvlx
@@ -240,7 +239,25 @@ export default function Main({userid}) {
     }   
     // state updates if user creates/deletes reservation
     const [resDet, setResDet] = useState(resDetfirst)
-    const resDetInfo = [String(resDet[0])[0], String(resDet[0])[1] === '0' ? String(resDet[0])[2] : String(resDet[0]).slice(1,3)] // !res
+
+    // get info on upcoming res to for display
+    const resExists = resDet.length !== 0
+    let upcomingRes
+    if (resExists) {
+        upcomingRes = resDet.sort(function(a,b) {
+            if (Number(a[1]) === Number(b[1])) return a[0] - b[0]
+            return Number(a[1]) - Number(b[1])
+        })[0]
+    }
+    const [upcomingInfo, setUpcomingInfo] = useState([])
+    useEffect(() => {
+        if (resExists) {
+            const element = document.getElementById(upcomingRes[0])
+            const lvl = element.closest('.lvl').id
+            const seat = element.value
+            setUpcomingInfo([lvl, seat, upcomingRes[1], upcomingRes[2]])
+        }
+    }, [upcomingRes])
 
     // selects
     // 1. duration
@@ -290,6 +307,20 @@ export default function Main({userid}) {
         }
     }
 
+    // user already has a reservation for selected slot
+    const userResSlots = []
+    for (var reservation of resDet) {
+        const resID = []
+        timeToID(reservation[1], reservation[2], resID)
+        for (var ele of resID) {
+            userResSlots.push(ele)
+        }
+    }
+    let userResSlotBool = false
+    for (var slotIDtest of slotID) {
+        userResSlotBool = userResSlots.includes(slotIDtest)
+        if (userResSlotBool) break
+    }
 
     // reserve modal
     const [openRes, setOpenRes] = useState(false)
@@ -373,15 +404,13 @@ export default function Main({userid}) {
     const handleManageOpen = () => setOpenManage(true)
     const handleManageClose = () => setOpenManage(false)
 
-
     // check in state
-    const [checkin, setCheckin] = useState(false)
+    const [checkin, setCheckin] = useState(true)
 
     // break modal
     const [openBreak, setOpenBreak] = useState(false)
     const handleBreakOpen = () => setOpenBreak(true)
     const handleBreakClose = () => setOpenBreak(false)
-
 
 
     // main
@@ -435,36 +464,24 @@ export default function Main({userid}) {
 
         {/* info tag */}
         <Container sx={{textAlign: 'center', marginTop:'-1rem', marginBottom: '3rem'}}>
-            {resDet.length === 0 &&
-            <Typography variant="body1">
-                Select a duration and time to start reserving
-            </Typography>
-            }
-
-            {/* upcoming - changes to show check in */}
-            <Typography variant='h6'
-            sx={{
-                visibility: resDet.length === 0 ? 'hidden' : 'visible',
-                marginBottom: 2
-            }}>
-                {checkin === false ?
-                    <span>Upcoming reservation at level <span style={{color: '#bd00ff', fontWeight: '700'}}>{resDetInfo[0]}</span> seat <span style={{color: '#bd00ff', fontWeight: '700'}}>
-                    {resDetInfo[1]}</span> from <span style={{fontWeight: '700'}}>{resDet[1]} - {resDet[2]}</span></span>
-                    : <span>Now studying at level <span style={{color: '#0085ff', fontWeight: '700'}}>{resDetInfo[0]}</span> seat <span style={{color: '#0085ff', fontWeight: '700'}}>
-                    {resDetInfo[1]}</span> until <span style={{fontWeight: '700'}}>{resDet[2]}</span></span>
+            <Typography variant='h6' marginBottom={2}>
+                {!resExists ?
+                'Select a duration and time to start reserving' :
+                (checkin === false ?
+                    <span>Upcoming reservation at level <span style={{color: '#bd00ff', fontWeight: '700'}}>{upcomingInfo[0]}</span> seat <span style={{color: '#bd00ff', fontWeight: '700'}}>
+                    {upcomingInfo[1]}</span> from <span style={{fontWeight: '700'}}>{upcomingInfo[2]} - {upcomingInfo[3]}</span></span>
+                    : <span>Now studying at level <span style={{color: '#0085ff', fontWeight: '700'}}>{upcomingInfo[0]}</span> seat <span style={{color: '#0085ff', fontWeight: '700'}}>
+                    {upcomingInfo[1]}</span> until <span style={{fontWeight: '700'}}>{upcomingInfo[3]}</span></span>
+                )
                 }
             </Typography>
-
-            {/* if you have more reservations, opens a new modal to show */}
-            <Typography variant='body1'>
-                {resDet.length !== 0 &&
-                    <span>Click <button
-                    value='cancelRes'
-                    onClick={handleManageOpen}
-                    className='cancel'>here</button> to manage reservations</span>
-                }
+            {/* manage res modal to cancel reservations */}
+            <Typography variant='body1' sx={{visibility: resExists ? 'visible' : 'hidden'}}>
+                <span>Click <button
+                value='cancelRes'
+                onClick={handleManageOpen}
+                className='cancel'>here</button> to manage reservations</span>
             </Typography>
-            
         </Container>
 
         {/* time slot selector */}
@@ -477,6 +494,7 @@ export default function Main({userid}) {
             gap: 1,
             marginBottom: 5,
             marginTop: -2,
+            position: 'relative'
         }}
         >
             {/* 1. duration */}
@@ -510,6 +528,19 @@ export default function Main({userid}) {
                     ))}
                 </Select>
             </FormControl>
+            {/* warning for same slot, diff seat */}
+            <Typography variant='body1' 
+            sx={{
+                visibility: userResSlotBool ? 'visible' : 'hidden',
+                position: 'absolute',
+                transform: 'translate(95%, 45%)',
+                textAlign: 'center',
+                border: '2px solid rgba(251, 121, 121, 0.75)',
+                padding: '10px'
+                }} 
+            >
+                A reservation for this slot exists<br/>You cannot reserve another seat
+            </Typography>
         </Box>
 
         {/* level layout */}
@@ -570,12 +601,13 @@ export default function Main({userid}) {
         {/* modals */}
         <Reserve
         open={openRes} onClose={handleResClose} 
-        seatDet={seatDet} 
+        seatDet={seatDet} userid={userid}
         ttCol={ttCol}
         setResDet={setResDet} resDet={resDet}
-        slot={[slot, slotID]} tobeOcc={tobeOcc}
+        slot={[slot, slotID]} resetSelect={[setDur, setSlot, setSlotDis]} tobeOcc={tobeOcc}
         full={full}
         resToDel={resToDel} delMod={delMod} setDelMod={setDelMod}
+        userResSlotBool={userResSlotBool}
         />
         <Break
         open={openBreak}
