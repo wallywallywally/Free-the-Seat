@@ -19,6 +19,23 @@ button.cancel:active {
     color: #fb7979
 }
 
+/* levels/lvlx.js */
+/* unresponsive grid */
+.grid {
+    display: grid
+}
+
+.flex-col {
+    display: flex;
+    flex-direction: column;
+}
+
+/* centering div */
+.center {
+    display: flex;
+    justify-content: center;
+}
+
 /* reserve.js */
 /* timetable */
 .tt p {

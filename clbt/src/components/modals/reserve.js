@@ -1,4 +1,5 @@
 import '../styles.css'
+import {useState} from "react"
 
 // mui
 import PropTypes from 'prop-types'
@@ -7,6 +8,9 @@ import DialogTitle from '@mui/material/DialogTitle'
 import Dialog from '@mui/material/Dialog'
 import Typography from '@mui/material/Typography'
 import { Box } from '@mui/material'
+import MenuItem from '@mui/material/MenuItem'
+import FormControl from '@mui/material/FormControl'
+import Select from '@mui/material/Select'
 
 
 // reservation system modal
@@ -19,40 +23,63 @@ function ReserveModal(props) {
         ttCol,
         setResDet, resDet, 
         slot, tobeOcc, 
-        full 
+        full,
+        resToDel, delMod, setDelMod,
     } = props
 
     // expressions
     const res = resDet.length !== 0
-    const resISseat = resDet[0] === Number(seatDet[2])
+
+    const ourReservations = []
+    for (var reservation of resDet) {
+        ourReservations.push(reservation[0])
+    }
+    const resISseat = ourReservations.includes(Number(seatDet[2]))
+    
     const alrOcc = tobeOcc.includes(Number(seatDet[2]))
-    const noslot = slot[1].length === 0
+    const noslotSelected = slot[1].length === 0
 
     // on close
     const handleClose = () => {
         // reset
+        setDelMod(false)
         onClose()
     }
 
-    // timetable displays selected slot
-    if (!alrOcc && !res) {
+    // timetable displays selected slot during reservation
+    if (!alrOcc && !resISseat) {
         for (var key of slot[1]) {
             ttCol[key] = 'tt-res'
         }
     }
     
-    // buttons
-    // [DB int] CREATE reservation
+    // [DB int]
+    // after creation/deletion in DB, we probably need to process Main's resDet again
+    // so [FRONTEND] stuff will be modified 
+
+    // CREATE reservation
     const handleSubmitCreate = () => {
-        const resDet = [Number(seatDet[2]), slot[0].slice(0,4), slot[0].slice(7,12)]
-        setResDet(resDet)
-        // this entry is pushed to DB
+        // this entry is to be pushed to DB
+        const resToPush = [Number(seatDet[2]), slot[0].slice(0,4), slot[0].slice(7,11)]
+
+        // [FRONTEND] pushes it to resDet
+        // pushed with no reservation id tho
+        const newRD = [...resDet, resToPush]
+        setResDet(newRD)
+
         handleClose()
     }
-    // [DB int] DELETE reservation
+
+    // DELETE reservation
     const handleSubmitDelete = () => {
-        setResDet([])
-        // this entry is removed from DB
+        // resToDel has id - this entry is to be removed from DB
+        // console.log(resToDel)
+
+        // [FRONTEND] removes it from resDet
+        const resToKeep = resDet.filter((res) => res[3] !== resToDel[0])
+        setResDet(resToKeep)
+
+        setDelMod(false)
         handleClose()
     }
 
@@ -63,9 +90,9 @@ function ReserveModal(props) {
             <DialogTitle>
             <span
             style={{
-                visibility: (res && !resISseat) || full || alrOcc || (noslot && !res) ? 'collapse' : 'revert'
+                visibility: (noslotSelected && !resISseat)|| full || (alrOcc && !resISseat) ? 'collapse' : 'revert'
             }}>
-                {res === true ? 'You have reserved:' :'You are now reserving:'}
+                {resISseat === true ? 'You have reserved:' :'You are now reserving:'}
             </span>
             </DialogTitle>
 
@@ -75,7 +102,8 @@ function ReserveModal(props) {
                 width: '7rem',
                 border: '1px solid #000',
                 textAlign: 'center',
-                margin: '0 auto'
+                margin: '0 auto',
+                padding: '4px 0'
             }}>
                 <Typography variant='h5'>Level {seatDet[0]}</Typography>
                 <Typography variant='h4'>{seatDet[1]}</Typography>
@@ -131,52 +159,38 @@ function ReserveModal(props) {
                 <p>1800</p>
             </Box>
 
-            {full && <Typography variant='h6' sx={{textAlign:'center'}}>Fully booked for today!</Typography>}
-            {!res && noslot && <Typography variant='h6' sx={{textAlign:'center'}}>Select a duration and time to start reserving</Typography>}
-            {!full && alrOcc && <Typography variant='h6' sx={{textAlign:'center'}}>Booked for the selected time slot</Typography>}
+            {full && !delMod && <Typography variant='h6' sx={{textAlign:'center'}}>Fully booked for today!</Typography>}
+            {!full && alrOcc && !resISseat &&
+            <Typography variant='h6' sx={{textAlign:'center'}}>
+                Booked for the selected time slot:<br/>{slot[0]}
+            </Typography>}
 
             {/* delete info */}
-            {res && resISseat ?
-            <>
-            <Typography variant='h6' sx={{textAlign:'center'}}>Time slot:</Typography>
-            <Box
-            display='flex'
-            justifyContent='center'
-            >
-                <Typography 
-                variant='h6' 
-                sx={{
-                    textAlign:'center', 
-                    border:'1px solid black',
-                    width: '12rem',
-                }}>
-                    {resDet[1]} - {resDet[2]}
-                </Typography>
-            </Box>
-            </>
-            : <></>
+            {delMod &&
+            <Typography variant='h6' sx={{textAlign:'center'}}>
+                Cancel time slot:<br/>{resToDel[1]} - {resToDel[2]}
+            </Typography>
             }
 
             {/* button */}
-            {/* no reservation - CREATE / yes reservation + correct seat - DELETE */}
             <Button
-            onClick={res ? handleSubmitDelete : handleSubmitCreate}
+            onClick={delMod ? handleSubmitDelete : handleSubmitCreate}
             variant='contained'
             disableElevation
             sx={{
-                visibility: (res && !resISseat) || full || alrOcc || (noslot && !res) ? 'hidden' : 'revert',
+                visibility: (noslotSelected && !resISseat) || (full && !delMod) || alrOcc || (resISseat && !delMod) ? 'hidden' : 'revert',
                 marginTop: 5,
                 borderRadius: 0,
-                backgroundColor: res ? '#fb7979' : 'rgba(189, 0 ,255, 0.6)',
+                backgroundColor: delMod ? '#fb7979' : 'rgba(189, 0 ,255, 0.6)',
                 color: '#000',
                 '&:hover': {
-                    backgroundColor: res ? 'rgba(251, 121, 121, 0.75)' : 'rgba(189, 0 ,255, 0.3)'
+                    backgroundColor: delMod ? 'rgba(251, 121, 121, 0.75)' : 'rgba(189, 0 ,255, 0.3)'
                 },
                 '&:active': {
-                    backgroundColor: res ? '#fb7979' : 'rgba(189, 0 ,255, 0.6)'
+                    backgroundColor: delMod ? '#fb7979' : 'rgba(189, 0 ,255, 0.6)'
                 },
             }}>
-                {res ? 'Cancel' : 'Reserve'}
+                {delMod ? 'Cancel' : 'Reserve'}
             </Button>
 
         </Dialog>
@@ -189,22 +203,27 @@ ReserveModal.propTypes = {
 }
 
 // main
-export default function Reserve({open, onClose, seatDet, ttCol, setResDet, resDet, slot, tobeOcc, full}) {
-    const handleClose = () => () => onClose()
+export default function Reserve({open, onClose, 
+    seatDet, 
+    ttCol, 
+    setResDet, resDet, 
+    slot, tobeOcc, 
+    full, 
+    resToDel, delMod, setDelMod}) 
+    {
+        const handleClose = () => () => onClose()
 
-    return (
-        <>
-        <ReserveModal
-        open={open}
-        onClose={handleClose()}
-        seatDet={seatDet}
-        ttCol={ttCol}
-        setResDet={setResDet}
-        resDet={resDet}
-        slot={slot}
-        tobeOcc={tobeOcc}
-        full={full}
-        />
-        </>
-  );
+        return (
+            <>
+            <ReserveModal
+            open={open} onClose={handleClose()}
+            seatDet={seatDet}
+            ttCol={ttCol}
+            setResDet={setResDet} resDet={resDet}
+            slot={slot} tobeOcc={tobeOcc}
+            full={full}
+            resToDel={resToDel} delMod={delMod} setDelMod={setDelMod}
+            />
+            </>
+        );
 }

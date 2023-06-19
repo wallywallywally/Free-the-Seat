@@ -12,7 +12,7 @@ const seatClr = createTheme({
 })
 
 // Seat
-const seatSide = 35
+const seatSide = 45
 const SeatBtn = styled(Button)(({status}) => ({
     minWidth: seatSide,
     height: seatSide,
@@ -22,6 +22,7 @@ const SeatBtn = styled(Button)(({status}) => ({
 
     borderRadius: 3,
     border: '1px solid rgba(0,0,0,0.25)',
+    // border: '2px solid #bd00ff',
 
     '&:hover':{
         backgroundColor: status === 'emp' ? 'rgba(134, 224, 132, 0.7)' 
@@ -35,12 +36,12 @@ const SeatBtn = styled(Button)(({status}) => ({
     }
 }))
     
-export default function Seat({status, reserve, id}) {
+export default function Seat({value, id, status, reserve}) {
     const handleReserve = () => (event) => reserve(event)
 
     return (
         <>
-        <SeatBtn id={id} variant='contained' status={status} disableElevation onClick={handleReserve()} />
+        <SeatBtn value={value} id={id} variant='contained' status={status} disableElevation onClick={handleReserve()} />
         </>
     );
 }
