@@ -99,13 +99,14 @@ const dbRes = [
 // seatInfo {101: 'emp',...} stores info for all seats
 // !! initialise according to seat_ids
 const numSeats = 120
-let seatInfo = {}
+const seatInfo = {}
 for (let i = 1; i <= numSeats; i++) {
     const seatNum = 100 + i
-    seatInfo[seatNum] = 'emp'
+    // 1st for colour, 2nd for border
+    seatInfo[seatNum] = ['emp', 'emp']
 }
-const seatInfoCopy = {...seatInfo}
-// to be reset for each selector change
+// deep copy for reset on selector change
+const seatInfoCopy = JSON.stringify(seatInfo)
 
 // turn timing into id (0900 - 0930 -> 91)
 export const timeToID = (start, end, arr) => {
@@ -226,7 +227,6 @@ export default function Main({userid}) {
                 setError(error);
             });
     }, [setReservations, setError]);
-    
     useEffect(() => {
         fetchReservations();
     }, [fetchReservations]);
@@ -272,14 +272,24 @@ export default function Main({userid}) {
     }
     let tobeOcc = [...new Set(tobeOccpre)]
     // reset
-    Object.assign(seatInfo, seatInfoCopy)
-    // display occ and ourres seats
+    Object.assign(seatInfo, JSON.parse(seatInfoCopy))
+    // display occ
     for (var seat of tobeOcc) {
-        seatInfo[seat] = 'occ'
+        seatInfo[seat][0] = 'occ'
     }
-    for (var res of resDet) {
-        seatInfo[res[0]] = 'ourres'
+    // display for reserved seats
+    // border: purple if reserved
+    for (var resBor of resDet) {
+        seatInfo[resBor[0]][1] = 'res'
     }
+    // colour: green/red/purple depending on status
+    // ! test after DB CREATE
+    for (var resCol of resDet) {
+        if (`${resCol[1]} - ${resCol[2]}` === slot) {
+            seatInfo[resCol[0]][0] = 'ourres'
+        }
+    }
+
 
     // reserve modal
     const [openRes, setOpenRes] = useState(false)
@@ -388,7 +398,7 @@ export default function Main({userid}) {
         alignItems='center'
         >
             <Typography variant='h5'>
-                Welcome back, TEST!
+                Welcome back, {userid}!
             </Typography>    
 
             <Typography variant='h4'
@@ -398,14 +408,13 @@ export default function Main({userid}) {
         </Box>
         </Container>
 
-        {/* sub-header */}
+        {/* level select */}
         <Container sx={{marginTop: '15px'}}>
         <Box
         display='flex'
         alignItems='center'
         gap='2rem'
         >
-            {/* level select */}
             <FormControl sx={{width: 100}}>
                 <InputLabel id="level-select-label">Level</InputLabel>
                 <Select

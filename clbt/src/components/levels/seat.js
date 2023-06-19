@@ -18,17 +18,16 @@ const SeatBtn = styled(Button)(({status}) => ({
     height: seatSide,
     padding: 0,
 
-    backgroundColor: seatClr[status],
+    backgroundColor: seatClr[status[0]],
 
     borderRadius: 3,
-    border: '1px solid rgba(0,0,0,0.25)',
-    // border: '2px solid #bd00ff',
+    border: status[1] === 'res' ? '2px solid #bd00ff' : '1px solid rgba(0,0,0,0.25)',
 
     '&:hover':{
-        backgroundColor: status === 'emp' ? 'rgba(134, 224, 132, 0.7)' 
-            : (status === 'res' ? 'rgba(255, 247, 44, 0.4)' 
-            : (status === 'occ' ? 'rgba(251, 121, 121, 0.75)'
-            : (status === 'ourres' ? 'rgba(189, 0 ,255, 0.6)' 
+        backgroundColor: status[0] === 'emp' ? 'rgba(134, 224, 132, 0.7)' 
+            : (status[0] === 'res' ? 'rgba(255, 247, 44, 0.4)' 
+            : (status[0] === 'occ' ? 'rgba(251, 121, 121, 0.75)'
+            : (status[0] === 'ourres' ? 'rgba(189, 0 ,255, 0.6)' 
             : 'rgba(0, 133, 255, 0.7)')))
     },
     '&:active':{
