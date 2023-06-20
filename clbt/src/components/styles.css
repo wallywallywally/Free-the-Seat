@@ -19,6 +19,7 @@ button.cancel:active {
     color: rgba(189, 0 ,255)
 }
 
+
 /* levels/lvlx.js */
 /* unresponsive grid */
 .grid {
@@ -35,6 +36,7 @@ button.cancel:active {
     display: flex;
     justify-content: center;
 }
+
 
 /* reserve.js */
 /* timetable */
@@ -54,4 +56,20 @@ button.cancel:active {
 
 .tt-res {
     background-color: #bd00ff;
+}
+
+.tt-resB {
+    border: 4px solid rgba(0, 0, 0, 0.6) !important
+}
+
+.tt-resB-L {
+    border-top: 4px solid rgba(0, 0, 0, 0.6) !important;
+    border-bottom: 4px solid rgba(0, 0, 0, 0.6) !important;
+    border-left: 4px solid rgba(0, 0, 0, 0.6) !important;
+}
+
+.tt-resB-R {
+    border-top: 4px solid rgba(0, 0, 0, 0.6) !important;
+    border-bottom: 4px solid rgba(0, 0, 0, 0.6) !important;
+    border-right: 4px solid rgba(0, 0, 0, 0.6) !important;
 }

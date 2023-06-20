@@ -83,7 +83,7 @@ export default function Lvl3({reserveModal, seatInfo}) {
         <>
         <ThemeProvider theme={table}>
 
-        <div className='lvl3' id='3'>
+        <div className='lvl' id='3'>
 
         {/* collab space */}
         <Grid container justifyContent='center'>

@@ -21,7 +21,7 @@ const SeatBtn = styled(Button)(({status}) => ({
     backgroundColor: seatClr[status[0]],
 
     borderRadius: 3,
-    border: status[1] === 'res' ? '2px solid #bd00ff' : '1px solid rgba(0,0,0,0.25)',
+    border: status[1] === 'res' ? '2.5px solid #bd00ff' : '1px solid rgba(0,0,0,0.25)',
 
     '&:hover':{
         backgroundColor: status[0] === 'emp' ? 'rgba(134, 224, 132, 0.7)' 

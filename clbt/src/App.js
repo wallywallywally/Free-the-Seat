@@ -47,7 +47,7 @@ function App() {
     // }
 
     // user id state
-    const [userid, setUserid] = useState(12)
+    const [userid, setUserid] = useState(123)
     
     
     return (
@@ -57,11 +57,9 @@ function App() {
 
         {session ?
              <Main user={session.user}/> : <LoginScreen/>
-}
-        {/* {session ?
-            <Main userid={userid}/> : <LoginScreen/>
-        } */}
+        }
 
+        {/* <Main userid={userid}/> */}
 
 
         </ThemeProvider>
