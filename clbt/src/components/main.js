@@ -234,12 +234,13 @@ export default function Main({user}) {
     // check for reservation on the first time, goes through database and checks if userid in reservations = user id of session
     let resDetfirst = []
     // !switch to actual DB
-    for (var element of dbRes) {
+    for (var element of reservations) {
         if (element.user_id === user.id) {
             resDetfirst.push([element.seat_id, element.start_time, element.end_time, element.id])
         }
     }   
     // state updates if user creates/deletes reservation
+    
     const [resDet, setResDet] = useState(resDetfirst)
 
     // get info on upcoming res to for display
@@ -281,7 +282,7 @@ export default function Main({user}) {
     timeToID(slot.slice(0,4), slot.slice(7, 11), slotID)
     const tobeOccpre = []
     // !switch to actual DB
-    for (var reservation of dbRes) {
+    for (var reservation of reservations) {
         const resID = []
         timeToID(reservation.start_time, reservation.end_time, resID)
         // check slotID in resID -> these are all 'occ'
@@ -354,7 +355,7 @@ export default function Main({user}) {
         // timetable
         // checks "reservations" table
         // !switch to actual DB
-        const ttdatapre = dbRes.filter((element) => element.seat_id === Number(seatId))
+        const ttdatapre = reservations.filter((element) => element.seat_id === Number(seatId))
         const ttdata = []
         for (var element of ttdatapre) {
             timeToID(element.start_time, element.end_time, ttdata)
@@ -421,7 +422,10 @@ export default function Main({user}) {
     }
     const handleBreakClose = () => setOpenBreak(false)
 
-
+    //sign out callback
+    const handleLogOutClick = () => {
+        supabase.auth.signOut();
+      };
     // main
     // ! responsive or fixed
     // Lvlx to be fixed, so we can scroll
@@ -438,6 +442,14 @@ export default function Main({user}) {
             <Typography variant='h5'>
                 Welcome back, {user.email}!
             </Typography>    
+
+            <Button
+            variant="text"
+            sx={{ color: "black" }}
+            onClick={handleLogOutClick}
+          >
+            Log out
+            </Button>
 
             <Typography variant='h4'
             sx={{textAlign: 'right'}}>
@@ -608,11 +620,11 @@ export default function Main({user}) {
         }
 
         {/* modals */}
-
         <Reserve
         open={openRes} onClose={handleResClose} 
         seatDet={seatDet}
         ttCol={ttCol}
+        
         setResDet={setResDet} resDet={resDet}
         slot={[slot, slotID]} resetSelect={[setDur, setSlot, setSlotDis]} tobeOcc={tobeOcc}
         full={full}
