@@ -28,12 +28,10 @@ const main = createTheme({
     }
 })
 
-// app
+
 function App() {
     // log in state
-    const [log, setLog] = useState(false)
-    const [session, setSession] = useState(null);
-
+    const [session, setSession] = useState(null)
     useEffect(() => {
         const subscription = supabase.auth.onAuthStateChange((_event, session) => {
             setSession(session);
@@ -41,26 +39,14 @@ function App() {
         return () => subscription.data.subscription.unsubscribe();
     }, []);
 
-    // const logInToggle = (event) => {
-    //     setLog(!log)
-    // }
-
-    // user id state
-    const [userid, setUserid] = useState(123)
-    
     
     return (
         <>
         <ThemeProvider theme={main}>
         <CssBaseline />
-
-        {session ?
-             <Main user={session.user}/> : <LoginScreen/>
-        }
-
-        {/* <Main userid={userid}/> */}
-
-
+            {session ?
+                <Main user={session.user}/> : <LoginScreen/>
+            }
         </ThemeProvider>
         </>
     );
