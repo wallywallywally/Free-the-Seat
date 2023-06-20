@@ -1,6 +1,5 @@
 import { Auth } from "@supabase/auth-ui-react" 
 import Grid from '@mui/material/Grid'
-import { ThemeSupa } from "@supabase/auth-ui-shared"
 import {supabase } from"../supabase"
 import { Box, Typography } from "@mui/material"
 
@@ -91,7 +90,7 @@ export default function LoginScreen() {
                     display: 'flex',
                     justifyContent: 'center'
                 }}>
-                    <img src={require('./img/nuslib.png')} style={{width:'60%'}} />
+                    <img alt='NUS Libraries Logo' src={require('./img/nuslib.png')} style={{width:'60%'}} />
                 </Box>
                 <Typography variant='h3' textAlign='center'>
                     Central Library Tracker

@@ -117,7 +117,7 @@ function BreakModal(props) {
             // }, 1000)
         }
         return () => clearInterval(intTimer)
-    }, [])
+    }, [])  // eslint-disable-line react-hooks/exhaustive-deps
     // issue of overlapping timers
 
 

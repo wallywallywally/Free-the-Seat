@@ -211,7 +211,7 @@ export default function Main({user}) {
     const [checkRes, setCheckRes] = useState(false)
     useEffect(() => {
         fetchReservations()
-    }, [checkRes])
+    }, [checkRes])  // eslint-disable-line react-hooks/exhaustive-deps
     // getting resDet - check element.id is not in our resDet id
     const [ourResIDs, setOurResIDs] = useState([])
     const getResDet = useCallback((allRes) => {
@@ -225,11 +225,11 @@ export default function Main({user}) {
         }
         setOurResIDs([...ourResIDs, ...IDtoPush])
         setResDet([...resDet, ...resDettoPush])
-    }, [setOurResIDs, setResDet])
+    }, [setOurResIDs, setResDet])   // eslint-disable-line react-hooks/exhaustive-deps
     useEffect(() => {
         // add to resDet if it's user's res and doesn't already exist
         getResDet(reservations.filter((res) => res.user_id === userid))
-    }, [reservations])
+    }, [reservations])  // eslint-disable-line react-hooks/exhaustive-deps
 
     console.log(reservations)
 
@@ -250,7 +250,7 @@ export default function Main({user}) {
             const seat = element.value
             setUpcomingInfo([lvl, seat, upcomingRes[1], upcomingRes[2]])
         }
-    }, [upcomingRes])
+    }, [upcomingRes])   // eslint-disable-line react-hooks/exhaustive-deps
 
     // selects
     // 1. duration
@@ -300,11 +300,11 @@ export default function Main({user}) {
 
     // user already has a reservation for selected slot
     const userResSlots = []
-    for (var reservation of resDet) {
+    for (var reservationD of resDet) {
         const resID = []
-        timeToID(reservation[1], reservation[2], resID)
-        for (var ele of resID) {
-            userResSlots.push(ele)
+        timeToID(reservationD[1], reservationD[2], resID)
+        for (var eleID of resID) {
+            userResSlots.push(eleID)
         }
     }
     let userResSlotBool = false

@@ -29,8 +29,8 @@ function ReserveModal(props) {
     } = props
     // expressions
     const ourReservationsSeats = []
-    for (var reservation of resDet) {
-        ourReservationsSeats.push(reservation[0])
+    for (var reservationD of resDet) {
+        ourReservationsSeats.push(reservationD[0])
     }
     const resISseat = ourReservationsSeats.includes(Number(seatDet[2]))
     
@@ -95,7 +95,7 @@ function ReserveModal(props) {
     // DB CRUD
     // CREATE reservation
     const handleSubmitCreate = async () => {
-        const { data, error } = await supabase
+        const { data, error } = await supabase 
             .from('reservations')
             .insert({seat_id: seatDet[2], user_id: userID, start_time: slot[0].slice(0,4), end_time: slot[0].slice(7,11)})
             .select()
