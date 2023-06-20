@@ -55,11 +55,11 @@ function App() {
         <ThemeProvider theme={main}>
         <CssBaseline />
 
-        {/* {session ?
+        {session ?
             <Main userid={userid}/> : <LoginScreen/>
-        } */}
+        }
 
-        <Main userid={userid}/>
+        {/* <Main userid={userid}/> */}
 
         </ThemeProvider>
         </>

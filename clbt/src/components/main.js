@@ -404,12 +404,19 @@ export default function Main({userid}) {
     const handleManageOpen = () => setOpenManage(true)
     const handleManageClose = () => setOpenManage(false)
 
-    // check in state
-    const [checkin, setCheckin] = useState(true)
+
+    // check in states
+    const [checkin, setCheckin] = useState(false)
+    const [chkinSeat, setChkinSeat] = useState({id: 22, user_id: 123, seat_id: 101, start_time: "1700", end_time: "1800"})
+    // [MS3] ig QR code would give us the reservation
+    // {id: 22, user_id: 123, seat_id: 101, start_time: "1700", end_time: "1800"}
+    // i'm passing a fake res into chkinSeat
 
     // break modal
     const [openBreak, setOpenBreak] = useState(false)
-    const handleBreakOpen = () => setOpenBreak(true)
+    const handleBreakOpen = () => {
+        setOpenBreak(true)
+    }
     const handleBreakClose = () => setOpenBreak(false)
 
 
@@ -537,7 +544,7 @@ export default function Main({userid}) {
                 textAlign: 'center',
                 border: '2px solid rgba(251, 121, 121, 0.75)',
                 padding: '10px'
-                }} 
+            }} 
             >
                 A reservation for this slot exists<br/>You cannot reserve another seat
             </Typography>
@@ -587,7 +594,7 @@ export default function Main({userid}) {
                     color: '#000',
                     borderRadius: 0.7,
                     border: '1px solid rgba(0,0,0,0.25)',
-                    width: '10%',
+                    width: '10rem',
                     '&:hover': {backgroundColor: 'rgba(231, 190, 149, 0.7)'},
                     '&:active': {backgroundColor: '#e7be95'},
                 }}
@@ -609,17 +616,17 @@ export default function Main({userid}) {
         resToDel={resToDel} delMod={delMod} setDelMod={setDelMod}
         userResSlotBool={userResSlotBool}
         />
-        <Break
-        open={openBreak}
-        onClose={handleBreakClose} 
-        seatDet={seatDet}
-        />
         <Manage
         open={openManage}
         onClose={handleManageClose} 
         resDet={resDet}
         handleResOpen={handleResOpen}
         setDelMod={setDelMod}
+        />
+        <Break
+        open={openBreak}
+        onClose={handleBreakClose} 
+        chkinSeat={chkinSeat}
         />
         </>
     )

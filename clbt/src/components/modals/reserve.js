@@ -258,7 +258,6 @@ ReserveModal.propTypes = {
   open: PropTypes.bool.isRequired,
 }
 
-// main
 export default function Reserve({
     open, onClose, 
     seatDet, userid,

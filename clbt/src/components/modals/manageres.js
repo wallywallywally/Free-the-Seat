@@ -126,7 +126,6 @@ ManageModal.propTypes = {
   open: PropTypes.bool.isRequired,
 }
 
-// main
 export default function Manage({open, onClose, resDet, handleResOpen, setDelMod}) {
     const handleClose = () => () => onClose()
 
