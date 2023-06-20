@@ -65,13 +65,15 @@ function ReserveModal(props) {
         const resToPush = [Number(seatDet[2]), slot[0].slice(0,4), slot[0].slice(7,11), userID] //seat id, start time, end time, user id
         // [FRONTEND] pushes it to resDet
         // pushed with no reservation id tho
-        // const { data, error } = await supabase
-        // .from('reservations')
-        // .insert({seat_id: seatDet[2], user_id: user.id, start_time: slot[0].slice(0,4), end_time: slot[0].slice(7,11)})
-        // .select()
-        // const newRD = [...resDet, data]
-        // setResDet(newRD)
+        const { data, error } = await supabase
+        .from('reservations')
+        .insert({seat_id: seatDet[2], user_id: userID, start_time: slot[0].slice(0,4), end_time: slot[0].slice(7,11)})
+        .select()
+        const newRD = [...resDet, data[0]]
+        console.log(JSON.stringify(resDet))
 
+        //setResDet(newRD) //this doesnt work because resdet is empty for some reason
+    
         handleClose()
     }
 
@@ -87,8 +89,8 @@ function ReserveModal(props) {
         .delete()
         .eq('id', resToDel[0])
 
-        const resToKeep = resDet.filter((res) => res[3] !== resToDel[0])
-        setResDet(resToKeep)
+        //const resToKeep = resDet.filter((res) => res[3] !== resToDel[0]) //! this doesnt work either im guessing cause resdet is empty
+        //setResDet(resToKeep)
 
         setDelMod(false)
         handleClose()
