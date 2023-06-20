@@ -203,7 +203,9 @@ function Lvlx(props) {
 
 
 // main
-export default function Main({userid}) {
+export default function Main({user}) {
+    const userid = user.id
+
     // level state
     const [level, setLevel] = useState(3)
     const handleChangeLevel = (event) => {
@@ -233,7 +235,7 @@ export default function Main({userid}) {
     let resDetfirst = []
     // !switch to actual DB
     for (var element of dbRes) {
-        if (element.user_id === userid) {
+        if (element.user_id === user.id) {
             resDetfirst.push([element.seat_id, element.start_time, element.end_time, element.id])
         }
     }   
@@ -434,7 +436,7 @@ export default function Main({userid}) {
         alignItems='center'
         >
             <Typography variant='h5'>
-                Welcome back, {userid}!
+                Welcome back, {user.email}!
             </Typography>    
 
             <Typography variant='h4'
@@ -606,13 +608,15 @@ export default function Main({userid}) {
         }
 
         {/* modals */}
+
         <Reserve
         open={openRes} onClose={handleResClose} 
-        seatDet={seatDet} userid={userid}
+        seatDet={seatDet}
         ttCol={ttCol}
         setResDet={setResDet} resDet={resDet}
         slot={[slot, slotID]} resetSelect={[setDur, setSlot, setSlotDis]} tobeOcc={tobeOcc}
         full={full}
+        userID = {userid}
         resToDel={resToDel} delMod={delMod} setDelMod={setDelMod}
         userResSlotBool={userResSlotBool}
         />
