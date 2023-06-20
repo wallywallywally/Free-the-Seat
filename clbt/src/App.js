@@ -4,9 +4,8 @@ import {useState, useEffect} from 'react'
 import {supabase} from "./supabase"
 
 // components
-import Welcome from "./components/welcome.js"
-import Main from './components/main.js'
 import LoginScreen from './components/loginscreen.js'
+import Main from './components/main.js'
 
 // mui
 import { CssBaseline } from '@mui/material'

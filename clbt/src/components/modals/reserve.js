@@ -284,7 +284,7 @@ export default function Reserve({
             <>
             <ReserveModal
             open={open} onClose={handleClose()}
-            seatDet={seatDet} userid={userid}
+            seatDet={seatDet}
             ttCol={ttCol}
             setResDet={setResDet} resDet={resDet}
             slot={slot} resetSelect={resetSelect} tobeOcc={tobeOcc}
