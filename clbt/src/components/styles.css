@@ -19,6 +19,13 @@ button.cancel:active {
     color: rgba(189, 0 ,255)
 }
 
+/* header center */
+.headbox {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+}
+
 
 /* levels/lvlx.js */
 /* unresponsive grid */

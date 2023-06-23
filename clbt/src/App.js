@@ -4,9 +4,8 @@ import {useState, useEffect} from 'react'
 import {supabase} from "./supabase"
 
 // components
-import Welcome from "./components/welcome.js"
-import Main from './components/main.js'
 import LoginScreen from './components/loginscreen.js'
+import Main from './components/main.js'
 
 // mui
 import { CssBaseline } from '@mui/material'
@@ -29,12 +28,10 @@ const main = createTheme({
     }
 })
 
-// app
+
 function App() {
     // log in state
-    const [log, setLog] = useState(false)
-    const [session, setSession] = useState(null);
-
+    const [session, setSession] = useState(null)
     useEffect(() => {
         const subscription = supabase.auth.onAuthStateChange((_event, session) => {
             setSession(session);
@@ -42,26 +39,14 @@ function App() {
         return () => subscription.data.subscription.unsubscribe();
     }, []);
 
-    // const logInToggle = (event) => {
-    //     setLog(!log)
-    // }
-
-    // user id state
-    const [userid, setUserid] = useState(123)
-    
     
     return (
         <>
         <ThemeProvider theme={main}>
         <CssBaseline />
-
-        {session ?
-             <Main user={session.user}/> : <LoginScreen/>
-        }
-
-        {/* <Main userid={userid}/> */}
-
-
+            {session ?
+                <Main user={session.user}/> : <LoginScreen/>
+            }
         </ThemeProvider>
         </>
     );

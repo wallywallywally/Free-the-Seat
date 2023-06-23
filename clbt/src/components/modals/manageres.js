@@ -63,9 +63,9 @@ function ManageModal(props) {
             {/* list of reservations */}
             <Box className='center' sx={{marginTop:3}}>
             <Box className='flex-col' gap='1rem' marginBottom='2rem'>
-                {resToShow.map((res) => {
+                {resToShow.map((res, i) => {
                 return(
-                    <Box key={(res)}
+                    <Box key={(i)}
                     display='flex'
                     alignItems='center'
                     gap='2rem'

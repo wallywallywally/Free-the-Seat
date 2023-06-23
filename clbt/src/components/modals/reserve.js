@@ -1,5 +1,4 @@
 import '../styles.css'
-import {useState} from "react"
 import { timeToID } from '../main'
 
 // mui
@@ -21,7 +20,7 @@ function ReserveModal(props) {
         onClose, open, 
         seatDet,
         ttCol,
-        setResDet, resDet, 
+        checkRes, ourResIDs, resDet, 
         slot, resetSelect, tobeOcc, 
         full,
         resToDel, delMod, setDelMod,
@@ -30,8 +29,8 @@ function ReserveModal(props) {
     } = props
     // expressions
     const ourReservationsSeats = []
-    for (var reservation of resDet) {
-        ourReservationsSeats.push(reservation[0])
+    for (var reservationD of resDet) {
+        ourReservationsSeats.push(reservationD[0])
     }
     const resISseat = ourReservationsSeats.includes(Number(seatDet[2]))
     
@@ -73,7 +72,7 @@ function ReserveModal(props) {
 
     // timetable displays selected slot during reservation
     // black border to differentiate from existing reservations
-    if (!alrOcc && !userResSlotBool) {
+    if (!alrOcc && !userResSlotBool && !delMod) {
         if (slot[1].length === 1) {
             ttCol[slot[1][0]] = 'tt-res tt-resB'
         } else {
@@ -81,52 +80,48 @@ function ReserveModal(props) {
             ttCol[slot[1][1]] = 'tt-res tt-resB-R'
         }
     }
+    // same for cancelling
+    if (delMod) {
+        const delID = []
+        timeToID(resToDel[1], resToDel[2], delID)
+        if (delID.length === 1) {
+            ttCol[delID[0]] = 'tt-res tt-resB'
+        } else {
+            ttCol[delID[0]] = 'tt-res tt-resB-L'
+            ttCol[delID[1]] = 'tt-res tt-resB-R'
+        }
+    }
     
-    // [DB int]
-    // after creation/deletion in DB, we probably need to process Main's resDet again
-    // so [FRONTEND] stuff will be modified
-    // useState for a DB CRUD - affects Main's useEffect
-
+    // DB CRUD
     // CREATE reservation
     const handleSubmitCreate = async () => {
-        // this entry is to be pushed to DB
-        // for frontend testing purposes
-        const fakeID = Math.floor(Math.random() * 10)
-        const resToPush = [Number(seatDet[2]), slot[0].slice(0,4), slot[0].slice(7,11), userID] //seat id, start time, end time, user id
-        // [FRONTEND] pushes it to resDet
-        // pushed with no reservation id tho
-        const { data, error } = await supabase
-        .from('reservations')
-        .insert({seat_id: seatDet[2], user_id: userID, start_time: slot[0].slice(0,4), end_time: slot[0].slice(7,11)})
-        .select()
-        const newRD = [...resDet, data[0]]
-        console.log(JSON.stringify(resDet))
-
-        //setResDet(newRD) //this doesnt work because resdet is empty for some reason
+        const { data, error } = await supabase 
+            .from('reservations')
+            .insert({seat_id: seatDet[2], user_id: userID, start_time: slot[0].slice(0,4), end_time: slot[0].slice(7,11)})
+            .select()
     
         handleClose()
         resetSelect[0]('')
         resetSelect[1]('')
         resetSelect[2](true)
+        // query DB
+        checkRes[1](!checkRes[0])
     }
-
     // DELETE reservation
     const handleSubmitDelete = async () => {
-        // resToDel has id - this entry is to be removed from DB
-        // console.log(resToDel)
-
-        // [FRONTEND] removes it from resDet
         const {error} = await supabase
-        .from('reservations')
-        .delete()
-        .eq('id', resToDel[0])
+            .from('reservations')
+            .delete()
+            .eq('id', resToDel[0])
 
-        //const resToKeep = resDet.filter((res) => res[3] !== resToDel[0]) //! this doesnt work either im guessing cause resdet is empty
-        //setResDet(resToKeep)
+        ourResIDs[1](ourResIDs[0].filter((id) => id !== resToDel[0]))
 
         setDelMod(false)
         handleClose()
+        // query DB
+        checkRes[1](!checkRes[0])
     }
+
 
 
     // what's displayed
@@ -225,8 +220,8 @@ function ReserveModal(props) {
                 <Typography variant='h6' sx={{textAlign:'center'}} marginTop={full ? 2.5 : 0} marginBottom={0.5}>
                     You have reserved this seat for the following slots:<br/>{slot[0]}
                 </Typography>
-                {res4seat.map((res) => (
-                    <Typography key={res} variant='h6' sx={{textAlign:'center'}}>
+                {res4seat.map((res, i) => (
+                    <Typography key={i} variant='h6' sx={{textAlign:'center'}}>
                         {res[1]} - {res[2]}
                     </Typography>
                 ))}
@@ -274,7 +269,7 @@ export default function Reserve({
     open, onClose, 
     seatDet, 
     ttCol, 
-    setResDet, resDet, 
+    checkRes, ourResIDs, resDet, 
     slot, resetSelect, tobeOcc, 
     full, 
     resToDel, delMod, setDelMod,
@@ -286,9 +281,9 @@ export default function Reserve({
             <>
             <ReserveModal
             open={open} onClose={handleClose()}
-            seatDet={seatDet} userid={userid}
+            seatDet={seatDet}
             ttCol={ttCol}
-            setResDet={setResDet} resDet={resDet}
+            checkRes={checkRes} ourResIDs={ourResIDs} resDet={resDet}
             slot={slot} resetSelect={resetSelect} tobeOcc={tobeOcc}
             full={full}
             resToDel={resToDel} delMod={delMod} setDelMod={setDelMod}

@@ -22,6 +22,7 @@ import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
 import Select from '@mui/material/Select'
 
+
 // theme
 const levelLayout = createTheme({
 })
@@ -139,36 +140,8 @@ export const timeToID = (start, end, arr) => {
     }
 }
 
-// [DB] seats: 
-// [id, light_status, floor]
-
-// [DB int] mimics "reservations" table
-// a database filtered by level is passed into each Lvl
-const dbRes = [
-    {id: 22, user_id: 123, seat_id: 101, start_time: "1700", end_time: "1800"},
-    {id: 21, user_id: 123, seat_id: 101, start_time: "1530", end_time: "1600"},
-    {id: 25, user_id: 123, seat_id: 105, start_time: "1630", end_time: "1700"},
-    {id: 28, user_id: 123, seat_id: 104, start_time: "1200", end_time: "1230"},
-    {id: 91, user_id: 236, seat_id: 101, start_time: "1330", end_time: "1430"},
-    {id: 32, user_id: 553, seat_id: 112, start_time: "0900", end_time: "1000"},
-    {id: 41, user_id: 598, seat_id: 112, start_time: "1330", end_time: "1430"},
-    {id: 52, user_id: 111, seat_id: 102, start_time: "1400", end_time: "1430"},
-    {id: 61, user_id: 112, seat_id: 102, start_time: "1430", end_time: "1530"},
-    {id: 63, user_id: 155, seat_id: 101, start_time: "0930", end_time: "1030"},
-
-    {id: 3, user_id: 553, seat_id: 103, start_time: "0900", end_time: "1000"},
-    {id: 2, user_id: 123, seat_id: 103, start_time: "1000", end_time: "1100"},
-    {id: 1, user_id: 236, seat_id: 103, start_time: "1100", end_time: "1200"},
-    {id: 4, user_id: 598, seat_id: 103, start_time: "1200", end_time: "1300"},
-    {id: 5, user_id: 111, seat_id: 103, start_time: "1300", end_time: "1400"},
-    {id: 6, user_id: 112, seat_id: 103, start_time: "1400", end_time: "1500"},
-    {id: 7, user_id: 155, seat_id: 103, start_time: "1500", end_time: "1600"},
-    {id: 8, user_id: 155, seat_id: 103, start_time: "1600", end_time: "1700"},
-    {id: 9, user_id: 155, seat_id: 103, start_time: "1700", end_time: "1800"},
-]
-
 // seatInfo {101: 'emp',...} stores info for all seats
-// !! initialise according to seat_ids
+// ! initialise according to seat_ids once we get more levels
 const numSeats = 120
 const seatInfo = {}
 for (let i = 1; i <= numSeats; i++) {
@@ -204,7 +177,12 @@ function Lvlx(props) {
 
 // main
 export default function Main({user}) {
+    // user session stuff
     const userid = user.id
+    // sign out callback
+    const handleLogOutClick = () => {
+        supabase.auth.signOut();
+    }
 
     // level state
     const [level, setLevel] = useState(3)
@@ -227,21 +205,33 @@ export default function Main({user}) {
             .catch((error) => {
                 setError(error);
             });
-    }, [setReservations, setError]);
+    }, [setReservations, setError])
+    // res states
+    const [resDet, setResDet] = useState([])
+    const [checkRes, setCheckRes] = useState(false)
     useEffect(() => {
-        fetchReservations();
-    }, [fetchReservations]);
-    // check for reservation on the first time, goes through database and checks if userid in reservations = user id of session
-    let resDetfirst = []
-    // !switch to actual DB
-    for (var element of reservations) {
-        if (element.user_id === user.id) {
-            resDetfirst.push([element.seat_id, element.start_time, element.end_time, element.id])
+        fetchReservations()
+    }, [checkRes])  // eslint-disable-line react-hooks/exhaustive-deps
+    // getting resDet - check element.id is not in our resDet id
+    const [ourResIDs, setOurResIDs] = useState([])
+    const getResDet = useCallback((allRes) => {
+        const IDtoPush = []
+        const resDettoPush = []
+        for (var element of allRes) {
+            if (!ourResIDs.includes(element.id)) {
+                IDtoPush.push(element.id)
+                resDettoPush.push([element.seat_id, element.start_time, element.end_time, element.id])
+            }
         }
-    }   
-    // state updates if user creates/deletes reservation
-    
-    const [resDet, setResDet] = useState(resDetfirst)
+        setOurResIDs([...ourResIDs, ...IDtoPush])
+        setResDet([...resDet, ...resDettoPush])
+    }, [setOurResIDs, setResDet])   // eslint-disable-line react-hooks/exhaustive-deps
+    useEffect(() => {
+        // add to resDet if it's user's res and doesn't already exist
+        getResDet(reservations.filter((res) => res.user_id === userid))
+    }, [reservations])  // eslint-disable-line react-hooks/exhaustive-deps
+
+    console.log(reservations)
 
     // get info on upcoming res to for display
     const resExists = resDet.length !== 0
@@ -260,7 +250,7 @@ export default function Main({user}) {
             const seat = element.value
             setUpcomingInfo([lvl, seat, upcomingRes[1], upcomingRes[2]])
         }
-    }, [upcomingRes])
+    }, [upcomingRes])   // eslint-disable-line react-hooks/exhaustive-deps
 
     // selects
     // 1. duration
@@ -281,7 +271,6 @@ export default function Main({user}) {
     const slotID = []
     timeToID(slot.slice(0,4), slot.slice(7, 11), slotID)
     const tobeOccpre = []
-    // !switch to actual DB
     for (var reservation of reservations) {
         const resID = []
         timeToID(reservation.start_time, reservation.end_time, resID)
@@ -303,7 +292,6 @@ export default function Main({user}) {
         seatInfo[resBor[0]][1] = 'res'
     }
     // colour: green/red/purple depending on status
-    // ! test after DB CREATE
     for (var resCol of resDet) {
         if (`${resCol[1]} - ${resCol[2]}` === slot) {
             seatInfo[resCol[0]][0] = 'ourres'
@@ -312,11 +300,11 @@ export default function Main({user}) {
 
     // user already has a reservation for selected slot
     const userResSlots = []
-    for (var reservation of resDet) {
+    for (var reservationD of resDet) {
         const resID = []
-        timeToID(reservation[1], reservation[2], resID)
-        for (var ele of resID) {
-            userResSlots.push(ele)
+        timeToID(reservationD[1], reservationD[2], resID)
+        for (var eleID of resID) {
+            userResSlots.push(eleID)
         }
     }
     let userResSlotBool = false
@@ -354,7 +342,6 @@ export default function Main({user}) {
 
         // timetable
         // checks "reservations" table
-        // !switch to actual DB
         const ttdatapre = reservations.filter((element) => element.seat_id === Number(seatId))
         const ttdata = []
         for (var element of ttdatapre) {
@@ -422,10 +409,8 @@ export default function Main({user}) {
     }
     const handleBreakClose = () => setOpenBreak(false)
 
-    //sign out callback
-    const handleLogOutClick = () => {
-        supabase.auth.signOut();
-      };
+
+
     // main
     // ! responsive or fixed
     // Lvlx to be fixed, so we can scroll
@@ -439,22 +424,38 @@ export default function Main({user}) {
         justifyContent='space-between'
         alignItems='center'
         >
-            <Typography variant='h5'>
-                Welcome back, {user.email}!
-            </Typography>    
+            <div className='headbox' >
+                <Typography variant='h5' sx={{marginRight: 'auto'}}>
+                    Welcome back, {user.email}!
+                </Typography>    
+            </div>
 
-            <Button
-            variant="text"
-            sx={{ color: "black" }}
-            onClick={handleLogOutClick}
-          >
-            Log out
-            </Button>
+            <div className='headbox'>
+                <Button
+                onClick={handleLogOutClick}
+                variant="contained"
+                disableElevation
+                sx={{ 
+                    borderRadius: 0.5,
+                    backgroundColor: '#fb7979',
+                    color: '#000',
+                    '&:hover': {backgroundColor: 'rgba(251, 121, 121, 0.75)'},
+                    '&:active': {backgroundColor: '#fb7979'},
+                }}
+                >
+                    Log out
+                </Button>
+            </div>
 
-            <Typography variant='h4'
-            sx={{textAlign: 'right'}}>
-                Central Library Tracker
-            </Typography>
+            <div className='headbox'>
+                <Typography variant='h4'
+                sx={{
+                    marginLeft: 'auto',
+                    textAlign: 'right'
+                }}>
+                    Central Library Tracker
+                </Typography>
+            </div>
         </Box>
         </Container>
 
@@ -542,8 +543,8 @@ export default function Main({user}) {
                     label="Time"
                     onChange={handleChangeSlot}
                 >
-                    {timetable.map((ele) => (
-                        <MenuItem key={timetable.indexOf(ele)} value={dur === 30 ? timeslots30[ele]: timeslots60[ele]}>
+                    {timetable.map((ele, i) => (
+                        <MenuItem key={i} value={dur === 30 ? timeslots30[ele]: timeslots60[ele]}>
                             {dur === 30 ? timeslots30[ele]: timeslots60[ele]}
                         </MenuItem>
                     ))}
@@ -624,8 +625,7 @@ export default function Main({user}) {
         open={openRes} onClose={handleResClose} 
         seatDet={seatDet}
         ttCol={ttCol}
-        
-        setResDet={setResDet} resDet={resDet}
+        checkRes={[checkRes, setCheckRes]} ourResIDs={[ourResIDs, setOurResIDs]} resDet={resDet}
         slot={[slot, slotID]} resetSelect={[setDur, setSlot, setSlotDis]} tobeOcc={tobeOcc}
         full={full}
         userID = {userid}
