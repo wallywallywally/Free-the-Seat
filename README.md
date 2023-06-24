@@ -3,7 +3,7 @@
 
 ## What is it?
 
-The [Central Library Tracker](https://www.free-the-seat.vercel.app) (CLBT) allows users to view seat vacancies of NUS' Central Library and make reservations to study at their desired seat and time slot.
+The [Central Library Tracker](https://free-the-seat.vercel.app) (CLBT) allows users to view seat vacancies of NUS' Central Library and make reservations to study at their desired seat and time slot.
 
 
 ## Tech stack
