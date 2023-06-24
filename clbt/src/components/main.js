@@ -206,6 +206,7 @@ export default function Main({user}) {
                 setError(error);
             });
     }, [setReservations, setError])
+    
     // res states
     const [resDet, setResDet] = useState([])
     const [checkRes, setCheckRes] = useState(false)
@@ -230,8 +231,6 @@ export default function Main({user}) {
         // add to resDet if it's user's res and doesn't already exist
         getResDet(reservations.filter((res) => res.user_id === userid))
     }, [reservations])  // eslint-disable-line react-hooks/exhaustive-deps
-
-    console.log(reservations)
 
     // get info on upcoming res to for display
     const resExists = resDet.length !== 0
@@ -591,8 +590,8 @@ export default function Main({user}) {
                 textAlign: 'center',
                 marginBottom: '2rem'
             }}>
-                If you are away from your seat for more than <span style={{fontWeight: 'bold'}}>5</span> min,
-                <br/> your seat will be marked as empty and your items will be cleared 
+                Please return to your seat by the end of your break
+                <br/> or your seat will be marked as empty and your items will be cleared 
             </Typography>
             <Box
             display='flex'

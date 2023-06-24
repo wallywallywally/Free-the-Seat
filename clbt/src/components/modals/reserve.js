@@ -27,6 +27,7 @@ function ReserveModal(props) {
         userResSlotBool,
         userID,
     } = props
+
     // expressions
     const ourReservationsSeats = []
     for (var reservationD of resDet) {
@@ -53,14 +54,10 @@ function ReserveModal(props) {
 
     // expressions for DOM elements
     const headerExp = !delMod && 
-        (noslotSelected || full || userResSlotBool
-            || alrOcc   // ! test after DB CRUD
-        )
+        (noslotSelected || full || userResSlotBool || alrOcc)
         ? 'collapse' : 'revert'
     const buttonExp = !delMod && 
-        (noslotSelected || full || slotISseatres || userResSlotBool
-            || alrOcc  // ! test after DB CRUD
-        )
+        (noslotSelected || full || slotISseatres || userResSlotBool || alrOcc)
         ? 'hidden' : 'revert'
 
     // on close

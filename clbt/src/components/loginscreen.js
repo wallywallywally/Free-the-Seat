@@ -26,10 +26,10 @@ const customTheme = {
             anchorTextHoverColor: 'darkgray',
         },
         fontSizes: {
-            baseLabelSize: '1.2rem',
-            baseInputSize: '1.2rem',
-            baseButtonSize: '1.1rem',
-            baseBodySize: '1rem',
+            baseLabelSize: '1rem',
+            baseInputSize: '1rem',
+            baseButtonSize: '1rem',
+            baseBodySize: '0.9rem',
         },
         space: {
             labelBottomMargin: '8px',
@@ -82,8 +82,9 @@ export default function LoginScreen() {
             <Box
             display='flex'
             flexDirection='column'
-            gap='4rem'
+            gap='3rem'
             padding='0 2rem'
+            margin='1rem 0'
             >
                 <Box
                 sx={{
