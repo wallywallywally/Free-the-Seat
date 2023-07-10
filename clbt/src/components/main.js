@@ -12,6 +12,7 @@ import Lvl6 from './levels/lvl6.js'
 import Reserve from './modals/reserve.js'
 import Break from './modals/break.js'
 import Manage from './modals/manageres.js'
+import Instructions from './modals/instructions'
 
 // mui
 import { Box, Button, Container, Typography } from '@mui/material'
@@ -393,6 +394,11 @@ export default function Main({user}) {
     const handleManageOpen = () => setOpenManage(true)
     const handleManageClose = () => setOpenManage(false)
 
+    // instructions modal
+    const [openInt, setOpenInt] = useState(false)
+    const handleIntOpen = () => setOpenInt(true)
+    const handleIntClose = () => setOpenInt(false)
+
 
     // check in states
     const [checkin, setCheckin] = useState(false)
@@ -411,9 +417,6 @@ export default function Main({user}) {
 
 
     // main
-    // ! responsive or fixed
-    // Lvlx to be fixed, so we can scroll
-    // Header and button can be position: fixed ?
     return(
         <>
         {/* main header */}
@@ -458,13 +461,14 @@ export default function Main({user}) {
         </Box>
         </Container>
 
-        {/* level select */}
+        {/* sub-header */}
         <Container sx={{marginTop: '15px'}}>
         <Box
         display='flex'
-        alignItems='center'
+        justifyContent='space-between'
         gap='2rem'
         >
+            {/* level select */}
             <FormControl sx={{width: 100}}>
                 <InputLabel id="level-select-label">Level</InputLabel>
                 <Select
@@ -480,11 +484,33 @@ export default function Main({user}) {
                     <MenuItem value={6}>6</MenuItem>
                 </Select>
             </FormControl>
+            {/* instructions */}
+            <Box
+            display='flex'
+            justifyContent='center'
+            alignItems='center'
+            >
+                <Button
+                onClick={handleIntOpen}
+                variant="contained"
+                disableElevation
+                sx={{
+                    backgroundColor: '#e7be95',
+                    color: '#000',
+                    borderRadius: 0.7,
+                    border: '1px solid rgba(0,0,0,0.25)',
+                    width: '10rem',
+                    '&:hover': {backgroundColor: 'rgba(231, 190, 149, 0.7)'},
+                    '&:active': {backgroundColor: '#e7be95'},
+                }}>
+                    How it works
+                </Button>
+            </Box>
         </Box>
         </Container>
 
         {/* info tag */}
-        <Container sx={{textAlign: 'center', marginTop:'-1rem', marginBottom: '3rem'}}>
+        <Container sx={{textAlign: 'center', marginTop:'-2.5rem', marginBottom: '3rem'}}>
             <Typography variant='h6' marginBottom={2}>
                 {!resExists ?
                 'Select a duration and time to start reserving' :
@@ -498,12 +524,17 @@ export default function Main({user}) {
             </Typography>
             {/* manage res modal to cancel reservations */}
             <Typography variant='body1' sx={{visibility: resExists ? 'visible' : 'hidden'}}>
-                <span>Click <button
+                <Button
                 value='cancelRes'
                 onClick={handleManageOpen}
-                className='cancel'>here</button> to manage reservations</span>
+                variant='contained'
+                disableElevation
+                className='cancel'
+                >
+                    Click here to manage reservations
+                </Button>
             </Typography>
-        </Container>
+        </Container>       
 
         {/* time slot selector */}
         <Box
@@ -637,6 +668,10 @@ export default function Main({user}) {
         resDet={resDet}
         handleResOpen={handleResOpen}
         setDelMod={setDelMod}
+        />
+        <Instructions
+        open={openInt}
+        onClose={handleIntClose} 
         />
         <Break
         open={openBreak}

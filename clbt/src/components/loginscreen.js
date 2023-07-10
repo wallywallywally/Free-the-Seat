@@ -3,6 +3,8 @@ import Grid from '@mui/material/Grid'
 import {supabase } from"../supabase"
 import { Box, Typography } from "@mui/material"
 
+import CLBimg from './img/clb.png'
+
 // styling supabase auth
 const customTheme = {
     default: {
@@ -61,7 +63,7 @@ export default function LoginScreen() {
             sm={4}
             md={7}
             sx={{
-                // backgroundImage: `url(/img/clb2.png)`,       no idea why this doesn't work
+                backgroundImage: `url(${CLBimg})`,
                 backgroundRepeat: 'no-repeat',
                 backgroundColor: '#c59e88',
                 backgroundSize: 'cover',

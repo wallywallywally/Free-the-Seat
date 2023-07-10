@@ -1,5 +1,6 @@
 import '../styles.css'
 import { useEffect, useState } from 'react'
+import { timeToID } from '../main'
 
 // mui
 import PropTypes from 'prop-types'
@@ -12,7 +13,7 @@ import { Box } from '@mui/material'
 
 // break system modal
 function ManageModal(props) {
-    const { onClose, open, resDet, handleResOpen, setDelMod} = props;
+    const {onClose, open, resDet, handleResOpen, setDelMod} = props;
 
     // on close
     const handleClose = () => {
@@ -27,11 +28,13 @@ function ManageModal(props) {
             const element = document.getElementById(String(res[0]))
             const lvl = element.closest('.lvl').id
             const seat = element.value
-            reservations.push([lvl, seat, ...res])
+            const resSlotSort = []
+            timeToID(res[1], res[2], resSlotSort)
+            reservations.push([lvl, seat, ...res, resSlotSort[0]])
         }
+        // sort by time
         const reservationsSorted = reservations.sort(function(a,b) {
-            if (a[2] === b[2]) return Number(a[3]) - Number(b[3])
-            return a[2] - b[2]
+            return a[6] - b[6]
         })
         setResToShow(reservationsSorted)
     }, [resDet])
