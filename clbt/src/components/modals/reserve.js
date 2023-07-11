@@ -241,16 +241,16 @@ function ReserveModal(props) {
                 visibility: buttonExp,
                 marginTop: 5,
                 borderRadius: 0,
-                backgroundColor: delMod ? '#fb7979' : 'rgba(189, 0 ,255, 0.6)',
+                backgroundColor: delMod ? '#fb7979' : 'rgba(189, 0 ,255, 0.55)',
                 color: '#000',
                 '&:hover': {
                     backgroundColor: delMod ? 'rgba(251, 121, 121, 0.75)' : 'rgba(189, 0 ,255, 0.3)'
                 },
                 '&:active': {
-                    backgroundColor: delMod ? '#fb7979' : 'rgba(189, 0 ,255, 0.6)'
+                    backgroundColor: delMod ? '#fb7979' : 'rgba(189, 0 ,255, 0.55)'
                 },
             }}>
-                {delMod ? 'Cancel' : 'Reserve'}
+                {delMod ? 'Delete reservation' : 'Reserve slot'}
             </Button>
 
         </Dialog>
