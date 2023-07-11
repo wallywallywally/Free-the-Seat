@@ -39,13 +39,14 @@ function App() {
         return () => subscription.data.subscription.unsubscribe();
     }, []);
 
-    
+    let params = new URLSearchParams(window.location.search);
+
     return (
         <>
         <ThemeProvider theme={main}>
-        <CssBaseline />
+        <CssBaseline /> 
             {session ?
-                <Main user={session.user}/> : <LoginScreen/>
+                <Main user={session.user} seatid = {params.get('seat')}/> : <LoginScreen/>
             }
         </ThemeProvider>
         </>

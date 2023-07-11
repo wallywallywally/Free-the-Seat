@@ -176,7 +176,7 @@ function Lvlx(props) {
 
 
 // main
-export default function Main({user}) {
+export default function Main({user, seatid}) {
     // user session stuff
     const userid = user.id
     // sign out callback
