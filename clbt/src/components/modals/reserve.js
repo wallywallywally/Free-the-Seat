@@ -26,7 +26,15 @@ function ReserveModal(props) {
         resToDel, delMod, setDelMod,
         userResSlotBool,
         userID,
+        toCheckIn, checkInRes, checkedIn, setCheckedIn,
     } = props
+
+    // on close
+    const handleClose = () => {
+        // reset
+        setDelMod(false)
+        onClose()
+    }
 
     // expressions
     const ourReservationsSeats = []
@@ -52,20 +60,22 @@ function ReserveModal(props) {
         if (slotISseatres) break
     }
 
+    // to check in
+    const seatToCheckIn = checkInRes[0] === Number(seatDet[2])
+    const toCheckInExp = toCheckIn && checkInRes.length !== 0 && !checkedIn && seatToCheckIn
+    const handleToCheckIn = () => {
+        setCheckedIn(true)      // [DB int] update DB for check in
+        handleClose()
+    }
+    const checkedInExp = checkedIn && seatToCheckIn
+
     // expressions for DOM elements
     const headerExp = !delMod && 
         (noslotSelected || full || userResSlotBool || alrOcc)
         ? 'collapse' : 'revert'
-    const buttonExp = !delMod && 
+    const buttonExp = !delMod && !toCheckInExp &&
         (noslotSelected || full || slotISseatres || userResSlotBool || alrOcc)
         ? 'hidden' : 'revert'
-
-    // on close
-    const handleClose = () => {
-        // reset
-        setDelMod(false)
-        onClose()
-    }
 
     // timetable displays selected slot during reservation
     // black border to differentiate from existing reservations
@@ -114,11 +124,11 @@ function ReserveModal(props) {
         ourResIDs[1](ourResIDs[0].filter((id) => id !== resToDel[0]))
 
         setDelMod(false)
+        if (resToDel[0] === checkInRes[3]) setCheckedIn(false)
         handleClose()
         // query DB
         checkRes[1](!checkRes[0])
     }
-
 
 
     // what's displayed
@@ -211,17 +221,43 @@ function ReserveModal(props) {
                 Time slot:<br/>{slot[0]}
             </Typography>}
 
-            {/* reserved slots */}
-            {!delMod && resISseat && noslotSelected && 
+            {/* reserved slots / to check in info */}
+            {!delMod && resISseat && noslotSelected && !checkedInExp &&
             <>
-                <Typography variant='h6' sx={{textAlign:'center'}} marginTop={full ? 2.5 : 0} marginBottom={0.5}>
-                    You have reserved this seat for the following slots:<br/>{slot[0]}
-                </Typography>
-                {res4seat.map((res, i) => (
-                    <Typography key={i} variant='h6' sx={{textAlign:'center'}}>
-                        {res[1]} - {res[2]}
+                {toCheckInExp ?
+                <>
+                    <Typography variant='h6' sx={{textAlign:'center'}} marginTop={full ? 2.5 : 0} marginBottom={0.5}>
+                        You are checking in for:<br/>{slot[0]}
                     </Typography>
-                ))}
+                    <Typography variant='h6' sx={{textAlign:'center'}}>
+                        {checkInRes[1]} - {checkInRes[2]}
+                    </Typography>
+                </>
+                :
+                <>
+                    <Typography variant='h6' sx={{textAlign:'center'}} marginTop={full ? 2.5 : 0} marginBottom={0.5}>
+                        You have reserved this seat for the following slots:<br/>{slot[0]}
+                    </Typography>
+                    {res4seat.map((res, i) => (
+                        <Typography key={i} variant='h6' sx={{textAlign:'center'}}>
+                            {res[1]} - {res[2]}
+                        </Typography>
+                    ))}
+                </>
+
+                }
+            </>
+            }
+
+            {/* checked in info */}
+            {checkedInExp &&
+            <>
+            <Typography variant='h6' sx={{textAlign:'center'}} marginTop={full ? 2.5 : 0} marginBottom={0.5}>
+                You have checked in for:<br/>{slot[0]}
+            </Typography>
+            <Typography variant='h6' sx={{textAlign:'center'}}>
+                {checkInRes[1]} - {checkInRes[2]}
+            </Typography>
             </>
             }
 
@@ -234,23 +270,23 @@ function ReserveModal(props) {
 
             {/* button */}
             <Button
-            onClick={delMod ? handleSubmitDelete : handleSubmitCreate}
+            onClick={delMod ? handleSubmitDelete : (toCheckInExp ? handleToCheckIn : handleSubmitCreate)}
             variant='contained'
             disableElevation
             sx={{
                 visibility: buttonExp,
                 marginTop: 5,
                 borderRadius: 0,
-                backgroundColor: delMod ? '#fb7979' : 'rgba(189, 0 ,255, 0.55)',
+                backgroundColor: delMod ? '#fb7979' : (toCheckInExp ? '#0085ff' : 'rgba(189, 0 ,255, 0.55)'),
                 color: '#000',
                 '&:hover': {
-                    backgroundColor: delMod ? 'rgba(251, 121, 121, 0.75)' : 'rgba(189, 0 ,255, 0.3)'
+                    backgroundColor: delMod ? 'rgba(251, 121, 121, 0.75)' : (toCheckInExp ? 'rgba(0, 133, 255, 0.7)' : 'rgba(189, 0 ,255, 0.3)')
                 },
                 '&:active': {
-                    backgroundColor: delMod ? '#fb7979' : 'rgba(189, 0 ,255, 0.55)'
+                    backgroundColor: delMod ? '#fb7979' : (toCheckInExp ? '#0085ff' : 'rgba(189, 0 ,255, 0.55)')
                 },
             }}>
-                {delMod ? 'Delete reservation' : 'Reserve slot'}
+                {delMod ? 'Delete reservation' : (toCheckInExp ? 'Check in' : 'Reserve slot')}
             </Button>
 
         </Dialog>
@@ -270,7 +306,11 @@ export default function Reserve({
     slot, resetSelect, tobeOcc, 
     full, 
     resToDel, delMod, setDelMod,
-    userResSlotBool, userID})  
+    userResSlotBool, 
+    userID,
+    toCheckIn, checkInRes, 
+    checkedIn, setCheckedIn
+    })  
     {
         const handleClose = () => () => onClose()
 
@@ -286,6 +326,8 @@ export default function Reserve({
             resToDel={resToDel} delMod={delMod} setDelMod={setDelMod}
             userResSlotBool={userResSlotBool}
             userID={userID}
+            toCheckIn={toCheckIn} checkInRes={checkInRes} 
+            checkedIn={checkedIn} setCheckedIn={setCheckedIn}
             />
             </>
         );

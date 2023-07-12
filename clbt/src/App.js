@@ -46,7 +46,7 @@ function App() {
         <ThemeProvider theme={main}>
         <CssBaseline /> 
             {session ?
-                <Main user={session.user} seatid = {params.get('seat')}/> : <LoginScreen/>
+                <Main user={session.user} checkInSeat={params.get('seat')}/> : <LoginScreen/>
             }
         </ThemeProvider>
         </>

@@ -12,6 +12,19 @@ button.cancel:hover {
     background: rgba(189, 0, 255, 0.2);
 }
 
+button.break {
+    width: 10rem;
+    background: none;
+    color: rgb(0, 133, 255);
+    border: 2px solid rgba(0, 133, 255, 0.7);
+    border-radius: 20px;
+    font-size: 0.95rem;
+}
+
+button.break:hover {
+    background: rgb(0, 133, 255, 0.3);
+}
+
 /* header center */
 .headbox {
     display: flex;
@@ -56,6 +69,10 @@ button.cancel:hover {
 
 .tt-res {
     background-color: #bd00ff;
+}
+
+.tt-checkin {
+    background-color: #0085ff;
 }
 
 .tt-resB {

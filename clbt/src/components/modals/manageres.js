@@ -19,7 +19,7 @@ function ManageModal(props) {
     const handleClose = () => {
         onClose()
     }
-    
+
     // processing details of resDet
     const [resToShow, setResToShow] = useState([])
     useEffect(() => {

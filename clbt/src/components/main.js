@@ -118,7 +118,7 @@ export const timeToID = (start, end, arr) => {
                 end.slice(2,4) === '00' ? arr.push(112) : arr.push(112, 121)
                 break
             case '12':
-                end.slice(2,4) === '00' ? arr.push(122) : arr.push(122, 132)
+                end.slice(2,4) === '00' ? arr.push(122) : arr.push(122, 131)
                 break
             case '13':
                 end.slice(2,4) === '00' ? arr.push(132) : arr.push(132, 141)
@@ -180,7 +180,7 @@ function Lvlx(props) {
 
 
 // main
-export default function Main({user, seatid}) {
+export default function Main({user, checkInSeat}) {
     // user session stuff
     const userid = user.id
     // sign out callback
@@ -324,24 +324,32 @@ export default function Main({user, seatid}) {
     const [full, setFull] = useState(false)
     // reservation to delete
     const [resToDel, setResToDel] = useState([])
-    const handleResOpen = (event) => {
+    const handleResOpen = useCallback((event, CISinfo, CISres) => {
         setOpenRes(true)
 
         // update modal
+        // seat details
         let seatId, seatNum
-        if (event.target.id === 'delRes') {
+        if (CISinfo) {
+            // QR code's checkInSeat URL
+            seatId = CISinfo[2]
+            seatNum = CISinfo[1]
+            setSeatDet([CISinfo[0], CISinfo[1], CISinfo[2]])
+        } else if (event.target.id === 'delRes') {
+            // manageRes
             const resDel = event.target.value.split(',')
+            const delLvl = resDel[0]
             seatId = resDel[2]
             seatNum = resDel[1]
-            // pass reservation to delete to reserve.js
+            setSeatDet([delLvl, seatNum, seatId])
+            // pass reservation to delete [id, start, end] to reserve.js
             setResToDel([Number(resDel[5]), resDel[3], resDel[4]])
         } else {
+            // default clicking on seats
             seatId = event.target.id
             seatNum = event.target.value
+            setSeatDet([level, seatNum, seatId])
         }
-
-        // seat details
-        setSeatDet([level, seatNum, seatId])
 
         // timetable
         // checks "reservations" table
@@ -383,12 +391,23 @@ export default function Main({user, seatid}) {
                 ttCol[slot] = 'tt-res'
             }
         }
+        // check in
+        if (CISres) {
+            const CIStt = []
+            timeToID(CISres[1], CISres[2], CIStt)
+            for (var CISslot of CIStt) {
+                ttCol[CISslot] = 'tt-checkin'
+            }
+        }
         setttCol(ttCol)
-
+        
         // seat is fully booked
         setFull(Object.values(ttCol).filter((element) => element === 'tt-emp').length === 0 ? true : false)
+    }, [resDet])    // eslint-disable-line react-hooks/exhaustive-deps
+    const handleResClose = () => {
+        setOpenRes(false)
+        setToCheckIn(false)
     }
-    const handleResClose = () => setOpenRes(false)
     // delete modal
     const [delMod, setDelMod] = useState(false)
 
@@ -403,12 +422,49 @@ export default function Main({user, seatid}) {
     const handleIntClose = () => setOpenInt(false)
 
 
-    // check in states
-    const [checkin, setCheckin] = useState(false)
-    const [chkinSeat, setChkinSeat] = useState({id: 22, user_id: 123, seat_id: 101, start_time: "1700", end_time: "1800"})
-    // [MS3] ig QR code would give us the reservation
-    // {id: 22, user_id: 123, seat_id: 101, start_time: "1700", end_time: "1800"}
-    // i'm passing a fake res into chkinSeat
+    // check in
+    const [checkedIn, setCheckedIn] = useState(false)   // [DB int] check if user is checked in
+    // QR code scanned and we get to URL
+    const [toCheckIn, setToCheckIn] = useState(false)
+    // const [checkInRes, setCheckInRes] = useState([])
+    const [checkInRes, setCheckInRes] = useState([125, '1330', '1430', 92]) // for testing
+    const checkInModal = useCallback(() => {
+        if (checkInSeat) {
+            // seat details
+            const element = document.getElementById(checkInSeat)
+            const CISlvl = element.closest('.lvl').id
+            const CISnum = element.value
+            
+            // reservation to check in to
+            // get time when QR code is scanned
+            const time = new Date()
+            // const now = `${time.getHours()}${time.getMinutes()}`
+            const now = '1400'
+            // check that current time and seat has reservation + track it
+            const checkInReservation = resDet.filter(ele => ele[0] === Number(checkInSeat))
+                .filter(ele => Number(now) - Number(ele[1]) >= 0)
+                .filter(ele => Number(ele[2]) - Number(now) >= 0)[0]
+
+            if (checkInReservation !== undefined) {
+                setCheckInRes(checkInReservation)
+                setToCheckIn(true)
+            }
+            // open modal
+            handleResOpen(null, [CISlvl, CISnum, checkInSeat], checkInReservation !== undefined && checkInReservation)
+        }
+    }, [checkInSeat, handleResOpen])    // eslint-disable-line react-hooks/exhaustive-deps
+    // count so that modal only pops up when we first get to the URL
+    const [count, setCount] = useState(0)
+    useEffect(() => {
+        if (count <= 2) {
+            checkInModal()
+            setCount(count + 1)
+        }
+    }, [checkInModal])  // eslint-disable-line react-hooks/exhaustive-deps
+    // change seat colour
+    if (checkedIn && checkInRes.length !== 0) {
+        seatInfo[checkInRes[0]][0] = 'checkin'
+    }
 
     // break modal
     const [openBreak, setOpenBreak] = useState(false)
@@ -416,7 +472,6 @@ export default function Main({user, seatid}) {
         setOpenBreak(true)
     }
     const handleBreakClose = () => setOpenBreak(false)
-
 
 
     // main
@@ -487,12 +542,12 @@ export default function Main({user, seatid}) {
                     <MenuItem value={6}>6</MenuItem>
                 </Select>
             </FormControl>
-            {/* instructions */}
             <Box
             display='flex'
-            justifyContent='center'
-            alignItems='center'
+            flexDirection='column'
+            gap='1rem'
             >
+                {/* instructions */}
                 <Button
                 onClick={handleIntOpen}
                 variant="contained"
@@ -507,17 +562,18 @@ export default function Main({user, seatid}) {
                     '&:active': {backgroundColor: '#e7be95'},
                 }}>
                     How it works
-                </Button>
+                </Button>                
             </Box>
         </Box>
         </Container>
 
         {/* info tag */}
         <Container sx={{textAlign: 'center', marginTop:'-2.5rem', marginBottom: '3rem'}}>
+        <Box sx={{position: 'relative'}}>
             <Typography variant='h6' marginBottom={2}>
                 {!resExists ?
                 'Select a duration and time to start reserving' :
-                (checkin === false ?
+                (checkedIn === false ?
                     <span>Upcoming reservation at level <span style={{color: '#bd00ff', fontWeight: '700'}}>{upcomingInfo[0]}</span> seat <span style={{color: '#bd00ff', fontWeight: '700'}}>
                     {upcomingInfo[1]}</span> from <span style={{fontWeight: '700'}}>{upcomingInfo[2]} - {upcomingInfo[3]}</span></span>
                     : <span>Now studying at level <span style={{color: '#0085ff', fontWeight: '700'}}>{upcomingInfo[0]}</span> seat <span style={{color: '#0085ff', fontWeight: '700'}}>
@@ -525,19 +581,37 @@ export default function Main({user, seatid}) {
                 )
                 }
             </Typography>
-            {/* manage res modal to cancel reservations */}
-            <Typography variant='body1' sx={{visibility: resExists ? 'visible' : 'hidden'}}>
-                <Button
-                value='cancelRes'
-                onClick={handleManageOpen}
-                variant='contained'
-                disableElevation
-                className='cancel'
-                >
-                    Click here to manage reservations
-                </Button>
-            </Typography>
-        </Container>       
+            {/* manage res modal */}
+            <Button
+            value='cancelRes'
+            onClick={handleManageOpen}
+            variant='contained'
+            disableElevation
+            className='cancel'
+            sx={{
+                visibility: resExists ? 'visible' : 'hidden',
+            }}
+            >
+                Click here to manage reservations
+            </Button>
+            {/* break button */}
+            <Button
+            id='break'
+            variant='contained'
+            disableElevation
+            onClick={handleBreakOpen}
+            className='break'
+            sx={{
+                visibility: checkedIn ? 'visible' : 'hidden',
+                position: 'absolute',
+                transform: 'translate(0%, 0%)',
+                right: '0'
+            }}
+            >
+                Take a break
+            </Button>
+        </Box>
+        </Container>
 
         {/* time slot selector */}
         <Box
@@ -615,43 +689,6 @@ export default function Main({user, seatid}) {
             </div>
         </ThemeProvider>
 
-        {/* checked in */}
-        {checkin &&
-        <>
-            <Typography 
-            variant='body1' 
-            sx={{
-                textAlign: 'center',
-                marginBottom: '2rem'
-            }}>
-                Please return to your seat by the end of your break
-                <br/> or your seat will be marked as empty and your items will be cleared 
-            </Typography>
-            <Box
-            display='flex'
-            justifyContent='center'
-            sx={{marginBottom: 4}}
-            >
-                <Button
-                id='break'
-                variant='contained'
-                disableElevation
-                onClick={handleBreakOpen}
-                sx={{
-                    backgroundColor: '#e7be95',
-                    color: '#000',
-                    borderRadius: 0.7,
-                    border: '1px solid rgba(0,0,0,0.25)',
-                    width: '10rem',
-                    '&:hover': {backgroundColor: 'rgba(231, 190, 149, 0.7)'},
-                    '&:active': {backgroundColor: '#e7be95'},
-                }}
-                >
-                    Take a break
-                </Button>
-            </Box>
-        </>
-        }
 
         {/* modals */}
         <Reserve
@@ -664,6 +701,8 @@ export default function Main({user, seatid}) {
         userID = {userid}
         resToDel={resToDel} delMod={delMod} setDelMod={setDelMod}
         userResSlotBool={userResSlotBool}
+        toCheckIn={toCheckIn} checkInRes={checkInRes} 
+        checkedIn={checkedIn} setCheckedIn={setCheckedIn}
         />
         <Manage
         open={openManage}
@@ -679,7 +718,7 @@ export default function Main({user, seatid}) {
         <Break
         open={openBreak}
         onClose={handleBreakClose} 
-        chkinSeat={chkinSeat}
+        checkInRes={checkInRes}
         />
         </>
     )

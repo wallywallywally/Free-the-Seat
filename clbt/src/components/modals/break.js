@@ -69,7 +69,7 @@ import { Box } from '@mui/material'
 
 // break system modal
 function BreakModal(props) {
-    const { onClose, open, chkinSeat } = props;
+    const { onClose, open, checkInRes } = props;
 
     // on close
     const handleClose = () => {
@@ -77,15 +77,21 @@ function BreakModal(props) {
         setProgress(100)
         onClose()
     }
+    
+    // checkInRes = [seatID, resID, start, end]
 
     // get seat info
     const [seatDet, setSeatDet] = useState([])
     useEffect(() => {
-        const element = document.getElementById(String(chkinSeat.seat_id))
-        const lvl = element.closest('.lvl').id
-        const seat = element.value
-        setSeatDet([lvl, seat])
-    }, [chkinSeat])
+        if (checkInRes !== undefined) {
+            const element = document.getElementById(String(checkInRes[0]))
+            if (element !== null) {
+                const lvl = element.closest('.lvl').id
+                const seat = element.value
+                setSeatDet([lvl, seat])
+            }
+        }
+    }, [checkInRes])
 
     // timer
     const val15minms = 15 * 60 * 1000 + 2000
@@ -132,6 +138,7 @@ function BreakModal(props) {
                 border: '1px solid #000',
                 textAlign: 'center',
                 margin: '0 auto',
+                padding: '4px 0',
                 marginTop: '1.5rem',
             }}>
                 <Typography variant='h5'>Level {seatDet[0]}</Typography>
@@ -142,6 +149,15 @@ function BreakModal(props) {
                 Breaks last for <span style={{fontWeight:'bold'}}>15</span> minutes
             </DialogTitle>
 
+            {/* <Typography 
+            variant='body1' 
+            sx={{
+                textAlign: 'center',
+                marginBottom: '2rem'
+            }}>
+                Please return to your seat by the end of your break
+                <br/> or your seat will be marked as empty and your items will be cleared 
+            </Typography> */}
 
             {/* timer */}
             <Box
@@ -215,7 +231,7 @@ BreakModal.propTypes = {
   open: PropTypes.bool.isRequired,
 }
 
-export default function Break({open, onClose, chkinSeat}) {
+export default function Break({open, onClose, checkInRes}) {
     const handleClose = () => () => onClose()
 
     return (
@@ -223,7 +239,7 @@ export default function Break({open, onClose, chkinSeat}) {
         <BreakModal
         open={open}
         onClose={handleClose()}
-        chkinSeat={chkinSeat}
+        checkInRes={checkInRes}
         />
         </>
   );

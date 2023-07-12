@@ -7,7 +7,7 @@ const seatClr = createTheme({
     emp: '#86e084',
     occ: '#fb7979',
     ourres: '#bd00ff',
-    chkin: '#0085ff'
+    checkin: 'rgba(0, 133, 255, 0.8)'
 })
 
 // Seat
