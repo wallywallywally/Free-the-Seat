@@ -9,73 +9,21 @@ import Dialog from '@mui/material/Dialog'
 import Typography from '@mui/material/Typography'
 import { Box } from '@mui/material'
 
-
-// timer
-// custom countdown hook
-// const useCountdown = (targetDate) => {
-//     const countDownDate = new Date(targetDate).getTime()
-//     const [countDown, setCountDown] = useState(countDownDate - new Date().getTime())
-
-//     useEffect(() => {
-//         const interval = setInterval(() => {
-//             setCountDown(countDownDate - new Date().getTime());
-//         }, 1000);
-//         return () => clearInterval(interval);
-//     }, [countDownDate])
-
-//     return timeLeft(countDown);
-// }
-// const timeLeft = (countDown) => {
-//     const minutes = Math.floor((countDown % (1000 * 60 * 60)) / (1000 * 60));
-//     const seconds = Math.floor((countDown % (1000 * 60)) / 1000);
-//     return [minutes, seconds];
-// }
-// const CountdownTimer = ({ targetDate, startTimer }) => {
-//     const [minutes, seconds] = useCountdown(targetDate);
-
-//     if (minutes + seconds <= 0) {
-//         // timer ends
-//         return (
-//             <p>ended</p>
-//         )
-//     } else {
-//         // timer
-//         return (
-//             <Box 
-//             display='flex'
-//             gap='1rem'
-//             >
-//                 <Box
-//                 display='flex'
-//                 flexDirection='column'
-//                 alignItems='center'>
-//                     <Typography variant='h3'>{startTimer ? minutes : 15}</Typography>
-//                     <Typography variant='h6'>minutes</Typography>
-//                 </Box>
-//                 <Typography variant='h3'>:</Typography>
-//                 <Box
-//                 display='flex'
-//                 flexDirection='column'
-//                 alignItems='center'>
-//                     <Typography variant='h3'>{startTimer ? seconds : 0}</Typography>
-//                     <Typography variant='h6'>seconds</Typography>
-//                 </Box>
-//             </Box>
-//         )
-//     }
-// }
-
+// timer component
+import Timer from './breakTimer.js'
 
 
 // break system modal
 function BreakModal(props) {
-    const { onClose, open, checkInRes } = props;
+    const { onClose, open, checkInRes, checkedIn, onBreak } = props;
 
     // on close
     const handleClose = () => {
-        setStartTimer(false)
-        setProgress(100)
-        onClose()
+        // stay on modal once break starts + not checked back in
+        if (checkedIn[0]) {
+            setStartTimer(false)
+            onClose()
+        }
     }
     
     // checkInRes = [seatID, resID, start, end]
@@ -94,37 +42,19 @@ function BreakModal(props) {
     }, [checkInRes])
 
     // timer
-    const val15minms = 15 * 60 * 1000 + 2000
+    const val15minms = 15 * 60 * 1000
     const currentTime = new Date().getTime()
     const timer15 = currentTime + val15minms
-    // start timer
+    const timer3s = currentTime + 3000
+    // start
     const [startTimer, setStartTimer] = useState(false)
-    const handleSubmitStart = () => {
+    const [timerEnd, setTimerEnd] = useState(false)
+    const handleBreakStart = () => {
         setStartTimer(true)
+        // check out + onBreak
+        onBreak[1](true)
+        checkedIn[1](false)
     }
-    // progress bar
-    const [progress, setProgress] = useState(100)
-    // updates every second
-    const update = () => {
-        const later = new Date(timer15).getTime()
-        const now = new Date().getTime()
-        const countdown = later - now
-        const minutes = Math.floor((countdown % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((countdown % (1000 * 60)) / 1000);
-        return [minutes, seconds, countdown/val15minms*100]
-    }
-    const [timer, setTimer] = useState([])
-    let intTimer
-    useEffect(() => {
-        if (setStartTimer) {
-            // intTimer = setInterval(() => {
-            //     setTimer([update()[0], update()[1]])
-            //     setProgress(update()[2])
-            // }, 1000)
-        }
-        return () => clearInterval(intTimer)
-    }, [])  // eslint-disable-line react-hooks/exhaustive-deps
-    // issue of overlapping timers
 
 
 
@@ -145,70 +75,51 @@ function BreakModal(props) {
                 <Typography variant='h4'>{seatDet[1]}</Typography>
             </div>
 
+            {timerEnd ? 
             <DialogTitle sx={{textAlign:'center'}}>
-                Breaks last for <span style={{fontWeight:'bold'}}>15</span> minutes
+                Your seat is now empty and open for others
             </DialogTitle>
-
-            {/* <Typography 
-            variant='body1' 
-            sx={{
-                textAlign: 'center',
-                marginBottom: '2rem'
-            }}>
-                Please return to your seat by the end of your break
-                <br/> or your seat will be marked as empty and your items will be cleared 
-            </Typography> */}
-
-            {/* timer */}
-            <Box
-            id='timer'
-            display='flex'
-            flexDirection='column'
-            alignItems='center'
-            marginTop='1rem'
-            >
-                <div
-                style={{
-                    position: 'relative',
-                    borderRadius: '50%',
-                    width: '20rem',
-                    height: '20rem',
-                    background: `radial-gradient(closest-side, white 90.2%, transparent 91% 100%), conic-gradient(rgb(0, 133, 255) ${progress}%, rgba(0, 133, 255, 0.5) 0)`
+            :
+            <>
+                <DialogTitle sx={{textAlign:'center'}}>
+                    Breaks last for <span style={{fontWeight:'bold'}}>15</span> minutes
+                </DialogTitle>
+                <Typography 
+                variant='body1' 
+                sx={{
+                    textAlign: 'center',
+                    marginBottom: '2rem'
                 }}>
-                    <div
-                    style={{
-                        position: 'absolute',
-                        transform: 'translate(31%, 130%)',
-                    }}>
-                        {/* <CountdownTimer targetDate={timer15} startTimer={startTimer} /> */}
-                        <Box 
-                        display='flex'
-                        gap='1rem'
-                        >
-                            <Box
-                            display='flex'
-                            flexDirection='column'
-                            alignItems='center'>
-                                <Typography variant='h3'>{startTimer ? timer[0] : 15}</Typography>
-                                <Typography variant='h6'>minutes</Typography>
-                            </Box>
-                            <Typography variant='h3'>:</Typography>
-                            <Box
-                            display='flex'
-                            flexDirection='column'
-                            alignItems='center'>
-                                <Typography variant='h3'>{startTimer ? timer[1] : 0}</Typography>
-                                <Typography variant='h6'>seconds</Typography>
-                            </Box>
-                        </Box>
-                    </div>
-                </div>
-            </Box>
+                    Please return to your seat by the end of your break
+                    <br/> or your seat will be marked as empty and open for others
+                </Typography>
+                {/* timer */}
+                <Box
+                display='flex'
+                justifyContent='center'
+                marginBottom='2rem'
+                >
+                    <Timer targetDate={timer3s} startTimer={startTimer} 
+                    setTimerEnd={setTimerEnd} setOnBreak={onBreak[1]}
+                    />
+                </Box>
+            </>
+            }
 
+            {startTimer &&
+            <Typography 
+            variant='body1' 
+            textAlign='center' 
+            marginBottom='2rem'
+            >
+                Scan the QR code to check back in to your seat
+            </Typography>
+            }
 
             {/* button */}
+            {!startTimer &&
             <Button
-            onClick={handleSubmitStart}
+            onClick={handleBreakStart}
             variant='contained'
             disableElevation
             sx={{
@@ -221,7 +132,7 @@ function BreakModal(props) {
             }}>
                 Start break timer
             </Button>
-
+            }
         </Dialog>
     )
 }
@@ -231,7 +142,7 @@ BreakModal.propTypes = {
   open: PropTypes.bool.isRequired,
 }
 
-export default function Break({open, onClose, checkInRes}) {
+export default function Break({open, onClose, checkInRes, checkedIn, onBreak}) {
     const handleClose = () => () => onClose()
 
     return (
@@ -240,6 +151,8 @@ export default function Break({open, onClose, checkInRes}) {
         open={open}
         onClose={handleClose()}
         checkInRes={checkInRes}
+        checkedIn={checkedIn}
+        onBreak={onBreak}
         />
         </>
   );

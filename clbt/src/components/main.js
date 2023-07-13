@@ -423,7 +423,7 @@ export default function Main({user, checkInSeat}) {
 
 
     // check in
-    const [checkedIn, setCheckedIn] = useState(false)   // [DB int] check if user is checked in
+    const [checkedIn, setCheckedIn] = useState(true)   // [DB int] check if user is checked in
     // QR code scanned and we get to URL
     const [toCheckIn, setToCheckIn] = useState(false)
     // const [checkInRes, setCheckInRes] = useState([])
@@ -467,7 +467,8 @@ export default function Main({user, checkInSeat}) {
     }
 
     // break modal
-    const [openBreak, setOpenBreak] = useState(false)
+    const [openBreak, setOpenBreak] = useState(true)
+    const [onBreak, setOnBreak] = useState(false)
     const handleBreakOpen = () => {
         setOpenBreak(true)
     }
@@ -719,6 +720,8 @@ export default function Main({user, checkInSeat}) {
         open={openBreak}
         onClose={handleBreakClose} 
         checkInRes={checkInRes}
+        checkedIn={[checkedIn, setCheckedIn]}
+        onBreak={[onBreak, setOnBreak]}
         />
         </>
     )
