@@ -38,7 +38,7 @@ function IntModal(props) {
                 Welcome to the Central Library Tracker!
             </Typography>
 
-            <Box className='center' marginTop='1.5rem' marginBottom='1rem'>
+            <Box className='center' marginTop='1.5rem' marginBottom='1.5rem'>
             <Box className='flex-col'>
                 {/* reserving */}
                 <Typography textAlign='center' variant='h6' marginBottom='-0.7rem'>
@@ -82,6 +82,21 @@ function IntModal(props) {
                     </li>
                     <li>
                         Delete the reservation
+                    </li>
+                </ol>
+                {/* check in */}
+                <Typography textAlign='center' variant='h6' marginBottom='-0.7rem' marginTop='1rem'>
+                    To check in:
+                </Typography>
+                <ol>
+                    <li>
+                        Once your reservation starts, scan the QR code<br/>at your seat
+                    </li>
+                    <li>
+                        Check in to your seat
+                    </li>
+                    <li style={{color:'red'}}>
+                        If do not check in to your seat within <span style={{fontWeight:'bold'}}>15min</span><br/>of your reservation, it will be deleted
                     </li>
                 </ol>
             </Box>
