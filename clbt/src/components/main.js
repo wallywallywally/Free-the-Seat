@@ -13,6 +13,7 @@ import Reserve from './modals/reserve.js'
 import Break from './modals/break.js'
 import Manage from './modals/manageres.js'
 import Instructions from './modals/instructions'
+import UserAlert from './modals/userAlert.js'
 
 // mui
 import { Box, Button, Container, Typography } from '@mui/material'
@@ -22,6 +23,7 @@ import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
 import Select from '@mui/material/Select'
+import { GoTrueAdminApi } from '@supabase/supabase-js'
 
 
 // theme
@@ -139,6 +141,15 @@ export const timeToID = (start, end, arr) => {
                 // do nothing
         }
     }
+}
+
+// get current time
+export const getNow = () => {
+    const time = new Date()
+    const hours = `${time.getHours()}`
+    const minutes = time.getMinutes() < 10 ? `0${time.getMinutes()}` : `${time.getMinutes()}`
+    const now = hours + minutes
+    return now
 }
 
 // seatInfo {101: 'emp',...} stores info for all seats
@@ -421,9 +432,9 @@ export default function Main({user, checkInSeat}) {
     const handleIntOpen = () => setOpenInt(true)
     const handleIntClose = () => setOpenInt(false)
 
-
     // check in
-    const [checkedIn, setCheckedIn] = useState(true)   // [DB int] check if user is checked in
+    // [DB int] check if user is checked in
+    const [checkedIn, setCheckedIn] = useState(false)   
     // QR code scanned and we get to URL
     const [toCheckIn, setToCheckIn] = useState(false)
     // const [checkInRes, setCheckInRes] = useState([])
@@ -437,9 +448,8 @@ export default function Main({user, checkInSeat}) {
             
             // reservation to check in to
             // get time when QR code is scanned
-            const time = new Date()
-            // const now = `${time.getHours()}${time.getMinutes()}`
-            const now = '1400'
+            // const now = getNow()
+            const now = '1430'
             // check that current time and seat has reservation + track it
             const checkInReservation = resDet.filter(ele => ele[0] === Number(checkInSeat))
                 .filter(ele => Number(now) - Number(ele[1]) >= 0)
@@ -467,12 +477,33 @@ export default function Main({user, checkInSeat}) {
     }
 
     // break modal
-    const [openBreak, setOpenBreak] = useState(true)
+    const [openBreak, setOpenBreak] = useState(false)
     const [onBreak, setOnBreak] = useState(false)
-    const handleBreakOpen = () => {
-        setOpenBreak(true)
-    }
+    const handleBreakOpen = () => setOpenBreak(true)
     const handleBreakClose = () => setOpenBreak(false)
+
+    // user alert modal
+    const [openUA, setOpenUA] = useState(false)
+    const handleUAClose = () => setOpenUA(false)
+
+    // reservation is done
+    // ! check time
+    const resDone = false
+
+    const [UAseat, setUAseat] = useState([])
+    useEffect(() => {
+        if (checkedIn) {
+            setUAseat(checkInRes[0])
+        
+            // open modal
+            setOpenUA(true)
+            
+            // reset
+            // setCheckedIn(false)
+            // setCheckInRes([])
+        }
+    }, [checkedIn])
+    
 
 
     // main
@@ -561,6 +592,7 @@ export default function Main({user, checkInSeat}) {
                     width: '10rem',
                     '&:hover': {backgroundColor: 'rgba(231, 190, 149, 0.7)'},
                     '&:active': {backgroundColor: '#e7be95'},
+                    zIndex: '100'
                 }}>
                     How it works
                 </Button>                
@@ -722,6 +754,11 @@ export default function Main({user, checkInSeat}) {
         checkInRes={checkInRes}
         checkedIn={[checkedIn, setCheckedIn]}
         onBreak={[onBreak, setOnBreak]}
+        />
+        <UserAlert
+        open={openUA}
+        onClose={handleUAClose}
+        UAseat={UAseat}
         />
         </>
     )

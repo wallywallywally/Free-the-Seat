@@ -64,7 +64,8 @@ function ReserveModal(props) {
     const seatToCheckIn = checkInRes[0] === Number(seatDet[2])
     const toCheckInExp = toCheckIn && checkInRes.length !== 0 && !checkedIn && seatToCheckIn
     const handleToCheckIn = () => {
-        setCheckedIn(true)      // [DB int] update DB for check in
+        setCheckedIn(true)
+        // [DB int] UPDATE user checked_in status - true
         handleClose()
     }
     const checkedInExp = checkedIn && seatToCheckIn
@@ -107,12 +108,12 @@ function ReserveModal(props) {
             .insert({seat_id: seatDet[2], user_id: userID, start_time: slot[0].slice(0,4), end_time: slot[0].slice(7,11)})
             .select()
     
-        handleClose()
         resetSelect[0]('')
         resetSelect[1]('')
         resetSelect[2](true)
         // query DB
         checkRes[1](!checkRes[0])
+        handleClose()
     }
     // DELETE reservation
     const handleSubmitDelete = async () => {
@@ -124,10 +125,13 @@ function ReserveModal(props) {
         ourResIDs[1](ourResIDs[0].filter((id) => id !== resToDel[0]))
 
         setDelMod(false)
+        // checked in reservation deleted - no longer checked in
         if (resToDel[0] === checkInRes[3]) setCheckedIn(false)
-        handleClose()
+        // [DB int] UPDATE user checked_in status - false
+
         // query DB
         checkRes[1](!checkRes[0])
+        handleClose()
     }
 
 

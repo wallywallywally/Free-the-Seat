@@ -1,5 +1,6 @@
 import '../styles.css'
 import { useState, useEffect } from 'react'
+import { getNow } from '../main'
 
 // mui
 import PropTypes from 'prop-types'
@@ -16,18 +17,7 @@ import Timer from './breakTimer.js'
 // break system modal
 function BreakModal(props) {
     const { onClose, open, checkInRes, checkedIn, onBreak } = props;
-
-    // on close
-    const handleClose = () => {
-        // stay on modal once break starts + not checked back in
-        if (checkedIn[0]) {
-            setStartTimer(false)
-            onClose()
-        }
-    }
     
-    // checkInRes = [seatID, resID, start, end]
-
     // get seat info
     const [seatDet, setSeatDet] = useState([])
     useEffect(() => {
@@ -51,12 +41,48 @@ function BreakModal(props) {
     const [timerEnd, setTimerEnd] = useState(false)
     const handleBreakStart = () => {
         setStartTimer(true)
-        // check out + onBreak
+        // onBreak + check out
         onBreak[1](true)
+
+        // [DB int] UPDATE user checked_in status - false
         checkedIn[1](false)
     }
 
+    // break end
+    // not checked in after break === to clear
+    const toClear = !onBreak[0] && !checkedIn[0] && timerEnd
+    if (toClear) {
+        // get current time
+        const now = getNow()
 
+        // NEW LOGIC
+        // if break timer ends, they have to reserve + check in again
+        // [DB int] DELETE checkInRes
+        // TAKEN FROM OTHER CODE AND EDITED - TO IMPLEMENT PROPERLY
+        // const {error} = await supabase
+        //     .from('reservations')
+        //     .delete()
+        //     .eq('id', checkInRes[3])
+        
+        // [DB int - staff alert] CREATE entry of seat to clear
+        // TAKEN FROM OTHER CODE AND EDITED - TO IMPLEMENT PROPERLY
+        // [seatid, time it was considered empty]
+        // const { data, error } = await supabase 
+        //     .from('toClear')
+        //     .insert({seat_id: seatDet[2], time: now})
+        //     .select()
+    }
+
+    // on close
+    const handleClose = () => {
+        // stay on modal once break starts (not checked in)
+        // can only exit once break has ended
+        if (checkedIn[0] || toClear) {
+            setStartTimer(false)
+            if (toClear) setTimerEnd(false)
+            onClose()
+        }
+    }
 
     // what's displayed
     return (
@@ -77,7 +103,7 @@ function BreakModal(props) {
 
             {timerEnd ? 
             <DialogTitle sx={{textAlign:'center'}}>
-                Your seat is now empty and open for others
+                Your seat is now empty and will be cleared for others
             </DialogTitle>
             :
             <>
@@ -90,8 +116,8 @@ function BreakModal(props) {
                     textAlign: 'center',
                     marginBottom: '2rem'
                 }}>
-                    Please return to your seat by the end of your break
-                    <br/> or your seat will be marked as empty and open for others
+                    Please return to your seat before the end of your break
+                    <br/> or your seat will be marked as empty and cleared for others
                 </Typography>
                 {/* timer */}
                 <Box
@@ -112,7 +138,7 @@ function BreakModal(props) {
             textAlign='center' 
             marginBottom='2rem'
             >
-                Scan the QR code to check back in to your seat
+                {timerEnd ? 'To continue using this seat, reserve and check in again' : 'Scan the QR code to check back in to your seat'}
             </Typography>
             }
 

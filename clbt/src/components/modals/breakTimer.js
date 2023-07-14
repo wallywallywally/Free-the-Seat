@@ -24,23 +24,23 @@ export default function Timer ({targetDate, startTimer, setTimerEnd, setOnBreak}
                 }, 1000);
                 return () => clearInterval(interval)
             }
-        }, [countDownDate])
+        }, [countDownDate, startTimer])
 
         return timeLeft(countDown);
     }
-
+    
     const [minutes, seconds, progress] = useCountdown(targetDate, startTimer)
 
-    // wack fix for constant timer running - i get a warning
-    // wrap in useEffect to remove warning ?
-    if (minutes + seconds > 0) {
-        setTimerEnd(false)
-    } else {
-        // ! done
-        // indicate that it can be cleared
-        setTimerEnd(true)
-        setOnBreak(false)
-    }
+    // fix for constant timer running
+    useEffect(() => {
+        if (minutes + seconds > 0) {
+            setTimerEnd(false)
+        } else {
+            // break done
+            setTimerEnd(true)
+            setOnBreak(false)
+        }
+    }, [minutes, seconds, setOnBreak, setTimerEnd])
 
     return (
         <>
