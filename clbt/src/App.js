@@ -46,6 +46,7 @@ function App() {
         <ThemeProvider theme={main}>
         <CssBaseline /> 
             {session ?
+                // another parameter to check for staff - staff={session.staff} ?
                 <Main user={session.user} checkInSeat={params.get('seat')}/> : <LoginScreen/>
             }
         </ThemeProvider>

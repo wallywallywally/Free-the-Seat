@@ -437,8 +437,8 @@ export default function Main({user, checkInSeat}) {
     const [checkedIn, setCheckedIn] = useState(false)   
     // QR code scanned and we get to URL
     const [toCheckIn, setToCheckIn] = useState(false)
-    // const [checkInRes, setCheckInRes] = useState([])
-    const [checkInRes, setCheckInRes] = useState([125, '1330', '1430', 92]) // for testing
+    const [checkInRes, setCheckInRes] = useState([])
+    // const [checkInRes, setCheckInRes] = useState([125, '1330', '1430', 92]) // for testing
     const checkInModal = useCallback(() => {
         if (checkInSeat) {
             // seat details
@@ -487,22 +487,40 @@ export default function Main({user, checkInSeat}) {
     const handleUAClose = () => setOpenUA(false)
 
     // reservation is done
-    // ! check time
-    const resDone = false
-
     const [UAseat, setUAseat] = useState([])
-    useEffect(() => {
-        if (checkedIn) {
+    const handleResDone = useCallback(() => {
+        // check if reservation is done
+        const resDoneExp = (getNow() - checkInRes[2] > 0) && checkedIn
+        if (resDoneExp) {
+            // open user alert modal
             setUAseat(checkInRes[0])
-        
-            // open modal
             setOpenUA(true)
             
             // reset
-            // setCheckedIn(false)
-            // setCheckInRes([])
+            setCheckedIn(false)
+            setCheckInRes([])
+            
+            // [DB int] DELETE checkInRes
+            // TAKEN FROM OTHER CODE AND EDITED - TO IMPLEMENT PROPERLY
+            // const {error} = await supabase
+            //     .from('reservations')
+            //     .delete()
+            //     .eq('id', checkInRes[3])
         }
-    }, [checkedIn])
+    }, [checkedIn, checkInRes])
+    useEffect(() => {
+        const CTnow = new Date()
+        for (var timeslot of Object.values(timeslots30)) {
+            // get times - 0900, 0930, ..., 1800
+            const [hour, min] = [Number(timeslot.slice(7,9)), Number(timeslot.slice(9,11))]
+            const timeMS = new Date(CTnow.getFullYear(), CTnow.getMonth(), CTnow.getDate(), hour, min, 0, 0).getTime() - CTnow
+            // check at these times
+            setTimeout(handleResDone, timeMS)
+        }
+    }, [handleResDone])
+
+    // STAFF
+    const [staff, setStaff] = useState(true)
     
 
 
@@ -578,6 +596,7 @@ export default function Main({user, checkInSeat}) {
             display='flex'
             flexDirection='column'
             gap='1rem'
+            visibility={staff ? 'hidden' : 'visible'}
             >
                 {/* instructions */}
                 <Button
@@ -600,110 +619,126 @@ export default function Main({user, checkInSeat}) {
         </Box>
         </Container>
 
-        {/* info tag */}
+        {staff ?
         <Container sx={{textAlign: 'center', marginTop:'-2.5rem', marginBottom: '3rem'}}>
-        <Box sx={{position: 'relative'}}>
-            <Typography variant='h6' marginBottom={2}>
-                {!resExists ?
-                'Select a duration and time to start reserving' :
-                (checkedIn === false ?
-                    <span>Upcoming reservation at level <span style={{color: '#bd00ff', fontWeight: '700'}}>{upcomingInfo[0]}</span> seat <span style={{color: '#bd00ff', fontWeight: '700'}}>
-                    {upcomingInfo[1]}</span> from <span style={{fontWeight: '700'}}>{upcomingInfo[2]} - {upcomingInfo[3]}</span></span>
-                    : <span>Now studying at level <span style={{color: '#0085ff', fontWeight: '700'}}>{upcomingInfo[0]}</span> seat <span style={{color: '#0085ff', fontWeight: '700'}}>
-                    {upcomingInfo[1]}</span> until <span style={{fontWeight: '700'}}>{upcomingInfo[3]}</span></span>
-                )
-                }
-            </Typography>
-            {/* manage res modal */}
-            <Button
-            value='cancelRes'
-            onClick={handleManageOpen}
-            variant='contained'
-            disableElevation
-            className='cancel'
-            sx={{
-                visibility: resExists ? 'visible' : 'hidden',
-            }}
+            <Box
+            display='flex'
+            justifyContent='center'
             >
-                Click here to manage reservations
-            </Button>
-            {/* break button */}
-            <Button
-            id='break'
-            variant='contained'
-            disableElevation
-            onClick={handleBreakOpen}
-            className='break'
-            sx={{
-                visibility: checkedIn ? 'visible' : 'hidden',
-                position: 'absolute',
-                transform: 'translate(0%, 0%)',
-                right: '0'
-            }}
-            >
-                Take a break
-            </Button>
-        </Box>
+                <Typography variant='h6'>
+                    test
+                </Typography>
+            </Box>
         </Container>
+        // put button for alert tray here
+        :
+        <>
+            {/* info tag */}
+            <Container sx={{textAlign: 'center', marginTop:'-2.5rem', marginBottom: '3rem'}}>
+            <Box sx={{position: 'relative'}}>
+                <Typography variant='h6' marginBottom={2}>
+                    {!resExists ?
+                    'Select a duration and time to start reserving' :
+                    (checkedIn === false ?
+                        <span>Upcoming reservation at level <span style={{color: '#bd00ff', fontWeight: '700'}}>{upcomingInfo[0]}</span> seat <span style={{color: '#bd00ff', fontWeight: '700'}}>
+                        {upcomingInfo[1]}</span> from <span style={{fontWeight: '700'}}>{upcomingInfo[2]} - {upcomingInfo[3]}</span></span>
+                        : <span>Now studying at level <span style={{color: '#0085ff', fontWeight: '700'}}>{upcomingInfo[0]}</span> seat <span style={{color: '#0085ff', fontWeight: '700'}}>
+                        {upcomingInfo[1]}</span> until <span style={{fontWeight: '700'}}>{upcomingInfo[3]}</span></span>
+                    )
+                    }
+                </Typography>
+                {/* manage res modal */}
+                <Button
+                value='cancelRes'
+                onClick={handleManageOpen}
+                variant='contained'
+                disableElevation
+                className='cancel'
+                sx={{
+                    visibility: resExists ? 'visible' : 'hidden',
+                }}
+                >
+                    Click here to manage reservations
+                </Button>
+                {/* break button */}
+                <Button
+                id='break'
+                variant='contained'
+                disableElevation
+                onClick={handleBreakOpen}
+                className='break'
+                sx={{
+                    visibility: checkedIn ? 'visible' : 'hidden',
+                    position: 'absolute',
+                    transform: 'translate(0%, 0%)',
+                    right: '0'
+                }}
+                >
+                    Take a break
+                </Button>
+            </Box>
+            </Container>
 
-        {/* time slot selector */}
-        <Box
-        sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: 1,
-            marginBottom: 5,
-            marginTop: -2,
-            position: 'relative'
-        }}
-        >
-            {/* 1. duration */}
-            <FormControl sx={{width: 170}}>
-                <InputLabel id="time-dur-label">Duration</InputLabel>
-                <Select
-                    labelId="time-dur-label"
-                    id="time-dur"
-                    value={dur}
-                    label="Duration"
-                    onChange={handleChangeDur}
-                >
-                    <MenuItem value={30}>30 min</MenuItem>
-                    <MenuItem value={60}>1 hour</MenuItem>
-                </Select>
-            </FormControl>      
-            {/* 2. time slot */}
-            <FormControl sx={{width: 170}} disabled={slotDis}>
-                <InputLabel id="time-slot-label">Time</InputLabel>
-                <Select
-                    labelId="time-slot-label"
-                    id="time-slot"
-                    value={slot}
-                    label="Time"
-                    onChange={handleChangeSlot}
-                >
-                    {timetable.map((ele, i) => (
-                        <MenuItem key={i} value={dur === 30 ? timeslots30[ele]: timeslots60[ele]}>
-                            {dur === 30 ? timeslots30[ele]: timeslots60[ele]}
-                        </MenuItem>
-                    ))}
-                </Select>
-            </FormControl>
-            {/* warning for same slot, diff seat */}
-            <Typography variant='body1' 
+            {/* time slot selector */}
+            <Box
             sx={{
-                visibility: userResSlotBool ? 'visible' : 'hidden',
-                position: 'absolute',
-                transform: 'translate(95%, 45%)',
-                textAlign: 'center',
-                border: '2px solid rgba(251, 121, 121, 0.75)',
-                padding: '10px'
-            }} 
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: 1,
+                marginBottom: 5,
+                marginTop: -2,
+                position: 'relative'
+            }}
             >
-                A reservation for this slot exists<br/>You cannot reserve another seat
-            </Typography>
-        </Box>
+                {/* 1. duration */}
+                <FormControl sx={{width: 170}}>
+                    <InputLabel id="time-dur-label">Duration</InputLabel>
+                    <Select
+                        labelId="time-dur-label"
+                        id="time-dur"
+                        value={dur}
+                        label="Duration"
+                        onChange={handleChangeDur}
+                    >
+                        <MenuItem value={30}>30 min</MenuItem>
+                        <MenuItem value={60}>1 hour</MenuItem>
+                    </Select>
+                </FormControl>      
+                {/* 2. time slot */}
+                <FormControl sx={{width: 170}} disabled={slotDis}>
+                    <InputLabel id="time-slot-label">Time</InputLabel>
+                    <Select
+                        labelId="time-slot-label"
+                        id="time-slot"
+                        value={slot}
+                        label="Time"
+                        onChange={handleChangeSlot}
+                    >
+                        {timetable.map((ele, i) => (
+                            <MenuItem key={i} value={dur === 30 ? timeslots30[ele]: timeslots60[ele]}>
+                                {dur === 30 ? timeslots30[ele]: timeslots60[ele]}
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
+                {/* warning for same slot, diff seat */}
+                <Typography variant='body1' 
+                sx={{
+                    visibility: userResSlotBool ? 'visible' : 'hidden',
+                    position: 'absolute',
+                    transform: 'translate(95%, 45%)',
+                    textAlign: 'center',
+                    border: '2px solid rgba(251, 121, 121, 0.75)',
+                    padding: '10px'
+                }} 
+                >
+                    A reservation for this slot exists<br/>You cannot reserve another seat
+                </Typography>
+            </Box>
+        </>
+        }
 
         {/* level layout */}
         <ThemeProvider theme={levelLayout}>
@@ -751,7 +786,7 @@ export default function Main({user, checkInSeat}) {
         <Break
         open={openBreak}
         onClose={handleBreakClose} 
-        checkInRes={checkInRes}
+        checkInRes={checkInRes} setCheckInRes={setCheckInRes}
         checkedIn={[checkedIn, setCheckedIn]}
         onBreak={[onBreak, setOnBreak]}
         />

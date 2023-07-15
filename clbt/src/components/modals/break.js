@@ -16,7 +16,7 @@ import Timer from './breakTimer.js'
 
 // break system modal
 function BreakModal(props) {
-    const { onClose, open, checkInRes, checkedIn, onBreak } = props;
+    const { onClose, open, checkInRes, setCheckInRes, checkedIn, onBreak } = props;
     
     // get seat info
     const [seatDet, setSeatDet] = useState([])
@@ -71,6 +71,9 @@ function BreakModal(props) {
         //     .from('toClear')
         //     .insert({seat_id: seatDet[2], time: now})
         //     .select()
+
+        // reset
+        setCheckInRes([])
     }
 
     // on close
@@ -168,7 +171,7 @@ BreakModal.propTypes = {
   open: PropTypes.bool.isRequired,
 }
 
-export default function Break({open, onClose, checkInRes, checkedIn, onBreak}) {
+export default function Break({open, onClose, checkInRes, setCheckInRes, checkedIn, onBreak}) {
     const handleClose = () => () => onClose()
 
     return (
@@ -176,7 +179,7 @@ export default function Break({open, onClose, checkInRes, checkedIn, onBreak}) {
         <BreakModal
         open={open}
         onClose={handleClose()}
-        checkInRes={checkInRes}
+        checkInRes={checkInRes} setCheckInRes={setCheckInRes}
         checkedIn={checkedIn}
         onBreak={onBreak}
         />
