@@ -55,6 +55,8 @@ function BreakModal(props) {
         // get current time
         const now = getNow()
 
+        // DB CRUD
+
         // NEW LOGIC
         // if break timer ends, they have to reserve + check in again
         // [DB int] DELETE checkInRes
@@ -64,11 +66,11 @@ function BreakModal(props) {
         //     .delete()
         //     .eq('id', checkInRes[3])
         
-        // [DB int - staff alert] CREATE entry of seat to clear
+        // [DB int - staff alert] CREATE in seatsToClear
         // TAKEN FROM OTHER CODE AND EDITED - TO IMPLEMENT PROPERLY
-        // [seatid, time it was considered empty]
+        // [seatid, time it was considered empty, DB id]
         // const { data, error } = await supabase 
-        //     .from('toClear')
+        //     .from('seatsToClear')
         //     .insert({seat_id: seatDet[2], time: now})
         //     .select()
 

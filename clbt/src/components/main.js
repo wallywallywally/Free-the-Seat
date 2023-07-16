@@ -14,6 +14,7 @@ import Break from './modals/break.js'
 import Manage from './modals/manageres.js'
 import Instructions from './modals/instructions'
 import UserAlert from './modals/userAlert.js'
+import StaffAlertTray from './modals/staffAlertTray.js'
 
 // mui
 import { Box, Button, Container, Typography } from '@mui/material'
@@ -207,7 +208,7 @@ export default function Main({user, checkInSeat}) {
 
     // DB - getting reservations
     const [reservations, setReservations] = useState([])
-    const [error, setError] = useState(null)
+    const [errorRes, setErrorRes] = useState(null)
     const fetchReservations = useCallback(() => {
         supabase
             .from("reservations")
@@ -215,12 +216,12 @@ export default function Main({user, checkInSeat}) {
             .order("id")
             .then(({ data: reservations, error }) => {
                 setReservations(reservations);
-                setError(error);
+                setErrorRes(error);
             })
             .catch((error) => {
-                setError(error);
+                setErrorRes(error);
             });
-    }, [setReservations, setError])
+    }, [setReservations, setErrorRes])
     
     // res states
     const [resDet, setResDet] = useState([])
@@ -519,9 +520,48 @@ export default function Main({user, checkInSeat}) {
         }
     }, [handleResDone])
 
+
     // STAFF
-    const [staff, setStaff] = useState(true)
+    const [staff, setStaff] = useState(false)
     
+    // staff alert modal
+    const [openSA, setOpenSA] = useState(false)
+    const handleSAOpen = () => setOpenSA(true)
+    const handleSAClose = () => setOpenSA(false)
+
+    // [DB int] get seatsToClear
+    // REMINDER: ONLY PLACE SEATSTOCLEAR IS UPDATED IS IN BREAK.JS
+    const [seatsToClear, setSeatsToClear] = useState([
+        // for testing
+        // {id: 1, seat_id: 140, time: '1000'},
+        // {id: 2, seat_id: 142, time: '1500'}
+    ])
+    const [errorSTC, setErrorSTC] = useState(null)
+    // const fetchSeatsToClear = useCallback(() => {
+    //     supabase
+    //         .from("seatsToClear")
+    //         .select()
+    //         .order("id")
+    //         .then(({ data: seatsToClear, error }) => {
+    //             setSeatsToClear(seatsToClear);
+    //             setErrorSTC(error);
+    //         })
+    //         .catch((error) => {
+    //             setErrorSTC(error);
+    //         });
+    // }, [setSeatsToClear, setErrorSTC])
+    const [checkSTC, setCheckSTC] = useState(false)
+    // useEffect(() => {
+    //     fetchSeatsToClear()
+    // }, [checkSTC])  // eslint-disable-line react-hooks/exhaustive-deps
+
+    const STCexists = seatsToClear.length !== 0
+    // change seat colour
+    if (STCexists) {
+        for (var stc of seatsToClear) {
+            seatInfo[stc.seat_id] = ['stafftoclear', 'stc']
+        }
+    }
 
 
     // main
@@ -624,13 +664,28 @@ export default function Main({user, checkInSeat}) {
             <Box
             display='flex'
             justifyContent='center'
+            marginBottom='1rem'
             >
                 <Typography variant='h6'>
-                    test
+                    Click on a seat for more information
                 </Typography>
             </Box>
+            {/* staff alert modal */}
+            <Button
+                onClick={handleSAOpen}
+                variant='contained'
+                disableElevation
+                className='staffAlert'
+                sx={{
+                    fontWeight: STCexists && 'bold',
+                    color: STCexists ? '#ff6e05' : 'rgb(90, 90, 90)',
+                    border: STCexists ? '2px solid rgba(255,0,0,0.5)' : '2px solid rgba(80, 80, 80, 0.4)',
+                    '&:hover': {background: STCexists ? 'rgba(255, 110, 5, 0.25)' : 'rgba(80, 80, 80, 0.2)'},
+                }}
+                >
+                    Check alerts
+            </Button>
         </Container>
-        // put button for alert tray here
         :
         <>
             {/* info tag */}
@@ -794,6 +849,13 @@ export default function Main({user, checkInSeat}) {
         open={openUA}
         onClose={handleUAClose}
         UAseat={UAseat}
+        />
+        <StaffAlertTray
+        open={openSA}
+        onClose={handleSAClose}
+        seatsToClear={seatsToClear}
+        setSeatsToClear={setSeatsToClear}
+        checkSTC={[checkSTC, setCheckSTC]}
         />
         </>
     )

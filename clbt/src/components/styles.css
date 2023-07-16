@@ -1,5 +1,5 @@
 /* main.js */
-/* header hyperlink to cancel res */
+/* manage res modal */
 button.cancel {
     background: none;
     color: rgba(189, 0, 255);
@@ -12,6 +12,7 @@ button.cancel:hover {
     background: rgba(189, 0, 255, 0.2);
 }
 
+/* break modal */
 button.break {
     width: 10rem;
     background: none;
@@ -23,6 +24,14 @@ button.break {
 
 button.break:hover {
     background: rgb(0, 133, 255, 0.3);
+}
+
+/* staff alert modal */
+button.staffAlert {
+    width: 10rem;
+    background: none;
+    border-radius: 20px;
+    font-size: 0.95rem;
 }
 
 /* header center */
