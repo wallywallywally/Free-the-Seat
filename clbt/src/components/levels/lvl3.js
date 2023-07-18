@@ -69,20 +69,16 @@ const table = createTheme({
 
 
 // main
+// seat ids: 101-215
 export default function Lvl3({reserveModal, seatInfo}) {
     // reserve modal
     const handleReserve = () => (event) => reserveModal(event)
 
-    // seat format:
-    // <Seat value='seat num for that level' id='seat_id' status={seatInfo[seat_id]} reserve={handleReserve()}/>
-
-    // use css grid to prevent responsiveness
-
+    
     // main
     return (
         <>
         <ThemeProvider theme={table}>
-
         <div className='lvl' id='3'>
 
         {/* collab space */}
@@ -160,7 +156,7 @@ export default function Lvl3({reserveModal, seatInfo}) {
                         <Seat value='13' id='113' status={seatInfo[113]} reserve={handleReserve()}/>
                     </Grid>
                     <Grid item>
-                        <Seat value='13' id='114' status={seatInfo[114]} reserve={handleReserve()}/>
+                        <Seat value='14' id='114' status={seatInfo[114]} reserve={handleReserve()}/>
                     </Grid>
 
                     <Grid item xs={12}>
@@ -706,8 +702,6 @@ export default function Lvl3({reserveModal, seatInfo}) {
         </div>
 
         </div>
-
-
         </ThemeProvider>
         </>
     )

@@ -155,7 +155,7 @@ export const getNow = () => {
 
 // seatInfo {101: 'emp',...} stores info for all seats
 // ! initialise according to seat_ids once we get more levels
-const numSeats = 120
+const numSeats = 500
 const seatInfo = {}
 for (let i = 1; i <= numSeats; i++) {
     const seatNum = 100 + i
@@ -187,9 +187,6 @@ function Lvlx(props) {
     return <Lvlx {...props} />
 }
 
-// time
-
-
 
 // main
 export default function Main({user, checkInSeat}) {
@@ -204,7 +201,7 @@ export default function Main({user, checkInSeat}) {
     const [level, setLevel] = useState(3)
     const handleChangeLevel = (event) => {
         setLevel(event.target.value)
-    } 
+    }
 
     // DB - getting reservations
     const [reservations, setReservations] = useState([])
@@ -336,12 +333,13 @@ export default function Main({user, checkInSeat}) {
     const [full, setFull] = useState(false)
     // reservation to delete
     const [resToDel, setResToDel] = useState([])
+    // console.log(seatDet)
     const handleResOpen = useCallback((event, CISinfo, CISres) => {
         setOpenRes(true)
 
         // update modal
         // seat details
-        let seatId, seatNum
+        let level, seatId, seatNum
         if (CISinfo) {
             // QR code's checkInSeat URL
             seatId = CISinfo[2]
@@ -358,6 +356,7 @@ export default function Main({user, checkInSeat}) {
             setResToDel([Number(resDel[5]), resDel[3], resDel[4]])
         } else {
             // default clicking on seats
+            level = event.target.closest('.lvl').id
             seatId = event.target.id
             seatNum = event.target.value
             setSeatDet([level, seatNum, seatId])
@@ -617,7 +616,7 @@ export default function Main({user, checkInSeat}) {
         gap='2rem'
         >
             {/* level select */}
-            <FormControl sx={{width: 100}}>
+            <FormControl sx={{width: 100, zIndex: '100'}}>
                 <InputLabel id="level-select-label">Level</InputLabel>
                 <Select
                     labelId="level-select-label"
@@ -802,7 +801,7 @@ export default function Main({user, checkInSeat}) {
                 // fixed so i can get the horizontal scrollbar
                 minWidth: '50rem',
                 margin: 'auto',
-                marginBottom: '2rem'
+                marginBottom: '2rem',
             }}>
                 <Lvlx
                 level={level}
