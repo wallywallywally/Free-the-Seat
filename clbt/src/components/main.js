@@ -433,8 +433,13 @@ export default function Main({user, checkInSeat}) {
     const handleIntClose = () => setOpenInt(false)
 
     // check in
-    // [DB int] check if user is checked in
-    const [checkedIn, setCheckedIn] = useState(false)   
+    // check if user is checked in
+    const [checkedIn, setCheckedIn] = useState(false) 
+    for (var res of resDet) {
+        if (res.checked_in === true) {
+            setCheckedIn(true)
+        }
+    }
     // QR code scanned and we get to URL
     const [toCheckIn, setToCheckIn] = useState(false)
     const [checkInRes, setCheckInRes] = useState([])

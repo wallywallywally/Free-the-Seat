@@ -49,7 +49,7 @@ async function checkCheckedIn () {
 
         }
         if (actualTime === Number(reservation.start_time) + 15){
-            if (!reservation.checked_in) {
+            if (!reservation.checked_in && !reservation.on_break) {
                 console.log("deleting reservation id %s due to not checking in ", reservation.id)
                 const { error } = await supabase
                 .from('reservations')
