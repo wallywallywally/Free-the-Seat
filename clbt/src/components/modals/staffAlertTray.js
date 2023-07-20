@@ -41,7 +41,6 @@ function SAModal(props) {
     // DELETE seatToClear
     const handleCleared = async () => {
         const STCid = Number(document.getElementById('delSTC').value)
-        // [DB int] DELETE from seatsToClear (done)
         const {error} = await supabase
             .from('seats_to_clear')
             .delete()

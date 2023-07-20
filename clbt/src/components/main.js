@@ -504,13 +504,6 @@ export default function Main({user, checkInSeat}) {
             // reset
             setCheckedIn(false)
             setCheckInRes([])
-            
-            // [DB int] DELETE checkInRes
-            // ! presumably deleted since time is done ?
-            // const {error} = await supabase
-            //     .from('reservations')
-            //     .delete()
-            //     .eq('id', checkInRes[3])
         }
     }, [checkedIn, checkInRes])
     useEffect(() => {
