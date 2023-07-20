@@ -65,13 +65,9 @@ function BreakModal(props) {
                 .delete()
                 .eq('id', checkInRes[3])
 
-            // [DB int - staff alert] CREATE seatsToClear
-            // get current time
-            // const now = getNow()
-            // ! no time ?
+            // CREATE seats_to_clear
             const { data, error2} = await supabase
                 .from('seats_to_clear')
-                //     .insert({seat_id: seatDet[2], time: now})
                 .insert({seat_id:seatDet[2]})
                 .select()
     }
