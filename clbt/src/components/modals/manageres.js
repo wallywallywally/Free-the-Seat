@@ -24,13 +24,15 @@ function ManageModal(props) {
     const [resToShow, setResToShow] = useState([])
     useEffect(() => {
         const reservations = []
-        for (var res of resDet) {
-            const element = document.getElementById(String(res[0]))
-            const lvl = element.closest('.lvl').id
-            const seat = element.value
-            const resSlotSort = []
-            timeToID(res[1], res[2], resSlotSort)
-            reservations.push([lvl, seat, ...res, resSlotSort[0]])
+        if (resDet.length !== 0) {
+            for (var res of resDet) {
+                const element = document.getElementById(String(res[0]))
+                const lvl = element.closest('.lvl').id
+                const seat = element.value
+                const resSlotSort = []
+                timeToID(res[1], res[2], resSlotSort)
+                reservations.push([lvl, seat, ...res, resSlotSort[0]])
+            }
         }
         // sort by time
         const reservationsSorted = reservations.sort(function(a,b) {

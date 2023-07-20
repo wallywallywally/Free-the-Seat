@@ -70,7 +70,7 @@ const table = createTheme({
 
 // main
 // seat ids: 416-
-export default function Lvl6({reserveModal, seatInfo}) {
+export default function Lvl6({reserveModal  , seatInfo}) {
     // reserve modal
     const handleReserve = () => (event) => reserveModal(event)
 
