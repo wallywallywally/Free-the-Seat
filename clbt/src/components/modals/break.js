@@ -12,11 +12,14 @@ import { Box } from '@mui/material'
 
 // timer component
 import Timer from './breakTimer.js'
+//import { supabase } from '@supabase/auth-ui-shared'
+import { supabase } from '../../supabase'
+
 
 
 // break system modal
 function BreakModal(props) {
-    const { onClose, open, checkInRes, setCheckInRes, checkedIn, onBreak } = props;
+    const { onClose, open, checkInRes, setCheckInRes, checkedIn, onBreak, userID } = props;
     
     // get seat info
     const [seatDet, setSeatDet] = useState([])
@@ -39,21 +42,36 @@ function BreakModal(props) {
     // start
     const [startTimer, setStartTimer] = useState(false)
     const [timerEnd, setTimerEnd] = useState(false)
-    const handleBreakStart = () => {
+    const handleBreakStart = async () => {
         setStartTimer(true)
         // onBreak + check out
         onBreak[1](true)
 
         // [DB int] UPDATE user checked_in status - false
         checkedIn[1](false)
+        const { data, error2 } = await supabase.from('reservations')
+        .update({ checked_in: false })
+        .eq('user_id', userID)
+        .select()
     }
 
     // break end
     // not checked in after break === to clear
     const toClear = !onBreak[0] && !checkedIn[0] && timerEnd
+    const DBcrud = async () => {
+                const {error} = await supabase
+            .from('reservations')
+            .delete()
+            .eq('id', checkInRes[3])
+
+            const { data, error2} = await supabase
+            .from('seats_to_clear')
+            .insert({seat_id:seatDet[2]})
+            .select()
+    }
     if (toClear) {
         // get current time
-        const now = getNow()
+        //const now = getNow()
 
         // DB CRUD
 
@@ -73,7 +91,7 @@ function BreakModal(props) {
         //     .from('seatsToClear')
         //     .insert({seat_id: seatDet[2], time: now})
         //     .select()
-
+        DBcrud()
         // reset
         setCheckInRes([])
     }
@@ -173,7 +191,7 @@ BreakModal.propTypes = {
   open: PropTypes.bool.isRequired,
 }
 
-export default function Break({open, onClose, checkInRes, setCheckInRes, checkedIn, onBreak}) {
+export default function Break({open, onClose, checkInRes, setCheckInRes, checkedIn, onBreak, userID}) {
     const handleClose = () => () => onClose()
 
     return (
@@ -184,6 +202,7 @@ export default function Break({open, onClose, checkInRes, setCheckInRes, checked
         checkInRes={checkInRes} setCheckInRes={setCheckInRes}
         checkedIn={checkedIn}
         onBreak={onBreak}
+        userID = {userID}
         />
         </>
   );
