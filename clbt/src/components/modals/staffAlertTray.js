@@ -7,6 +7,8 @@ import DialogTitle from '@mui/material/DialogTitle'
 import Dialog from '@mui/material/Dialog'
 import Typography from '@mui/material/Typography'
 import { Box, Button } from '@mui/material'
+import { supabase } from '../../supabase'
+
 
 
 // staff alert tray modal
@@ -37,13 +39,13 @@ function SAModal(props) {
 
     // DB CRUD
     // DELETE seatToClear
-    const handleCleared = () => {
+    const handleCleared = async () => {
         const STCid = Number(document.getElementById('delSTC').value)
-        // [DB int] DELETE from seatsToClear
-        // const {error} = await supabase
-        //     .from('seatsToClear')
-        //     .delete()
-        //     .eq('id', STCid)
+        // [DB int] DELETE from seatsToClear (done)
+        const {error} = await supabase
+            .from('seats_to_clear')
+            .delete()
+            .eq('id', STCid)
 
         // query DB
         checkSTC[1](!checkSTC[0])

@@ -67,11 +67,9 @@ function ReserveModal(props) {
         setCheckedIn(true)
         // [DB int] UPDATE user checked_in status - true (done)
         const { data, error } = await supabase.from('reservations')
-            .update({ checked_in: true })
-            .eq('user_id', userID)
-            .select()
-            .order('start_time', {ascending: true})
-            .limit(1)
+        .update({ checked_in: true })
+        .eq('user_id', userID)
+        .select()
         handleClose()
     }
     const checkedInExp = checkedIn && seatToCheckIn
@@ -133,8 +131,11 @@ function ReserveModal(props) {
         setDelMod(false)
         // checked in reservation deleted - no longer checked in
         if (resToDel[0] === checkInRes[3]) setCheckedIn(false)
-        // [DB int] UPDATE user checked_in status - false (not needed as check in status is determined by presence of reservation with check in)
-
+        // [DB int] UPDATE user checked_in status - false (done)
+        const { data, error2 } = await supabase.from('reservations')
+        .update({ checked_in: false })
+        .eq('user_id', userID)
+        .select()
         // query DB
         checkRes[1](!checkRes[0])
         handleClose()

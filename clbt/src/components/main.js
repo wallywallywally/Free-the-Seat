@@ -848,6 +848,7 @@ export default function Main({user, checkInSeat}) {
         checkInRes={checkInRes} setCheckInRes={setCheckInRes}
         checkedIn={[checkedIn, setCheckedIn]}
         onBreak={[onBreak, setOnBreak]}
+        userID = {userid}
         />
         <UserAlert
         open={openUA}
