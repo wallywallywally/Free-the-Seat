@@ -1,5 +1,6 @@
 import '../styles.css'
 import { timeToID } from '../main'
+import { supabase } from '../../supabase'
 
 // mui
 import PropTypes from 'prop-types'
@@ -8,7 +9,6 @@ import DialogTitle from '@mui/material/DialogTitle'
 import Dialog from '@mui/material/Dialog'
 import Typography from '@mui/material/Typography'
 import { Box } from '@mui/material'
-import { supabase } from '../../supabase'
 
 
 
@@ -65,11 +65,12 @@ function ReserveModal(props) {
     const toCheckInExp = toCheckIn && checkInRes.length !== 0 && !checkedIn && seatToCheckIn
     const handleToCheckIn = async () => {
         setCheckedIn(true)
-        // [DB int] UPDATE user checked_in status - true (done)
+        // UPDATE user checked_in status - true
         const { data, error } = await supabase.from('reservations')
-        .update({ checked_in: true })
-        .eq('user_id', userID)
-        .select()
+            .update({ checked_in: true })
+            .eq('user_id', userID)
+            .select()
+
         handleClose()
     }
     const checkedInExp = checkedIn && seatToCheckIn
@@ -131,11 +132,13 @@ function ReserveModal(props) {
         setDelMod(false)
         // checked in reservation deleted - no longer checked in
         if (resToDel[0] === checkInRes[3]) setCheckedIn(false)
-        // [DB int] UPDATE user checked_in status - false (done)
+
+        // UPDATE user checked_in status - false
         const { data, error2 } = await supabase.from('reservations')
-        .update({ checked_in: false })
-        .eq('user_id', userID)
-        .select()
+            .update({ checked_in: false })
+            .eq('user_id', userID)
+            .select()
+            
         // query DB
         checkRes[1](!checkRes[0])
         handleClose()

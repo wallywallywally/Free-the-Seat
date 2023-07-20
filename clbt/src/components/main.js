@@ -506,7 +506,7 @@ export default function Main({user, checkInSeat}) {
             setCheckInRes([])
             
             // [DB int] DELETE checkInRes
-            // TAKEN FROM OTHER CODE AND EDITED - TO IMPLEMENT PROPERLY
+            // ! presumably deleted since time is done ?
             // const {error} = await supabase
             //     .from('reservations')
             //     .delete()
@@ -534,7 +534,7 @@ export default function Main({user, checkInSeat}) {
     const handleSAClose = () => setOpenSA(false)
 
     // [DB int] get seatsToClear
-    // REMINDER: ONLY PLACE SEATSTOCLEAR IS UPDATED IS IN BREAK.JS
+    // ! to implement
     const [seatsToClear, setSeatsToClear] = useState([
         // for testing
         // {id: 1, seat_id: 140, time: '1000'},

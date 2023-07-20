@@ -1,6 +1,8 @@
 import '../styles.css'
 import { useState, useEffect } from 'react'
 import { getNow } from '../main'
+// import { supabase } from '@supabase/auth-ui-shared'
+import { supabase } from '../../supabase'
 
 // mui
 import PropTypes from 'prop-types'
@@ -12,8 +14,6 @@ import { Box } from '@mui/material'
 
 // timer component
 import Timer from './breakTimer.js'
-//import { supabase } from '@supabase/auth-ui-shared'
-import { supabase } from '../../supabase'
 
 
 
@@ -47,51 +47,37 @@ function BreakModal(props) {
         // onBreak + check out
         onBreak[1](true)
 
-        // [DB int] UPDATE user checked_in status - false
+        // UPDATE user checked_in status - false
         checkedIn[1](false)
         const { data, error2 } = await supabase.from('reservations')
-        .update({ checked_in: false })
-        .eq('user_id', userID)
-        .select()
+            .update({ checked_in: false })
+            .eq('user_id', userID)
+            .select()
     }
 
     // break end
     // not checked in after break === to clear
     const toClear = !onBreak[0] && !checkedIn[0] && timerEnd
     const DBcrud = async () => {
-                const {error} = await supabase
-            .from('reservations')
-            .delete()
-            .eq('id', checkInRes[3])
+            // DELETE checkInRes
+            const {error} = await supabase
+                .from('reservations')
+                .delete()
+                .eq('id', checkInRes[3])
 
+            // [DB int - staff alert] CREATE seatsToClear
+            // get current time
+            // const now = getNow()
+            // ! no time ?
             const { data, error2} = await supabase
-            .from('seats_to_clear')
-            .insert({seat_id:seatDet[2]})
-            .select()
+                .from('seats_to_clear')
+                //     .insert({seat_id: seatDet[2], time: now})
+                .insert({seat_id:seatDet[2]})
+                .select()
     }
     if (toClear) {
-        // get current time
-        //const now = getNow()
-
-        // DB CRUD
-
-        // NEW LOGIC
-        // if break timer ends, they have to reserve + check in again
-        // [DB int] DELETE checkInRes
-        // TAKEN FROM OTHER CODE AND EDITED - TO IMPLEMENT PROPERLY
-        // const {error} = await supabase
-        //     .from('reservations')
-        //     .delete()
-        //     .eq('id', checkInRes[3])
-        
-        // [DB int - staff alert] CREATE in seatsToClear
-        // TAKEN FROM OTHER CODE AND EDITED - TO IMPLEMENT PROPERLY
-        // [seatid, time it was considered empty, DB id]
-        // const { data, error } = await supabase 
-        //     .from('seatsToClear')
-        //     .insert({seat_id: seatDet[2], time: now})
-        //     .select()
         DBcrud()
+
         // reset
         setCheckInRes([])
     }
