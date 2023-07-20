@@ -154,7 +154,7 @@ export const getNow = () => {
 }
 
 // seatInfo {101: 'emp',...} stores info for all seats
-// ! initialise according to seat_ids once we get more levels
+// seat ids: 101-559
 const numSeats = 500
 const seatInfo = {}
 for (let i = 1; i <= numSeats; i++) {

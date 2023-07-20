@@ -67,11 +67,11 @@ function ReserveModal(props) {
         setCheckedIn(true)
         // [DB int] UPDATE user checked_in status - true (done)
         const { data, error } = await supabase.from('reservations')
-        .update({ checked_in: true })
-        .eq('user_id', userID)
-        .select()
-        .order('start_time', {ascending: true})
-        .limit(1)
+            .update({ checked_in: true })
+            .eq('user_id', userID)
+            .select()
+            .order('start_time', {ascending: true})
+            .limit(1)
         handleClose()
     }
     const checkedInExp = checkedIn && seatToCheckIn

@@ -81,7 +81,7 @@ export default function Lvl5({reserveModal, seatInfo}) {
         <ThemeProvider theme={table}>
         <div className='lvl' id='5'>
 
-        {/* collab space */}
+        {/* shelves */}
         <Grid container justifyContent='center'>
             <FillerTop>Books</FillerTop>
         </Grid>
@@ -484,7 +484,6 @@ export default function Lvl5({reserveModal, seatInfo}) {
                 </Table4>
             </Box>
         
-            {/* misc stuff */}
             <Grid marginTop={-1}>
                 <FillerWtv>Staircase</FillerWtv>
                 <Box className='flex-col' sx={{gap:'9rem', alignItems:'center'}} marginTop='1.8rem'>
