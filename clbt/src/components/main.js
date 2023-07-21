@@ -534,23 +534,23 @@ export default function Main({user, checkInSeat}) {
         // {id: 2, seat_id: 142, time: '1500'}
     ])
     const [errorSTC, setErrorSTC] = useState(null)
-    // const fetchSeatsToClear = useCallback(() => {
-    //     supabase
-    //         .from("seatsToClear")
-    //         .select()
-    //         .order("id")
-    //         .then(({ data: seatsToClear, error }) => {
-    //             setSeatsToClear(seatsToClear);
-    //             setErrorSTC(error);
-    //         })
-    //         .catch((error) => {
-    //             setErrorSTC(error);
-    //         });
-    // }, [setSeatsToClear, setErrorSTC])
+    const fetchSeatsToClear = useCallback(() => {
+        supabase
+            .from("seats_to_clear")
+            .select()
+            .order("id")
+            .then(({ data: seatsToClear, error }) => {
+                setSeatsToClear(seatsToClear);
+                setErrorSTC(error);
+            })
+            .catch((error) => {
+                setErrorSTC(error);
+            });
+    }, [setSeatsToClear, setErrorSTC])
     const [checkSTC, setCheckSTC] = useState(false)
-    // useEffect(() => {
-    //     fetchSeatsToClear()
-    // }, [checkSTC])  // eslint-disable-line react-hooks/exhaustive-deps
+    useEffect(() => {
+        fetchSeatsToClear()
+    }, [checkSTC])  // eslint-disable-line react-hooks/exhaustive-deps
 
     const STCexists = seatsToClear.length !== 0
     // change seat colour
