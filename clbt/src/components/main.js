@@ -434,7 +434,7 @@ export default function Main({user, checkInSeat}) {
 
     // check in
     // check if user is checked in
-    const [checkedIn, setCheckedIn] = useState(false) 
+    const [checkedIn, setCheckedIn] = useState(true) 
     for (var res of resDet) {
         if (res.checked_in === true) {
             setCheckedIn(true)
@@ -442,8 +442,8 @@ export default function Main({user, checkInSeat}) {
     }
     // QR code scanned and we get to URL
     const [toCheckIn, setToCheckIn] = useState(false)
-    const [checkInRes, setCheckInRes] = useState([])
-    // const [checkInRes, setCheckInRes] = useState([125, '1330', '1430', 92]) // for testing
+    // const [checkInRes, setCheckInRes] = useState([])
+    const [checkInRes, setCheckInRes] = useState([125, '1330', '1430', 92]) // for testing
     const checkInModal = useCallback(() => {
         if (checkInSeat) {
             // seat details
@@ -506,16 +506,16 @@ export default function Main({user, checkInSeat}) {
             setCheckInRes([])
         }
     }, [checkedIn, checkInRes])
-    useEffect(() => {
-        const CTnow = new Date()
-        for (var timeslot of Object.values(timeslots30)) {
-            // get times - 0900, 0930, ..., 1800
-            const [hour, min] = [Number(timeslot.slice(7,9)), Number(timeslot.slice(9,11))]
-            const timeMS = new Date(CTnow.getFullYear(), CTnow.getMonth(), CTnow.getDate(), hour, min, 0, 0).getTime() - CTnow
-            // check at these times
-            setTimeout(handleResDone, timeMS)
-        }
-    }, [handleResDone])
+    // useEffect(() => {
+    //     const CTnow = new Date()
+    //     for (var timeslot of Object.values(timeslots30)) {
+    //         // get times - 0900, 0930, ..., 1800
+    //         const [hour, min] = [Number(timeslot.slice(7,9)), Number(timeslot.slice(9,11))]
+    //         const timeMS = new Date(CTnow.getFullYear(), CTnow.getMonth(), CTnow.getDate(), hour, min, 0, 0).getTime() - CTnow
+    //         // check at these times
+    //         setTimeout(handleResDone, timeMS)
+    //     }
+    // }, [handleResDone])
 
 
     // STAFF
