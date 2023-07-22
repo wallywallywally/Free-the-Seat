@@ -192,6 +192,7 @@ function Lvlx(props) {
 export default function Main({user, checkInSeat}) {
     // user session stuff
     const userid = user.id
+    const staffid = "a1f89fe9-fe14-4d85-b898-601855aaf75d" //for staff auth
     // sign out callback
     const handleLogOutClick = () => {
         supabase.auth.signOut();

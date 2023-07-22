@@ -18,8 +18,20 @@ seats.forEach( (seat) => {
     //console.log(seat.light_status)
 })
 }
+async function checkSeatsToClear () {
+    console.log("deleting old seats to clear")
+    const thirtyMinutesAgo = new Date();
+    thirtyMinutesAgo.setMinutes(thirtyMinutesAgo.getMinutes() - 30);
+    
+    // Fetch entries older than 30 minutes
+    const { data, error } = await supabase
+      .from("seats_to_clear")
+      .delete()
+      .eq('created_at', thirtyMinutesAgo.toISOString());
+    
+}
 
-setInterval(updateLights, 10000)
+setInterval(checkSeatsToClear, 30000)
 
 async function checkCheckedIn () {
     let {data: res, error} = await supabase.from("reservations").select('*');
