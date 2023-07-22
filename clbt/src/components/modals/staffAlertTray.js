@@ -19,27 +19,25 @@ function SAModal(props) {
     const handleClose = () => {
         onClose()
     }
-    // console.log(seatsToClear)
-    // ! TO FIX
+
     // processing details of seatsToClear
     const [STCtoshow, setSTCtoshow] = useState([])
-    console.log(seatsToClear)
     useEffect(() => {
         const STClist = []
         if (seatsToClear.length !== 0) {
             for (var stc of seatsToClear) {
-                // const element = document.getElementById(String(stc.seat_id))
-                // const lvl = element.closest('.lvl').id
-                // const seat = element.value
+                const element = document.getElementById(String(stc.seat_id))
+                const lvl = element.closest('.lvl').id
+                const seat = element.value
                 const hogTime = stc.created_at.slice(11,13) + stc.created_at.slice(14,16)
-                // STClist.push([stc.id, lvl, seat, stc.seat_id, hogTime])
+                STClist.push([stc.id, lvl, seat, stc.seat_id, hogTime])
             }
         }
         // sort by time
         const STClistSorted = STClist.sort(function(a,b) {
-            return Number(a[3]) - Number(b[3])
+            return Number(a[4]) - Number(b[4])
         })
-        setSTCtoshow(STClist)
+        setSTCtoshow(STClistSorted)
     }, [seatsToClear])
 
     // DB CRUD

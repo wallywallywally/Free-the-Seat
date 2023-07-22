@@ -192,7 +192,7 @@ function Lvlx(props) {
 export default function Main({user, checkInSeat}) {
     // user session stuff
     const userid = user.id
-    const staffid = "a1f89fe9-fe14-4d85-b898-601855aaf75d" //for staff auth
+    
     // sign out callback
     const handleLogOutClick = () => {
         supabase.auth.signOut();
@@ -337,7 +337,6 @@ export default function Main({user, checkInSeat}) {
     const [full, setFull] = useState(false)
     // reservation to delete
     const [resToDel, setResToDel] = useState([])
-    // console.log(seatDet)
     const handleResOpen = useCallback((event, CISinfo, CISres) => {
         setOpenRes(true)
 
@@ -447,7 +446,6 @@ export default function Main({user, checkInSeat}) {
     // QR code scanned and we get to URL
     const [toCheckIn, setToCheckIn] = useState(false)
     const [checkInRes, setCheckInRes] = useState([])
-    // const [checkInRes, setCheckInRes] = useState([125, '1330', '1430', 92]) // for testing
     const checkInModal = useCallback(() => {
         if (checkInSeat) {
             // seat details
@@ -522,7 +520,8 @@ export default function Main({user, checkInSeat}) {
 
 
     // STAFF
-    const [staff, setStaff] = useState(false)
+    const staffid = "a1f89fe9-fe14-4d85-b898-601855aaf75d"      // ripdge
+    const [staff, setStaff] = useState(userid === staffid ? true : false)
     
     // staff alert modal
     const [openSA, setOpenSA] = useState(false)
@@ -544,7 +543,8 @@ export default function Main({user, checkInSeat}) {
             .catch((error) => {
                 setErrorSTC(error);
             });
-    }, [setSeatsToClear, setErrorSTC])
+    }, [setSeatsToClear, setErrorSTC]
+    )
     const [checkSTC, setCheckSTC] = useState(false)
     useEffect(() => {
         fetchSeatsToClear()
