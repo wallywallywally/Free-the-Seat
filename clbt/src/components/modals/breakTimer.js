@@ -26,7 +26,7 @@ export default function Timer ({startTimer, endTT, setTimerEnd, setOnBreak}) {
                 }, 1000)
                 return () => clearInterval(interval)
             }
-        }, [countDown, startTimer,
+        }, [countDown,
         // endTT
         ])
 

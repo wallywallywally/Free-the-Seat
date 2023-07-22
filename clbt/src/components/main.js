@@ -187,6 +187,22 @@ function Lvlx(props) {
     return <Lvlx {...props} />
 }
 
+// seats database
+// fix as we cannot get element when lvlx is not loaded in
+export const seatDetDB = {}
+for (let i = 101; i <= 215; i++) {
+    seatDetDB[i] = [3, i-100]
+}
+for (let i = 216; i <= 323; i++) {
+    seatDetDB[i] = [4, i-215]
+}
+for (let i = 324; i <= 415; i++) {
+    seatDetDB[i] = [5, i-323]
+}
+for (let i = 416; i <= 559; i++) {
+    seatDetDB[i] = [6, i-415]
+}
+
 
 // main
 export default function Main({user, checkInSeat}) {
@@ -261,9 +277,7 @@ export default function Main({user, checkInSeat}) {
     const [upcomingInfo, setUpcomingInfo] = useState([])
     useEffect(() => {
         if (resExists) {
-            const element = document.getElementById(upcomingRes[0])
-            const lvl = element.closest('.lvl').id
-            const seat = element.value
+            const [lvl, seat] = seatDetDB[upcomingRes[0]]
             setUpcomingInfo([lvl, seat, upcomingRes[1], upcomingRes[2]])
         }
     }, [upcomingRes])   // eslint-disable-line react-hooks/exhaustive-deps

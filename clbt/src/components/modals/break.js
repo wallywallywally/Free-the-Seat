@@ -37,6 +37,7 @@ function BreakModal(props) {
     // timer
     const [startTimer, setStartTimer] = useState(false)
     const [timerEnd, setTimerEnd] = useState(false)
+    // break start
     const [endTT, setEndTT] = useState(0)
     const handleBreakStart = async () => {
         // ? continue break timer after refresh
@@ -57,7 +58,7 @@ function BreakModal(props) {
     // break end
     // not checked in after break === to clear
     const toClear = !onBreak[0] && !checkedIn[0] && timerEnd
-    const DBcrud = async () => {
+    const handleBreakEnd = async () => {
             // DELETE checkInRes
             const {error} = await supabase
                 .from('reservations')
@@ -65,13 +66,13 @@ function BreakModal(props) {
                 .eq('id', checkInRes[3])
 
             // CREATE seats_to_clear
-            const { data, error2} = await supabase
+            const {data, error2} = await supabase
                 .from('seats_to_clear')
                 .insert({seat_id:checkInRes[0]})
                 .select()
     }
     if (toClear) {
-        DBcrud()
+        handleBreakEnd()
 
         // reset
         setCheckInRes([])

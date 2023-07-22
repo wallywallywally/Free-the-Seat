@@ -1,6 +1,6 @@
 import '../styles.css'
 import { useEffect, useState } from 'react'
-import { timeToID } from '../main'
+import { timeToID, seatDetDB } from '../main'
 
 // mui
 import PropTypes from 'prop-types'
@@ -26,9 +26,7 @@ function ManageModal(props) {
         const reservations = []
         if (resDet.length !== 0) {
             for (var res of resDet) {
-                const element = document.getElementById(String(res[0]))
-                const lvl = element.closest('.lvl').id
-                const seat = element.value
+                const [lvl, seat] = seatDetDB[res[0]]
                 const resSlotSort = []
                 timeToID(res[1], res[2], resSlotSort)
                 reservations.push([lvl, seat, ...res, resSlotSort[0]])
