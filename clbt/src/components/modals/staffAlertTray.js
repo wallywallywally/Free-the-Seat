@@ -13,22 +13,27 @@ import { supabase } from '../../supabase'
 
 // staff alert tray modal
 function SAModal(props) {
-    const { onClose, open, seatsToClear, setSeatsToClear, checkSTC } = props;
+    const { onClose, open, seatsToClear, checkSTC } = props;
 
     // on close
     const handleClose = () => {
         onClose()
     }
-
+    // console.log(seatsToClear)
+    // ! TO FIX
     // processing details of seatsToClear
     const [STCtoshow, setSTCtoshow] = useState([])
+    console.log(seatsToClear)
     useEffect(() => {
         const STClist = []
-        for (var stc of seatsToClear) {
-            const element = document.getElementById(String(stc.seat_id))
-            const lvl = element.closest('.lvl').id
-            const seat = element.value
-            STClist.push([stc.id, lvl, seat, stc.seat_id, stc.time])
+        if (seatsToClear.length !== 0) {
+            for (var stc of seatsToClear) {
+                // const element = document.getElementById(String(stc.seat_id))
+                // const lvl = element.closest('.lvl').id
+                // const seat = element.value
+                const hogTime = stc.created_at.slice(11,13) + stc.created_at.slice(14,16)
+                // STClist.push([stc.id, lvl, seat, stc.seat_id, hogTime])
+            }
         }
         // sort by time
         const STClistSorted = STClist.sort(function(a,b) {
@@ -138,7 +143,7 @@ SAModal.propTypes = {
   open: PropTypes.bool.isRequired,
 }
 
-export default function StaffAlertTray({open, onClose, seatsToClear, setSeatsToClear, checkSTC}) {
+export default function StaffAlertTray({open, onClose, seatsToClear, checkSTC}) {
     const handleClose = () => () => onClose()
 
     return (
@@ -147,7 +152,6 @@ export default function StaffAlertTray({open, onClose, seatsToClear, setSeatsToC
         open={open}
         onClose={handleClose()}
         seatsToClear={seatsToClear}
-        setSeatsToClear={setSeatsToClear}
         checkSTC={checkSTC}
         />
         </>

@@ -4,34 +4,37 @@ import { useState, useEffect } from 'react'
 import Typography from '@mui/material/Typography'
 import { Box } from '@mui/material'
 
-export default function Timer ({targetDate, startTimer, setTimerEnd, setOnBreak}) {
+
+export default function Timer ({startTimer, endTT, setTimerEnd, setOnBreak}) {
     const timeLeft = (countDown) => {
         const minutes = Math.floor((countDown % (1000 * 60 * 60)) / (1000 * 60))
         const seconds = Math.floor((countDown % (1000 * 60)) / 1000)
         const CD15min = 15 * 60 * 1000
-        // const prog = 100*countDown/CD15min
-        const prog = 100*countDown/3000
+        const prog = 100*countDown/CD15min
         return [minutes, seconds, prog];
     }
-    const useCountdown = (targetDate, startTimer) => {
-        const countDownDate = new Date(targetDate).getTime()
-        const [countDown, setCountDown] = useState(countDownDate - new Date().getTime())
+
+    const useCountdown = (timerMin) => {
+        const [countDown, setCountDown] = useState(timerMin*60*1000)
+        // const [countDown, setCountDown] = useState(endTT - new Date().getTime())
 
         useEffect(() => {
             if (startTimer) {
                 const interval = setInterval(() => {
-                    setCountDown(countDownDate - new Date().getTime());
-                }, 1000);
+                    setCountDown(countDown - 1000)
+                    // setCountDown(endTT - new Date().getTime())
+                }, 1000)
                 return () => clearInterval(interval)
             }
-        }, [countDownDate, startTimer])
+        }, [countDown, startTimer,
+        // endTT
+        ])
 
         return timeLeft(countDown);
     }
     
-    const [minutes, seconds, progress] = useCountdown(targetDate, startTimer)
+    const [minutes, seconds, progress] = useCountdown(15)
 
-    // fix for constant timer running
     useEffect(() => {
         if (minutes + seconds > 0) {
             setTimerEnd(false)
@@ -50,7 +53,7 @@ export default function Timer ({targetDate, startTimer, setTimerEnd, setOnBreak}
             borderRadius: '50%',
             width: '20rem',
             height: '20rem',
-            background: `radial-gradient(closest-side, white 90.2%, transparent 91% 100%), conic-gradient(rgb(0, 133, 255) ${startTimer ? progress : 100}%, rgba(0, 133, 255, 0.5) 0)`
+            background: `radial-gradient(closest-side, white 90.2%, transparent 91% 100%), conic-gradient(rgb(0, 133, 255) ${progress}%, rgba(0, 133, 255, 0.5) 0)`
         }}>
             <div
             style={{
@@ -65,7 +68,7 @@ export default function Timer ({targetDate, startTimer, setTimerEnd, setOnBreak}
                     display='flex'
                     flexDirection='column'
                     alignItems='center'>
-                        <Typography variant='h3'>{startTimer ? minutes : 15}</Typography>
+                        <Typography variant='h3'>{minutes}</Typography>
                         <Typography variant='h6'>minutes</Typography>
                     </Box>
                     <Typography variant='h3'>:</Typography>
@@ -73,7 +76,7 @@ export default function Timer ({targetDate, startTimer, setTimerEnd, setOnBreak}
                     display='flex'
                     flexDirection='column'
                     alignItems='center'>
-                        <Typography variant='h3'>{startTimer ? seconds : 0}</Typography>
+                        <Typography variant='h3'>{seconds}</Typography>
                         <Typography variant='h6'>seconds</Typography>
                     </Box>
                 </Box>

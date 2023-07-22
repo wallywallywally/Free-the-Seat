@@ -35,15 +35,14 @@ function BreakModal(props) {
     }, [checkInRes])
 
     // timer
-    const val15minms = 15 * 60 * 1000
-    const currentTime = new Date().getTime()
-    const timer15 = currentTime + val15minms
-    const timer3s = currentTime + 3000
-    // start
     const [startTimer, setStartTimer] = useState(false)
     const [timerEnd, setTimerEnd] = useState(false)
+    const [endTT, setEndTT] = useState(0)
     const handleBreakStart = async () => {
+        // ? continue break timer after refresh
+        setEndTT(new Date().getTime() + 15*60*1000)
         setStartTimer(true)
+
         // onBreak + check out
         onBreak[1](true)
 
@@ -68,7 +67,7 @@ function BreakModal(props) {
             // CREATE seats_to_clear
             const { data, error2} = await supabase
                 .from('seats_to_clear')
-                .insert({seat_id:seatDet[2]})
+                .insert({seat_id:checkInRes[0]})
                 .select()
     }
     if (toClear) {
@@ -106,7 +105,7 @@ function BreakModal(props) {
                 <Typography variant='h4'>{seatDet[1]}</Typography>
             </div>
 
-            {timerEnd ? 
+            {timerEnd && startTimer ? 
             <DialogTitle sx={{textAlign:'center'}}>
                 Your seat is now empty and will be cleared for others
             </DialogTitle>
@@ -130,7 +129,7 @@ function BreakModal(props) {
                 justifyContent='center'
                 marginBottom='2rem'
                 >
-                    <Timer targetDate={timer3s} startTimer={startTimer} 
+                    <Timer startTimer={startTimer} endTT={endTT}
                     setTimerEnd={setTimerEnd} setOnBreak={onBreak[1]}
                     />
                 </Box>

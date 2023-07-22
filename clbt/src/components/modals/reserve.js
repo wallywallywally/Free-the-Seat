@@ -60,7 +60,7 @@ function ReserveModal(props) {
         if (slotISseatres) break
     }
 
-    // to check in
+    // DB - to check in
     const seatToCheckIn = checkInRes[0] === Number(seatDet[2])
     const toCheckInExp = toCheckIn && checkInRes.length !== 0 && !checkedIn && seatToCheckIn
     const handleToCheckIn = async () => {
@@ -264,7 +264,7 @@ function ReserveModal(props) {
             }
 
             {/* checked in info */}
-            {checkedInExp &&
+            {checkedInExp && !delMod &&
             <>
             <Typography variant='h6' sx={{textAlign:'center'}} marginTop={full ? 2.5 : 0} marginBottom={0.5}>
                 You have checked in for:<br/>{slot[0]}

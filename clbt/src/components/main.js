@@ -222,10 +222,13 @@ export default function Main({user, checkInSeat}) {
     
     // res states
     const [resDet, setResDet] = useState([])
+    // reserve.js DB CRUDs
     const [checkRes, setCheckRes] = useState(false)
+    // when reservations end
+    const [UAseat, setUAseat] = useState([])
     useEffect(() => {
         fetchReservations()
-    }, [checkRes])  // eslint-disable-line react-hooks/exhaustive-deps
+    }, [checkRes, UAseat])  // eslint-disable-line react-hooks/exhaustive-deps
     // getting resDet - check element.id is not in our resDet id
     const [ourResIDs, setOurResIDs] = useState([])
     const getResDet = useCallback((allRes) => {
@@ -434,7 +437,7 @@ export default function Main({user, checkInSeat}) {
 
     // check in
     // check if user is checked in
-    const [checkedIn, setCheckedIn] = useState(true) 
+    const [checkedIn, setCheckedIn] = useState(false) 
     for (var res of resDet) {
         if (res.checked_in === true) {
             setCheckedIn(true)
@@ -442,8 +445,8 @@ export default function Main({user, checkInSeat}) {
     }
     // QR code scanned and we get to URL
     const [toCheckIn, setToCheckIn] = useState(false)
-    // const [checkInRes, setCheckInRes] = useState([])
-    const [checkInRes, setCheckInRes] = useState([125, '1330', '1430', 92]) // for testing
+    const [checkInRes, setCheckInRes] = useState([])
+    // const [checkInRes, setCheckInRes] = useState([125, '1330', '1430', 92]) // for testing
     const checkInModal = useCallback(() => {
         if (checkInSeat) {
             // seat details
@@ -453,8 +456,7 @@ export default function Main({user, checkInSeat}) {
             
             // reservation to check in to
             // get time when QR code is scanned
-            // const now = getNow()
-            const now = '1430'
+            const now = getNow()
             // check that current time and seat has reservation + track it
             const checkInReservation = resDet.filter(ele => ele[0] === Number(checkInSeat))
                 .filter(ele => Number(now) - Number(ele[1]) >= 0)
@@ -492,7 +494,7 @@ export default function Main({user, checkInSeat}) {
     const handleUAClose = () => setOpenUA(false)
 
     // reservation is done
-    const [UAseat, setUAseat] = useState([])
+    // UA seat state is placed above reservations, so code knows to re-query
     const handleResDone = useCallback(() => {
         // check if reservation is done
         const resDoneExp = (getNow() - checkInRes[2] > 0) && checkedIn
@@ -506,16 +508,16 @@ export default function Main({user, checkInSeat}) {
             setCheckInRes([])
         }
     }, [checkedIn, checkInRes])
-    // useEffect(() => {
-    //     const CTnow = new Date()
-    //     for (var timeslot of Object.values(timeslots30)) {
-    //         // get times - 0900, 0930, ..., 1800
-    //         const [hour, min] = [Number(timeslot.slice(7,9)), Number(timeslot.slice(9,11))]
-    //         const timeMS = new Date(CTnow.getFullYear(), CTnow.getMonth(), CTnow.getDate(), hour, min, 0, 0).getTime() - CTnow
-    //         // check at these times
-    //         setTimeout(handleResDone, timeMS)
-    //     }
-    // }, [handleResDone])
+    useEffect(() => {
+        const CTnow = new Date()
+        for (var timeslot of Object.values(timeslots30)) {
+            // get times - 0900, 0930, ..., 1800
+            const [hour, min] = [Number(timeslot.slice(7,9)), Number(timeslot.slice(9,11))]
+            const timeMS = new Date(CTnow.getFullYear(), CTnow.getMonth(), CTnow.getDate(), hour, min, 0, 0).getTime() - CTnow
+            // check at these times
+            setTimeout(handleResDone, timeMS)
+        }
+    }, [handleResDone])
 
 
     // STAFF
@@ -526,13 +528,8 @@ export default function Main({user, checkInSeat}) {
     const handleSAOpen = () => setOpenSA(true)
     const handleSAClose = () => setOpenSA(false)
 
-    // [DB int] get seatsToClear
-    // ! to implement
-    const [seatsToClear, setSeatsToClear] = useState([
-        // for testing
-        // {id: 1, seat_id: 140, time: '1000'},
-        // {id: 2, seat_id: 142, time: '1500'}
-    ])
+    // get seatsToClear
+    const [seatsToClear, setSeatsToClear] = useState([])
     const [errorSTC, setErrorSTC] = useState(null)
     const fetchSeatsToClear = useCallback(() => {
         supabase
@@ -852,7 +849,6 @@ export default function Main({user, checkInSeat}) {
         open={openSA}
         onClose={handleSAClose}
         seatsToClear={seatsToClear}
-        setSeatsToClear={setSeatsToClear}
         checkSTC={[checkSTC, setCheckSTC]}
         />
         </>
