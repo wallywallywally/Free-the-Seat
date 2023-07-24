@@ -456,6 +456,10 @@ export default function Main({user, checkInSeat}) {
         if (res.checked_in === true) {
             setCheckedIn(true)
         }
+        if (res.on_break === true)
+        {
+            setOnBreak(true)
+        }
     }
     // QR code scanned and we get to URL
     const [toCheckIn, setToCheckIn] = useState(false)

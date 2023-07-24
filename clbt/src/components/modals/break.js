@@ -47,10 +47,10 @@ function BreakModal(props) {
         // onBreak + check out
         onBreak[1](true)
 
-        // UPDATE user checked_in status - false
+        // UPDATE user onbreak status - true
         checkedIn[1](false)
         const { data, error2 } = await supabase.from('reservations')
-            .update({ checked_in: false })
+            .update({ on_break: true })
             .eq('user_id', userID)
             .select()
     }
