@@ -564,8 +564,8 @@ export default function Main({user, checkInSeat}) {
         fetchSeatsToClear()
     }, [checkSTC])  // eslint-disable-line react-hooks/exhaustive-deps
 
-    const STCexists = seatsToClear.length !== 0
     // change seat colour
+    const STCexists = seatsToClear.length !== 0
     if (STCexists) {
         for (var stc of seatsToClear) {
             seatInfo[stc.seat_id] = ['stafftoclear', 'stc']

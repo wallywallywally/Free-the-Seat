@@ -26,7 +26,7 @@ export default function Timer ({startTimer, endTT, setTimerEnd, setOnBreak}) {
                 }, 1000)
                 return () => clearInterval(interval)
             }
-        }, [countDown,
+        }, [countDown, startTimer,      // eslint-disable-line react-hooks/exhaustive-deps
         // endTT
         ])
 
@@ -34,6 +34,7 @@ export default function Timer ({startTimer, endTT, setTimerEnd, setOnBreak}) {
     }
     
     const [minutes, seconds, progress] = useCountdown(15)
+    console.log(minutes, seconds)
 
     useEffect(() => {
         if (minutes + seconds > 0) {
