@@ -16,18 +16,15 @@ export default function Timer ({startTimer, endTT, setTimerEnd, setOnBreak}) {
 
     const useCountdown = (timerMin) => {
         const [countDown, setCountDown] = useState(timerMin*60*1000)
-        // const [countDown, setCountDown] = useState(endTT - new Date().getTime())
 
         useEffect(() => {
             if (startTimer) {
                 const interval = setInterval(() => {
                     setCountDown(countDown - 1000)
-                    // setCountDown(endTT - new Date().getTime())
                 }, 1000)
                 return () => clearInterval(interval)
             }
         }, [countDown, startTimer,      // eslint-disable-line react-hooks/exhaustive-deps
-        // endTT
         ])
 
         return timeLeft(countDown);

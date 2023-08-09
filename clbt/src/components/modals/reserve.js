@@ -13,8 +13,6 @@ import { Box } from '@mui/material'
 
 
 // reservation system modal
-// ! to fix styling
-// timetable + timings don't line up when window is minimised - add another and hide visibility or smth
 function ReserveModal(props) {
     const {
         onClose, open, 

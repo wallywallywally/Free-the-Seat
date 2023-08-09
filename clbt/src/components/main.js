@@ -538,7 +538,7 @@ export default function Main({user, checkInSeat}) {
 
 
     // STAFF
-    const staffid = "a1f89fe9-fe14-4d85-b898-601855aaf75d"      // ripdge
+    const staffid = "a1f89fe9-fe14-4d85-b898-601855aaf75d"
     const [staff, setStaff] = useState(userid === staffid ? true : false)
     
     // staff alert modal

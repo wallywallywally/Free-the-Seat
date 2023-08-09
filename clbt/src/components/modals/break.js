@@ -1,7 +1,6 @@
 import '../styles.css'
 import { useState, useEffect } from 'react'
 import { getNow } from '../main'
-// import { supabase } from '@supabase/auth-ui-shared'
 import { supabase } from '../../supabase'
 
 // mui
@@ -40,7 +39,6 @@ function BreakModal(props) {
     // break start
     const [endTT, setEndTT] = useState(0)
     const handleBreakStart = async () => {
-        // ? continue break timer after refresh
         setEndTT(new Date().getTime() + 15*60*1000)
         setStartTimer(true)
 
