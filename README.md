@@ -23,9 +23,10 @@ CLBT is built with React as the frontend, with our backend handled by Supabase.
 
 From this repo:
 1. Clone the project
-2. Run <code>npm install</code>
-3. Run <code>npm start</code>
-4. CLBT now works!
+2. CD to /clbt
+3. Run <code>npm install</code>
+4. Run <code>npm start</code>
+5. CLBT now works!
 
 
 ## Credits
